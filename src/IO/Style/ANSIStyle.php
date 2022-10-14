@@ -14,15 +14,22 @@ class ANSIStyle extends AbstractStyle
      */
     public function apply(string $message): string
     {
-        $set = [
-            $this->getColor()->getColorCode(),
-            $this->getBackground()->getBackgroundCode(),
-        ];
+        $set = [];
+        if (!$this->getColor()->isDefault()) {
+            $set[] = $this->getColor()->getColorCode();
+        }
+        if (!$this->getBackground()->isDefault()) {
+            $set[] = $this->getBackground()->getBackgroundCode();
+        }
         $options = $this->getOptions();
         if (count($options)) {
             foreach ($options as $option) {
                 $set[] = $option->getCode();
             }
+        }
+
+        if (!count($set)) {
+            return sprintf('%s', $message);
         }
 
         return sprintf("\x1b[%sm%s\x1b[0m", implode(';', $set), $message);
