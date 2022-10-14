@@ -92,7 +92,7 @@ class StreamOutputTest extends TestCase
      */
     public function testWriteError()
     {
-        $output = new StreamOutput(new Stream('php://memory', 'r'), new Formatter(), true);
+        $output = new StreamOutput(new Stream('php://temp', 'r'), new Formatter(), true);
         $this->assertInstanceOf(StreamOutput::class, $output);
         $this->assertFalse($output->writeln('test'));
     }
