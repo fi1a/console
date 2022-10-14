@@ -61,7 +61,7 @@ class StreamTest extends TestCase
      */
     public function testReadWrite()
     {
-        $stream = new Stream('php://memory', 'w');
+        $stream = new Stream('php://memory', 'rw');
         $stream->seek(0);
         $stream->write('123');
         $stream->seek(0);

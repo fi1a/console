@@ -17,6 +17,12 @@ class Stream implements StreamInterface
     private $stream;
 
     /**
+     * @var string
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
+    private $mode;
+
+    /**
      * @inheritDoc
      */
     public function __construct($file = null, ?string $mode = null)
@@ -37,6 +43,7 @@ class Stream implements StreamInterface
         if (!$file) {
             return false;
         }
+        $this->mode = $mode;
         if (!is_resource($file)) {
             $file = fopen($file, $mode);
         }
@@ -88,7 +95,7 @@ class Stream implements StreamInterface
     {
         $stream = $this->getStream();
 
-        if (!$stream) {
+        if (!$stream || $this->mode === 'r') {
             return false;
         }
 
@@ -104,7 +111,7 @@ class Stream implements StreamInterface
     {
         $stream = $this->getStream();
 
-        if (!$stream) {
+        if (!$stream || $this->mode === 'w' || $this->mode === 'a' || $this->mode === 'x' || $this->mode === 'c') {
             return '';
         }
 
