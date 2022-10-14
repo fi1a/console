@@ -25,6 +25,8 @@ class StreamTest extends TestCase
         $this->assertTrue($stream->close());
         $stream->open('php://temp', 'w');
         $this->assertIsResource($stream->getStream());
+        $stream = new Stream();
+        $this->assertFalse($stream->open(false, 'r'));
     }
 
     /**

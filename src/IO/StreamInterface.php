@@ -11,13 +11,17 @@ interface StreamInterface
 {
     /**
      * Конструктор
+     *
+     * @param string|resource|null $file
      */
-    public function __construct(?string $file = null, ?string $mode = null);
+    public function __construct($file = null, ?string $mode = null);
 
     /**
      * Открыть поток
+     *
+     * @param string|resource $file
      */
-    public function open(string $file, string $mode): bool;
+    public function open($file, string $mode): bool;
 
     /**
      * Закрыть поток
@@ -42,8 +46,10 @@ interface StreamInterface
 
     /**
      * Запись в поток
+     *
+     * @return bool|int
      */
-    public function write(string $content, ?int $length = null): int;
+    public function write(string $content, ?int $length = null);
 
     /**
      * Чтение из потока

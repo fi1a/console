@@ -19,7 +19,7 @@ class Stream implements StreamInterface
     /**
      * @inheritDoc
      */
-    public function __construct(?string $file = null, ?string $mode = null)
+    public function __construct($file = null, ?string $mode = null)
     {
         if (!$mode) {
             $mode = 'rw';
@@ -32,9 +32,16 @@ class Stream implements StreamInterface
     /**
      * @inheritDoc
      */
-    public function open(string $file, string $mode): bool
+    public function open($file, string $mode): bool
     {
-        $this->setStream(fopen($file, $mode));
+        if (!$file) {
+            return false;
+        }
+        if (!is_resource($file)) {
+            $file = fopen($file, $mode);
+        }
+
+        $this->setStream($file);
 
         return true;
     }
@@ -77,12 +84,12 @@ class Stream implements StreamInterface
     /**
      * @inheritDoc
      */
-    public function write(string $content, ?int $length = null): int
+    public function write(string $content, ?int $length = null)
     {
         $stream = $this->getStream();
 
         if (!$stream) {
-            return 0;
+            return false;
         }
 
         return !is_null($length)
