@@ -18,8 +18,6 @@ class ANSIColorTest extends TestCase
     public function testANSIColor()
     {
         $color = new ANSIColor();
-        $this->assertTrue(is_string($color->getDefaultColorCode()));
-        $this->assertTrue(is_string($color->getDefaultBackgroundCode()));
         $this->assertTrue($color->isDefault());
         $this->assertTrue(is_string($color->getColorCode()));
         $this->assertTrue(is_string($color->getBackgroundCode()));

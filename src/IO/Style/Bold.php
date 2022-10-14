@@ -18,12 +18,4 @@ class Bold extends AbstractOption
     {
         return '1';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultCode(): string
-    {
-        return '22';
-    }
 }

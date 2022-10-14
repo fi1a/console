@@ -18,12 +18,4 @@ class Underscore extends AbstractOption
     {
         return '4';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultCode(): string
-    {
-        return '24';
-    }
 }

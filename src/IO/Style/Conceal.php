@@ -18,12 +18,4 @@ class Conceal extends AbstractOption
     {
         return '8';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultCode(): string
-    {
-        return '28';
-    }
 }

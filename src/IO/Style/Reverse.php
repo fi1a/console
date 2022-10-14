@@ -18,12 +18,4 @@ class Reverse extends AbstractOption
     {
         return '7';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultCode(): string
-    {
-        return '27';
-    }
 }

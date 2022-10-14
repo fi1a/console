@@ -25,16 +25,6 @@ interface ColorInterface
     public function getBackgroundCode(): string;
 
     /**
-     * Возвращает код цвета по умолчанию
-     */
-    public function getDefaultColorCode(): string;
-
-    /**
-     * Возвращает код цвета фона по умолчанию
-     */
-    public function getDefaultBackgroundCode(): string;
-
-    /**
      * Цвет по умолчанию или нет
      */
     public function isDefault(): bool;

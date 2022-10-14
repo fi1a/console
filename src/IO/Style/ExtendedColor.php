@@ -7,9 +7,9 @@ namespace Fi1a\Console\IO\Style;
 use InvalidArgumentException;
 
 /**
- * ANSI класс цвета текста и фона
+ * Расширенный класс цвета текста и фона
  */
-class ANSIColor implements ColorInterface
+class ExtendedColor implements ColorInterface
 {
     /**
      * @var string
@@ -38,10 +38,11 @@ class ANSIColor implements ColorInterface
      * @var int[]
      */
     private static $colorCodes = [
-        self::DEFAULT => 39, self::BLACK => 30, self::RED => 31, self::GREEN => 32, self::YELLOW => 33,
-        self::BLUE => 34, self::MAGENTA => 35, self::CYAN => 36, self::GRAY => 37,
-        self::DARK_GRAY => 90, self::LIGHT_RED => 91, self::LIGHT_GREEN => 92, self::LIGHT_YELLOW => 93,
-        self::LIGHT_BLUE => 94, self::LIGHT_MAGENTA => 95, self::LIGHT_CYAN => 96, self::WHITE => 97,
+        self::DEFAULT => 39, self::BLACK => 0, self::RED => 1, self::GREEN => 2, self::YELLOW => 3,
+        self::BLUE => 4, self::MAGENTA => 5, self::CYAN => 6, self::WHITE => 15,
+        self::GRAY => 7, self::LIGHT_RED => 9, self::LIGHT_GREEN => 10, self::LIGHT_YELLOW => 11,
+        self::LIGHT_BLUE => 14, self::LIGHT_MAGENTA => 13, self::LIGHT_CYAN => 14,
+        self::DARK_GRAY => 244,
     ];
 
     /**
@@ -60,7 +61,11 @@ class ANSIColor implements ColorInterface
      */
     public function getColorCode(): string
     {
-        return (string) static::$colorCodes[$this->color];
+        if (is_numeric($this->color)) {
+            return '38;5;' . $this->color;
+        }
+
+        return '38;5;' . static::$colorCodes[$this->color];
     }
 
     /**
@@ -68,7 +73,11 @@ class ANSIColor implements ColorInterface
      */
     public function getBackgroundCode(): string
     {
-        return (string) (static::$colorCodes[$this->color] + 10);
+        if (is_numeric($this->color)) {
+            return '48;5;' . $this->color;
+        }
+
+        return '48;5;' . static::$colorCodes[$this->color];
     }
 
     /**
@@ -84,7 +93,9 @@ class ANSIColor implements ColorInterface
      */
     public function setColor(string $color): bool
     {
-        if (!in_array($color, array_keys(static::$colorCodes))) {
+        if (is_numeric($color) && ((int) $color < 0 || (int) $color > 255)) {
+            throw new InvalidArgumentException(sprintf('Неизвестный цвет "%s"', $color));
+        } elseif (!is_numeric($color) && !in_array($color, array_keys(static::$colorCodes))) {
             throw new InvalidArgumentException(sprintf('Неизвестный цвет "%s"', $color));
         }
         $this->color = $color;

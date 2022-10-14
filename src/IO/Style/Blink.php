@@ -18,12 +18,4 @@ class Blink extends AbstractOption
     {
         return '5';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultCode(): string
-    {
-        return '25';
-    }
 }

@@ -18,19 +18,14 @@ class ANSIStyle extends AbstractStyle
             $this->getColor()->getColorCode(),
             $this->getBackground()->getBackgroundCode(),
         ];
-        $unset = [
-            $this->getColor()->getDefaultColorCode(),
-            $this->getBackground()->getDefaultBackgroundCode(),
-        ];
         $options = $this->getOptions();
         if (count($options)) {
             foreach ($options as $option) {
                 $set[] = $option->getCode();
-                $unset[] = $option->getDefaultCode();
             }
         }
 
-        return sprintf("\x1b[%sm%s\x1b[%sm", implode(';', $set), $message, implode(';', $unset));
+        return sprintf("\x1b[%sm%s\x1b[0m", implode(';', $set), $message);
     }
 
     /**

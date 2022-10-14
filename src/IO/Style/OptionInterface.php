@@ -13,9 +13,4 @@ interface OptionInterface
      * Цифровой код опции
      */
     public function getCode(): string;
-
-    /**
-     * Цифровой код опции по умолчанию
-     */
-    public function getDefaultCode(): string;
 }
