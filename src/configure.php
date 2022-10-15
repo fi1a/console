@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Fi1a\Console\IO\Formatter;
-use Fi1a\Console\IO\Style\ANSIColor;
-use Fi1a\Console\IO\Style\ANSIStyle;
+use Fi1a\Console\IO\Style\TrueColor;
+use Fi1a\Console\IO\Style\TrueColorStyle;
 
-Formatter::addStyle('error', new ANSIStyle(ANSIColor::WHITE, ANSIColor::RED));
-Formatter::addStyle('success', new ANSIStyle(ANSIColor::BLACK, ANSIColor::GREEN));
-Formatter::addStyle('info', new ANSIStyle(ANSIColor::GREEN));
-Formatter::addStyle('comment', new ANSIStyle(ANSIColor::YELLOW));
-Formatter::addStyle('question', new ANSIStyle(ANSIColor::BLACK, ANSIColor::CYAN));
+Formatter::addStyle('error', new TrueColorStyle(TrueColor::WHITE, TrueColor::RED));
+Formatter::addStyle('success', new TrueColorStyle(TrueColor::BLACK, TrueColor::GREEN));
+Formatter::addStyle('info', new TrueColorStyle(TrueColor::GREEN));
+Formatter::addStyle('comment', new TrueColorStyle(TrueColor::YELLOW));
+Formatter::addStyle('question', new TrueColorStyle(TrueColor::BLACK, TrueColor::CYAN));

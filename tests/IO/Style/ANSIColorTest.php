@@ -24,6 +24,28 @@ class ANSIColorTest extends TestCase
     }
 
     /**
+     * ANSI класс цвета текста и фона (цвет из Extended)
+     */
+    public function testANSIColorFromExtended()
+    {
+        $color = new ANSIColor('200');
+        $this->assertFalse($color->isDefault());
+        $this->assertTrue(is_string($color->getColorCode()));
+        $this->assertTrue(is_string($color->getBackgroundCode()));
+    }
+
+    /**
+     * ANSI класс цвета текста и фона (цвет из TrueColor)
+     */
+    public function testANSIColorFromTrueColor()
+    {
+        $color = new ANSIColor('#000000');
+        $this->assertFalse($color->isDefault());
+        $this->assertTrue(is_string($color->getColorCode()));
+        $this->assertTrue(is_string($color->getBackgroundCode()));
+    }
+
+    /**
      * ANSI класс цвета текста и фона
      */
     public function testANSIColorException()

@@ -9,6 +9,24 @@ namespace Fi1a\Console\IO\Style;
  */
 interface ColorInterface
 {
+    public const DEFAULT = 'default';
+    public const BLACK   = 'black';
+    public const RED     = 'red';
+    public const GREEN   = 'green';
+    public const YELLOW  = 'yellow';
+    public const BLUE    = 'blue';
+    public const MAGENTA = 'magenta';
+    public const CYAN    = 'cyan';
+    public const GRAY    = 'gray';
+    public const DARK_GRAY     = 'dark_gray';
+    public const LIGHT_RED     = 'light_red';
+    public const LIGHT_GREEN   = 'light_green';
+    public const LIGHT_YELLOW  = 'light_yellow';
+    public const LIGHT_BLUE    = 'light_blue';
+    public const LIGHT_MAGENTA = 'light_magenta';
+    public const LIGHT_CYAN    = 'light_cyan';
+    public const WHITE         = 'white';
+
     /**
      * Конструктор
      */

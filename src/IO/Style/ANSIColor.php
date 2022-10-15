@@ -11,37 +11,22 @@ use InvalidArgumentException;
  */
 class ANSIColor implements ColorInterface
 {
+    use ColorTrait;
+
     /**
      * @var string
      */
     private $color = self::DEFAULT;
 
-    public const DEFAULT = 'default';
-    public const BLACK   = 'black';
-    public const RED     = 'red';
-    public const GREEN   = 'green';
-    public const YELLOW  = 'yellow';
-    public const BLUE    = 'blue';
-    public const MAGENTA = 'magenta';
-    public const CYAN    = 'cyan';
-    public const GRAY    = 'gray';
-    public const DARK_GRAY     = 'dark_gray';
-    public const LIGHT_RED     = 'light_red';
-    public const LIGHT_GREEN   = 'light_green';
-    public const LIGHT_YELLOW  = 'light_yellow';
-    public const LIGHT_BLUE    = 'light_blue';
-    public const LIGHT_MAGENTA = 'light_magenta';
-    public const LIGHT_CYAN    = 'light_cyan';
-    public const WHITE         = 'white';
-
     /**
      * @var int[]
      */
     private static $colorCodes = [
-        self::DEFAULT => 39, self::BLACK => 30, self::RED => 31, self::GREEN => 32, self::YELLOW => 33,
+        self::BLACK => 30, self::RED => 31, self::GREEN => 32, self::YELLOW => 33,
         self::BLUE => 34, self::MAGENTA => 35, self::CYAN => 36, self::GRAY => 37,
-        self::DARK_GRAY => 90, self::LIGHT_RED => 91, self::LIGHT_GREEN => 92, self::LIGHT_YELLOW => 93,
+        self::LIGHT_RED => 91, self::LIGHT_GREEN => 92, self::LIGHT_YELLOW => 93,
         self::LIGHT_BLUE => 94, self::LIGHT_MAGENTA => 95, self::LIGHT_CYAN => 96, self::WHITE => 97,
+        self::DARK_GRAY => 90,
     ];
 
     /**
@@ -60,6 +45,10 @@ class ANSIColor implements ColorInterface
      */
     public function getColorCode(): string
     {
+        if ($this->isDefault()) {
+            return '';
+        }
+
         return (string) static::$colorCodes[$this->color];
     }
 
@@ -68,6 +57,10 @@ class ANSIColor implements ColorInterface
      */
     public function getBackgroundCode(): string
     {
+        if ($this->isDefault()) {
+            return '';
+        }
+
         return (string) (static::$colorCodes[$this->color] + 10);
     }
 
@@ -84,8 +77,18 @@ class ANSIColor implements ColorInterface
      */
     public function setColor(string $color): bool
     {
-        if (!in_array($color, array_keys(static::$colorCodes))) {
-            throw new InvalidArgumentException(sprintf('Неизвестный цвет "%s"', $color));
+        if (!in_array($color, array_keys(static::$colorCodes)) && $color !== self::DEFAULT) {
+            if (is_numeric($color) && (int) $color >= 0 && (int) $color <= 255) {
+                [$r, $g, $b] = $this->getRgbFromExtended((int) $color);
+                $color = $this->getAnsiForRGB($r, $g, $b);
+            } elseif (substr($color, 0, 1) === '#' && (mb_strlen($color) === 7 || mb_strlen($color) === 4)) {
+                [$r, $g, $b] = $this->getRGBFromHex($color);
+                $color = $this->getAnsiForRGB($r, $g, $b);
+            } else {
+                throw new InvalidArgumentException(sprintf('Неизвестный цвет "%s"', $color));
+            }
+            $keys = array_keys(static::$colorCodes);
+            $color = (string) $keys[$color];
         }
         $this->color = $color;
 

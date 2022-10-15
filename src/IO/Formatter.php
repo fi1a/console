@@ -102,7 +102,7 @@ class Formatter implements FormatterInterface
             $style->setOption($match[1]);
         }
 
-        return static::$styles[$name] = $style;
+        return $style;
     }
 
     /**

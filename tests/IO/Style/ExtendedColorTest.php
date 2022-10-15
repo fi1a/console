@@ -30,6 +30,17 @@ class ExtendedColorTest extends TestCase
     /**
      * Расширенный класс цвета текста и фона
      */
+    public function testExtendedColorFromTrueColor()
+    {
+        $color = new ExtendedColor('#000000');
+        $this->assertFalse($color->isDefault());
+        $this->assertTrue(is_string($color->getColorCode()));
+        $this->assertTrue(is_string($color->getBackgroundCode()));
+    }
+
+    /**
+     * Расширенный класс цвета текста и фона
+     */
     public function testExtendedColorException()
     {
         $this->expectException(\InvalidArgumentException::class);
