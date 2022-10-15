@@ -36,5 +36,5 @@ interface FormatterInterface
     /**
      * Форматирование вывода
      */
-    public function format(string $message): string;
+    public function format(string $message, ?StyleInterface $style = null): string;
 }

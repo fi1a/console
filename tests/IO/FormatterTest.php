@@ -7,6 +7,8 @@ namespace Fi1a\Unit\Console\IO;
 use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\ANSIColor;
 use Fi1a\Console\IO\Style\ANSIStyle;
+use Fi1a\Console\IO\Style\TrueColor;
+use Fi1a\Console\IO\Style\TrueColorStyle;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +25,7 @@ class FormatterTest extends TestCase
     /**
      * Конструктор
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         static::$formatter = new Formatter();
 
@@ -33,7 +35,7 @@ class FormatterTest extends TestCase
     /**
      * Исключение
      */
-    public function testStyleClassException()
+    public function testStyleClassException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Formatter(static::class);
@@ -44,7 +46,7 @@ class FormatterTest extends TestCase
      *
      * @depends testConstruct
      */
-    public function testAddStyle()
+    public function testAddStyle(): void
     {
         $this->assertTrue(static::$formatter->addStyle(
             'style',
@@ -61,7 +63,7 @@ class FormatterTest extends TestCase
      *
      * @depends testAddStyle
      */
-    public function testHasStyle()
+    public function testHasStyle(): void
     {
         $this->assertTrue(static::$formatter->hasStyle('error'));
         $this->assertFalse(static::$formatter->hasStyle('not_exist'));
@@ -72,7 +74,7 @@ class FormatterTest extends TestCase
      *
      * @depends testHasStyle
      */
-    public function testFormat()
+    public function testFormat(): void
     {
         $this->assertTrue(is_string(
             static::$formatter->format('<error>Error text</error> <comment>com<info>men</info>t</comment>')
@@ -91,7 +93,7 @@ class FormatterTest extends TestCase
     /**
      * @depends testFormat
      */
-    public function testFormatException()
+    public function testFormatException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         static::$formatter->format('<error>Error text</error></error> test');
@@ -102,7 +104,7 @@ class FormatterTest extends TestCase
      *
      * @depends testHasStyle
      */
-    public function testGetStyle()
+    public function testGetStyle(): void
     {
         $this->assertInstanceOf(ANSIStyle::class, static::$formatter->getStyle('error'));
         $this->assertFalse(static::$formatter->getStyle('not_exist'));
@@ -117,9 +119,22 @@ class FormatterTest extends TestCase
      *
      * @depends testHasStyle
      */
-    public function testDeleteStyle()
+    public function testDeleteStyle(): void
     {
         $this->assertTrue(static::$formatter->deleteStyle('style'));
         $this->assertFalse(static::$formatter->deleteStyle('style'));
+    }
+
+    /**
+     * Форматирование из стиля
+     */
+    public function testFormatWithStyle(): void
+    {
+        $this->assertTrue(is_string(
+            static::$formatter->format(
+                'Error text',
+                new TrueColorStyle(TrueColor::RED, TrueColor::BLACK)
+            )
+        ));
     }
 }

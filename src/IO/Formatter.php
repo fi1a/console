@@ -108,12 +108,16 @@ class Formatter implements FormatterInterface
     /**
      * @inheritDoc
      */
-    public function format(string $message): string
+    public function format(string $message, ?StyleInterface $style = null): string
     {
         $offset = 0;
         $output = '';
         $tagRegex = '[a-z][a-z0-9\_\=\;\-\#]*+';
         preg_match_all("#<(($tagRegex) | /($tagRegex)?)>#ix", $message, $matches, PREG_OFFSET_CAPTURE);
+
+        if ($style) {
+            $this->getStack()->push($style);
+        }
 
         foreach ($matches[0] as $i => $match) {
             $pos = $match[1];
@@ -129,12 +133,12 @@ class Formatter implements FormatterInterface
 
             if (!$open && !$tag) {
                 $this->getStack()->pop();
-            } elseif (($style = $this->getStyle(mb_strtolower($tag))) === false) {
+            } elseif (($inlineStyle = $this->getStyle(mb_strtolower($tag))) === false) {
                 $output .= $this->applyCurrent($text);
             } elseif ($open) {
-                $this->getStack()->push($style);
+                $this->getStack()->push($inlineStyle);
             } else {
-                $this->getStack()->pop($style);
+                $this->getStack()->pop($inlineStyle);
             }
         }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
+use Fi1a\Console\IO\Style\StyleInterface;
+
 /**
  * Вывод
  */
@@ -28,6 +30,7 @@ interface OutputInterface
     public function write(
         $messages,
         array $variables = [],
+        ?StyleInterface $style = null,
         bool $newLine = false,
         int $verbose = self::VERBOSE_NORMAL
     ): bool;
@@ -38,7 +41,12 @@ interface OutputInterface
      * @param string|string[] $messages
      * @param mixed[] $variables
      */
-    public function writeln($messages, array $variables = [], int $verbose = self::VERBOSE_NORMAL): bool;
+    public function writeln(
+        $messages,
+        array $variables = [],
+        ?StyleInterface $style = null,
+        int $verbose = self::VERBOSE_NORMAL
+    ): bool;
 
     /**
      * Возвращает класс форматирования

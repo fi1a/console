@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
+use Fi1a\Console\IO\Style\StyleInterface;
 use Fi1a\Format\Formatter as StringFormatter;
 
 /**
@@ -83,6 +84,7 @@ abstract class AbstractOutput implements OutputInterface
     public function write(
         $messages,
         array $variables = [],
+        ?StyleInterface $style = null,
         bool $newLine = false,
         int $verbose = self::VERBOSE_NORMAL
     ): bool {
@@ -95,7 +97,7 @@ abstract class AbstractOutput implements OutputInterface
         $result = true;
         foreach ($messages as $message) {
             $message = StringFormatter::format($message, $variables);
-            $message = $this->isDecorated() ? $formatter->format($message) : strip_tags($message);
+            $message = $this->isDecorated() ? $formatter->format($message, $style) : strip_tags($message);
             $result = $this->doWrite($message, $newLine) && $result;
         }
 
@@ -105,9 +107,13 @@ abstract class AbstractOutput implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function writeln($messages, array $variables = [], int $verbose = self::VERBOSE_NORMAL): bool
-    {
-        return $this->write($messages, $variables, true, $verbose);
+    public function writeln(
+        $messages,
+        array $variables = [],
+        ?StyleInterface $style = null,
+        int $verbose = self::VERBOSE_NORMAL
+    ): bool {
+        return $this->write($messages, $variables, $style, true, $verbose);
     }
 
     /**
