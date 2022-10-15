@@ -7,7 +7,7 @@ namespace Fi1a\Console\IO;
 /**
  * Ввод
  */
-interface InputInterface
+interface InputArgumentsInterface
 {
     /**
      * Токены в виде массива

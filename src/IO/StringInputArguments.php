@@ -11,7 +11,7 @@ use Fi1a\Tokenizer\ITokenizer;
 /**
  * Ввод из строки
  */
-class StringInput implements InputInterface
+class StringInputArguments implements InputArgumentsInterface
 {
     /**
      * @var string[]

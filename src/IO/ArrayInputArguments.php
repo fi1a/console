@@ -7,7 +7,7 @@ namespace Fi1a\Console\IO;
 /**
  * Ввод из массива
  */
-class ArrayInput implements InputInterface
+class ArrayInputArguments implements InputArgumentsInterface
 {
     /**
      * @var string[]
@@ -17,11 +17,11 @@ class ArrayInput implements InputInterface
     /**
      * Конструктор
      *
-     * @param string[] $array
+     * @param string[] $argv
      */
-    public function __construct(array $array)
+    public function __construct(array $argv)
     {
-        $this->tokens = $array;
+        $this->tokens = $argv;
     }
 
     /**

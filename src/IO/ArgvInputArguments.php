@@ -7,16 +7,16 @@ namespace Fi1a\Console\IO;
 /**
  * Ввод из массива аргументов CLI
  */
-class ArgvInput extends ArrayInput
+class ArgvInputArguments extends ArrayInputArguments
 {
     /**
      * Конструктор
      *
-     * @param string[] $array
+     * @param string[] $argv
      */
-    public function __construct(array $array)
+    public function __construct(array $argv)
     {
-        array_shift($array);
-        parent::__construct($array);
+        array_shift($argv);
+        parent::__construct($argv);
     }
 }

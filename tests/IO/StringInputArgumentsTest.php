@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\IO;
 
-use Fi1a\Console\IO\StringInput;
+use Fi1a\Console\IO\StringInputArguments;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Тестирование ввода из строки
  */
-class StringInputTest extends TestCase
+class StringInputArgumentsTest extends TestCase
 {
     /**
      * Провайдер данных для теста testStringInput
@@ -40,7 +40,7 @@ class StringInputTest extends TestCase
      */
     public function testStringInput(string $line, array $tokes)
     {
-        $input = new StringInput($line);
+        $input = new StringInputArguments($line);
         $this->assertEquals($tokes, $input->getTokens());
     }
 }
