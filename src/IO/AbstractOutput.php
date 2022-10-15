@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
+use Fi1a\Format\Formatter as StringFormatter;
+
 /**
  * Абстрактный класс вывода
  */
@@ -78,8 +80,12 @@ abstract class AbstractOutput implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function write($messages, bool $newLine = false, int $verbose = self::VERBOSE_NORMAL): bool
-    {
+    public function write(
+        $messages,
+        array $variables = [],
+        bool $newLine = false,
+        int $verbose = self::VERBOSE_NORMAL
+    ): bool {
         $this->checkVerbose($verbose);
         if ($verbose > $this->getVerbose()) {
             return true;
@@ -88,6 +94,7 @@ abstract class AbstractOutput implements OutputInterface
         $formatter = $this->getFormatter();
         $result = true;
         foreach ($messages as $message) {
+            $message = StringFormatter::format($message, $variables);
             $message = $this->isDecorated() ? $formatter->format($message) : strip_tags($message);
             $result = $this->doWrite($message, $newLine) && $result;
         }
@@ -98,9 +105,9 @@ abstract class AbstractOutput implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function writeln($messages, int $verbose = self::VERBOSE_NORMAL): bool
+    public function writeln($messages, array $variables = [], int $verbose = self::VERBOSE_NORMAL): bool
     {
-        return $this->write($messages, true, $verbose);
+        return $this->write($messages, $variables, true, $verbose);
     }
 
     /**

@@ -69,6 +69,19 @@ class StreamOutputTest extends TestCase
     }
 
     /**
+     * Вывод
+     *
+     * @depends testConstructDecorate
+     */
+    public function testWriteFormatter()
+    {
+        $this->assertTrue(static::$output->write(
+            '{{if(key1)}}{{key2}}{{endif}}',
+            ['key1' => 1, 'key2' => 2,]
+        ));
+    }
+
+    /**
      * Вывод с использованием уровня подробности
      */
     public function testVerbose()

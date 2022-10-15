@@ -23,15 +23,22 @@ interface OutputInterface
      * Вывод
      *
      * @param string|string[] $messages
+     * @param mixed[] $variables
      */
-    public function write($messages, bool $newLine = false, int $verbose = self::VERBOSE_NORMAL): bool;
+    public function write(
+        $messages,
+        array $variables = [],
+        bool $newLine = false,
+        int $verbose = self::VERBOSE_NORMAL
+    ): bool;
 
     /**
      * Вывод с переводом строки
      *
      * @param string|string[] $messages
+     * @param mixed[] $variables
      */
-    public function writeln($messages, int $verbose = self::VERBOSE_NORMAL): bool;
+    public function writeln($messages, array $variables = [], int $verbose = self::VERBOSE_NORMAL): bool;
 
     /**
      * Возвращает класс форматирования
