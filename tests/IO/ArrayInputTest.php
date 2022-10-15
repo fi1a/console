@@ -17,8 +17,8 @@ class ArrayInputTest extends TestCase
      */
     public function testGetTokens(): void
     {
-        $argv = ['command', '--force'];
-        $input = new ArrayInput($argv);
-        $this->assertEquals($argv, $input->getTokens());
+        $array = ['command', '--force'];
+        $input = new ArrayInput($array);
+        $this->assertEquals($array, $input->getTokens());
     }
 }

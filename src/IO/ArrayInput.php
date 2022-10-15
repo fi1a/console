@@ -17,11 +17,11 @@ class ArrayInput implements InputInterface
     /**
      * Конструктор
      *
-     * @param string[] $argv
+     * @param string[] $array
      */
-    public function __construct(array $argv)
+    public function __construct(array $array)
     {
-        $this->tokens = $argv;
+        $this->tokens = $array;
     }
 
     /**
