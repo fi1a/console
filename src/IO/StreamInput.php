@@ -7,7 +7,7 @@ namespace Fi1a\Console\IO;
 /**
  * Потоковый ввод
  */
-class StreamConsoleInput implements ConsoleInputInterface
+class StreamInput implements InputInterface
 {
     /**
      * @var StreamInterface

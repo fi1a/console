@@ -7,7 +7,7 @@ namespace Fi1a\Console\IO;
 /**
  * Интерфейс ввода
  */
-interface ConsoleInputInterface
+interface InputInterface
 {
     /**
      * Чтение

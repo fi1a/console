@@ -9,7 +9,7 @@ namespace Fi1a\Console\IO;
  *
  * @codeCoverageIgnore
  */
-class ConsoleInput extends StreamConsoleInput
+class ConsoleInput extends StreamInput
 {
     /**
      * @inheritDoc
