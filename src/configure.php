@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\TrueColor;
 use Fi1a\Console\IO\Style\TrueColorStyle;
+use Fi1a\Console\Registry;
+
+Registry::setArgv($_SERVER['argv'] ?? []);
 
 Formatter::addStyle('error', new TrueColorStyle(TrueColor::WHITE, TrueColor::RED));
 Formatter::addStyle('success', new TrueColorStyle(TrueColor::BLACK, TrueColor::GREEN));

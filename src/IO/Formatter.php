@@ -112,8 +112,11 @@ class Formatter implements FormatterInterface
     {
         $offset = 0;
         $output = '';
-        $tagRegex = '[a-z][a-z0-9\_\=\;\-\#]*+';
-        preg_match_all("#<(($tagRegex) | /($tagRegex)?)>#ix", $message, $matches, PREG_OFFSET_CAPTURE);
+
+        $openTagRegex = '[a-z][a-z0-9\_\=\;\-\#]*+';
+        $closeTagRegex = '[a-z][^<>]*+';
+
+        preg_match_all("#<(($openTagRegex) | /($closeTagRegex)?)>#ix", $message, $matches, PREG_OFFSET_CAPTURE);
 
         if ($style) {
             $this->getStack()->push($style);
@@ -122,7 +125,8 @@ class Formatter implements FormatterInterface
         foreach ($matches[0] as $i => $match) {
             $pos = $match[1];
             $text = $match[0];
-            $output .= $this->applyCurrent(mb_substr($message, $offset, $pos - $offset));
+
+            $output .= $this->applyCurrent(substr($message, $offset, $pos - $offset));
             $offset = $pos + mb_strlen($text);
 
             if ($open = $text[1] !== '/') {
@@ -142,7 +146,7 @@ class Formatter implements FormatterInterface
             }
         }
 
-        return $output . $this->applyCurrent(mb_substr($message, $offset));
+        return $output . $this->applyCurrent(substr($message, $offset));
     }
 
     /**

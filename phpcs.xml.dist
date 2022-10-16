@@ -375,7 +375,9 @@
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
 
     <!-- Disallow use of super-global variables -->
-    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable"/>
+    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable">
+        <exclude name="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable"/>
+    </rule>
 
     <!-- Clean up unnecessary variables -->
     <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
