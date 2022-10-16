@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console;
 
 use Fi1a\Console\Definition\Definition;
-use Fi1a\Console\Definition\Exception\UnknownOptionException;
+use Fi1a\Console\Definition\Exception\DefinitionException;
 use Fi1a\Console\IO\ArgvInputArguments;
 use Fi1a\Console\IO\ConsoleInput;
 use Fi1a\Console\IO\ConsoleOutput;
@@ -14,6 +14,7 @@ use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\InputArgumentsInterface;
 use Fi1a\Console\IO\InputInterface;
 use Fi1a\Console\IO\Style\ANSIStyle;
+use Fi1a\Validation\Error;
 use InvalidArgumentException;
 
 /**
@@ -83,13 +84,20 @@ class App implements AppInterface
 
         try {
             $definition->parseValues($input);
-        } catch (UnknownOptionException $exception) {
-            $output->getErrorOutput()->writeln(
-                '<error>Передана неизвестная опция "{{name}}"</error>',
-                [
-                    'name' => $exception->getName(),
-                ]
-            );
+        } catch (DefinitionException $exception) {
+            $output->getErrorOutput()->writeln('<error>' . $exception->getMessage() . '</error>');
+
+            return 1;
+        }
+        $result = $definition->validate();
+        if (!$result->isSuccess()) {
+            /**
+             * @var Error $error
+             */
+            foreach ($result->getErrors() as $error) {
+                $message = (string) $error->getMessage();
+                $output->getErrorOutput()->writeln('<error>' . $message . '</error>');
+            }
 
             return 1;
         }

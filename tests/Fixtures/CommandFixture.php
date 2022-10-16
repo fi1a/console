@@ -19,6 +19,7 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
      */
     public function __construct(DefinitionInterface $definition)
     {
+        $definition->addOption('option1')->validation()->allOf()->integer();
     }
 
     /**

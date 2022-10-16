@@ -50,7 +50,21 @@ class AppTest extends TestCase
      */
     public function testRunUnknownOption(): void
     {
-        $input = new ArrayInputArguments(['--option1=1']);
+        $input = new ArrayInputArguments(['--unknown=1']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run(CommandFixture::class);
+        $this->assertEquals(1, $code);
+    }
+
+    /**
+     * Запуск команды
+     */
+    public function testRunValidationError(): void
+    {
+        $input = new ArrayInputArguments(['--option1=abc']);
         $output = new ConsoleOutput(new Formatter());
         $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));

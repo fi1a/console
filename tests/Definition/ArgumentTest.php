@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Unit\Console\Definition;
 
 use Fi1a\Console\Definition\Argument;
+use Fi1a\Console\Definition\Validation;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,5 +37,16 @@ class ArgumentTest extends TestCase
         $this->assertTrue($argument->isMultiple());
         $argument->multiple(false);
         $this->assertFalse($argument->isMultiple());
+    }
+
+    /**
+     * Валидация аргументов и опций
+     */
+    public function testValidation(): void
+    {
+        $argument = new Argument();
+        $this->assertNull($argument->getValidation());
+        $this->assertInstanceOf(Validation::class, $argument->validation());
+        $this->assertInstanceOf(Validation::class, $argument->getValidation());
     }
 }

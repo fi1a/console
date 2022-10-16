@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Unit\Console\Definition;
 
 use Fi1a\Console\Definition\Option;
+use Fi1a\Console\Definition\Validation;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,5 +37,16 @@ class OptionTest extends TestCase
         $this->assertTrue($option->isMultiple());
         $option->multiple(false);
         $this->assertFalse($option->isMultiple());
+    }
+
+    /**
+     * Валидация аргументов и опций
+     */
+    public function testValidation(): void
+    {
+        $option = new Option();
+        $this->assertNull($option->getValidation());
+        $this->assertInstanceOf(Validation::class, $option->validation());
+        $this->assertInstanceOf(Validation::class, $option->getValidation());
     }
 }

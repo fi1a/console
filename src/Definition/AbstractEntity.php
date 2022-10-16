@@ -25,6 +25,11 @@ abstract class AbstractEntity implements EntityInterface
     private $multiple = false;
 
     /**
+     * @var Validation|null
+     */
+    private $validation;
+
+    /**
      * @inheritDoc
      */
     public function setValue($value): EntityInterface
@@ -72,5 +77,21 @@ abstract class AbstractEntity implements EntityInterface
     public function isMultiple(): bool
     {
         return $this->multiple;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validation(): ValidationInterface
+    {
+        return $this->validation = new Validation();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidation(): ?ValidationInterface
+    {
+        return $this->validation;
     }
 }

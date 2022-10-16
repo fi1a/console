@@ -6,7 +6,7 @@ namespace Fi1a\Unit\Console\Definition;
 
 use Fi1a\Console\Definition\Argument;
 use Fi1a\Console\Definition\Definition;
-use Fi1a\Console\Definition\Exception\UnknownOptionException;
+use Fi1a\Console\Definition\Exception\DefinitionException;
 use Fi1a\Console\Definition\Option;
 use Fi1a\Console\IO\ArrayInputArguments;
 use InvalidArgumentException;
@@ -168,17 +168,22 @@ class DefinitionTest extends TestCase
     /**
      * Значения
      */
+    public function testValuesUnknownArguments(): void
+    {
+        $this->expectException(DefinitionException::class);
+        $definition = new Definition();
+        $definition->addArgument('arg1');
+        $definition->parseValues(new ArrayInputArguments(['argument1', 'argument2',]));
+    }
+
+    /**
+     * Значения
+     */
     public function testValuesUnknownOption(): void
     {
-        $this->expectException(UnknownOptionException::class);
+        $this->expectException(DefinitionException::class);
         $definition = new Definition();
-        try {
-            $definition->parseValues(new ArrayInputArguments(['--option1=1']));
-        } catch (UnknownOptionException $exception) {
-            $this->assertEquals('option1', $exception->getName());
-
-            throw $exception;
-        }
+        $definition->parseValues(new ArrayInputArguments(['--option1=1']));
     }
 
     /**
@@ -186,14 +191,21 @@ class DefinitionTest extends TestCase
      */
     public function testValuesUnknownShortOption(): void
     {
-        $this->expectException(UnknownOptionException::class);
+        $this->expectException(DefinitionException::class);
         $definition = new Definition();
-        try {
-            $definition->parseValues(new ArrayInputArguments(['-opt1', 'value']));
-        } catch (UnknownOptionException $exception) {
-            $this->assertEquals('opt1', $exception->getName());
+        $definition->parseValues(new ArrayInputArguments(['-opt1', 'value']));
+    }
 
-            throw $exception;
-        }
+    /**
+     * Валидация
+     */
+    public function testValidate(): void
+    {
+        $definition = new Definition();
+        $definition->addOption('option1', 'opt1')->validation()->allOf()->required()->integer();
+        $definition->addArgument('arg1')->validation()->allOf()->required()->array();
+        $definition->parseValues(new ArrayInputArguments([]));
+        $result = $definition->validate();
+        $this->assertFalse($result->isSuccess());
     }
 }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\Definition;
 
-use Fi1a\Console\Definition\Exception\UnknownOptionException;
+use Fi1a\Console\Definition\Exception\DefinitionException;
 use Fi1a\Console\IO\InputArgumentsInterface;
+use Fi1a\Validation\Result;
+use Fi1a\Validation\ResultInterface;
 use InvalidArgumentException;
 
 /**
@@ -201,15 +203,13 @@ class Definition implements DefinitionInterface
 
         $this->parseOptions($tokens);
         $this->parseShortOptions($tokens);
-
         if (($name = $this->checkUnknownOptions($tokens)) !== true) {
-            $exception = new UnknownOptionException();
-            $exception->setName($name);
-
-            throw $exception;
+            throw new DefinitionException(sprintf('Передана неизвестная опция "%s"', $name));
         }
-
         $this->parseArguments($tokens);
+        if (count($tokens)) {
+            throw new DefinitionException('Передан неизвестный аргумент');
+        }
     }
 
     /**
@@ -343,5 +343,33 @@ class Definition implements DefinitionInterface
         }
 
         return true;
+    }
+
+    /**
+     * Валидация
+     */
+    public function validate(): ResultInterface
+    {
+        $total = new Result();
+        $total->setSuccess(true);
+        foreach ($this->allOptions() + $this->allArguments() as $name => $entity) {
+            $validation = $entity->getValidation();
+            if ($validation && ($chain = $validation->getChain())) {
+                $value = [];
+                if (!is_null($entity->getValue())) {
+                    $value = [(string) $name => $entity->getValue()];
+                }
+                $result = $chain->validate(
+                    $value,
+                    (string) $name
+                );
+                $total->setSuccess($total->isSuccess() && $result->isSuccess());
+                if (!$result->isSuccess()) {
+                    $total->addErrors($result->getErrors());
+                }
+            }
+        }
+
+        return $total;
     }
 }
