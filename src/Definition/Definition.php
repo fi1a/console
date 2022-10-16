@@ -208,6 +208,8 @@ class Definition implements DefinitionInterface
 
             throw $exception;
         }
+
+        $this->parseArguments($tokens);
     }
 
     /**
@@ -239,6 +241,9 @@ class Definition implements DefinitionInterface
                 continue;
             }
             unset($tokens[$ind]);
+            if ($option->isMultiple()) {
+                $value = array_map('trim', explode(',', (string) $value));
+            }
             $option->setValue($value);
         }
     }
@@ -273,7 +278,45 @@ class Definition implements DefinitionInterface
                 }
             }
             unset($tokens[$ind]);
+            if ($option->isMultiple()) {
+                $value = array_map('trim', explode(',', (string) $value));
+            }
             $option->setValue($value);
+        }
+    }
+
+    /**
+     * Парсим аргументы
+     *
+     * @param string[] $tokens
+     */
+    private function parseArguments(array &$tokens): void
+    {
+        $tokens = array_values($tokens);
+        $arguments = $this->allArguments();
+        $ind = 0;
+        $count = count($tokens);
+        $countArgs = count($arguments);
+        foreach (array_values($arguments) as $aInd => $argument) {
+            if ($ind >= $count) {
+                break;
+            }
+
+            if (!$argument->isMultiple()) {
+                $value = $tokens[$ind];
+                unset($tokens[$ind]);
+                $ind++;
+                $argument->setValue($value);
+
+                continue;
+            }
+            $value = [];
+            while ($ind < $count && $countArgs - $aInd <= $count - $ind) {
+                $value[] = $tokens[$ind];
+                unset($tokens[$ind]);
+                $ind++;
+            }
+            $argument->setValue($value);
         }
     }
 

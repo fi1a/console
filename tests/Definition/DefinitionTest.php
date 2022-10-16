@@ -127,10 +127,42 @@ class DefinitionTest extends TestCase
         $definition->addOption('option1', 'opt1');
         $definition->addOption('option2', 'opt2');
         $definition->addOption('option3', 'opt3');
-        $definition->parseValues(new ArrayInputArguments(['--option1=1', 'argument1', '--option2', '-opt3', 'value']));
+        $definition->addArgument('arg1')->multiple();
+        $definition->parseValues(
+            new ArrayInputArguments(['--option1=1', 'argument1', 'argument2', '--option2', '-opt3', 'value'])
+        );
         $this->assertEquals('1', $definition->getOption('option1')->getValue());
         $this->assertTrue($definition->getOption('option2')->getValue());
         $this->assertEquals('value', $definition->getShortOption('opt3')->getValue());
+        $this->assertEquals(['argument1', 'argument2'], $definition->getArgument('arg1')->getValue());
+    }
+
+    /**
+     * Значения
+     */
+    public function testValuesMultipleOptions(): void
+    {
+        $definition = new Definition();
+        $definition->addOption('option1', 'opt1')->multiple();
+        $definition->addOption('option2', 'opt2')->multiple();
+        $definition->parseValues(new ArrayInputArguments(['--option1=1, 2, 3', '-opt2', '1, 2, 3']));
+        $this->assertEquals(['1', '2', '3'], $definition->getOption('option1')->getValue());
+        $this->assertEquals(['1', '2', '3'], $definition->getShortOption('opt2')->getValue());
+    }
+
+    /**
+     * Значения
+     */
+    public function testValuesArgument(): void
+    {
+        $definition = new Definition();
+        $definition->addArgument('arg1');
+        $definition->addArgument('arg2');
+        $definition->addArgument('arg3')->multiple();
+        $definition->parseValues(new ArrayInputArguments(['argument1', 'argument2',]));
+        $this->assertEquals('argument1', $definition->getArgument('arg1')->getValue());
+        $this->assertEquals('argument2', $definition->getArgument('arg2')->getValue());
+        $this->assertNull($definition->getArgument('arg3')->getValue());
     }
 
     /**

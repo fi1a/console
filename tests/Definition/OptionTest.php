@@ -24,4 +24,17 @@ class OptionTest extends TestCase
         $option->setValue('value');
         $this->assertEquals('value', $option->getValue());
     }
+
+    /**
+     * Множественное значение
+     */
+    public function testMultiple(): void
+    {
+        $option = new Option();
+        $this->assertFalse($option->isMultiple());
+        $option->multiple();
+        $this->assertTrue($option->isMultiple());
+        $option->multiple(false);
+        $this->assertFalse($option->isMultiple());
+    }
 }

@@ -31,4 +31,16 @@ interface EntityInterface
      * @param mixed $value
      */
     public function default($value): EntityInterface;
+
+    /**
+     * Множественное значение
+     *
+     * @return static
+     */
+    public function multiple(bool $multiple = true): EntityInterface;
+
+    /**
+     * Имеет ли множественное значение
+     */
+    public function isMultiple(): bool;
 }

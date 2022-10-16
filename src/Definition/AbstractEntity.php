@@ -20,6 +20,11 @@ abstract class AbstractEntity implements EntityInterface
     private $default;
 
     /**
+     * @var bool
+     */
+    private $multiple = false;
+
+    /**
      * @inheritDoc
      */
     public function setValue($value): EntityInterface
@@ -49,5 +54,23 @@ abstract class AbstractEntity implements EntityInterface
         $this->default = $value;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function multiple(bool $multiple = true): EntityInterface
+    {
+        $this->multiple = $multiple;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isMultiple(): bool
+    {
+        return $this->multiple;
     }
 }
