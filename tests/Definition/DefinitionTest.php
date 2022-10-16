@@ -66,9 +66,11 @@ class DefinitionTest extends TestCase
         $definition = new Definition();
         $definition->addOption('option1', 'opt1');
         $definition->addOption('option2', 'opt2');
-        $definition->parseValues(new ArrayInputArguments(['--option1=1', 'argument1', '--option2']));
+        $definition->addOption('option3', 'opt3');
+        $definition->parseValues(new ArrayInputArguments(['--option1=1', 'argument1', '--option2', '-opt3', 'value']));
         $this->assertEquals('1', $definition->getOption('option1')->getValue());
         $this->assertTrue($definition->getOption('option2')->getValue());
+        $this->assertEquals('value', $definition->getShortOption('opt3')->getValue());
     }
 
     /**
@@ -82,6 +84,22 @@ class DefinitionTest extends TestCase
             $definition->parseValues(new ArrayInputArguments(['--option1=1']));
         } catch (UnknownOptionException $exception) {
             $this->assertEquals('option1', $exception->getName());
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Значения
+     */
+    public function testValuesUnknownShortOption(): void
+    {
+        $this->expectException(UnknownOptionException::class);
+        $definition = new Definition();
+        try {
+            $definition->parseValues(new ArrayInputArguments(['-opt1', 'value']));
+        } catch (UnknownOptionException $exception) {
+            $this->assertEquals('opt1', $exception->getName());
 
             throw $exception;
         }

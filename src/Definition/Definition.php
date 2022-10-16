@@ -131,6 +131,7 @@ class Definition implements DefinitionInterface
         $tokens = $input->getTokens();
 
         $this->parseOptions($tokens);
+        $this->parseShortOptions($tokens);
 
         if (($name = $this->checkUnknownOptions($tokens)) !== true) {
             $exception = new UnknownOptionException();
@@ -174,6 +175,40 @@ class Definition implements DefinitionInterface
     }
 
     /**
+     * Парсим опции в короткой нотации
+     *
+     * <code>
+     * -option 1 -option 1,2,3
+     * </code>
+     *
+     * @param string[] $tokens
+     */
+    private function parseShortOptions(array &$tokens): void
+    {
+        $tokens = array_values($tokens);
+        $count = count($tokens);
+        foreach ($tokens as $ind => $token) {
+            if (mb_substr($token, 0, 2) === '--' || mb_substr($token, 0, 1) !== '-') {
+                continue;
+            }
+            $name = mb_substr($token, 1);
+            if (($option = $this->getShortOption($name)) === false) {
+                continue;
+            }
+            $value = null;
+            if ($ind + 1 < $count) {
+                $token = $tokens[$ind + 1];
+                if (mb_substr($token, 0, 1) !== '-') {
+                    $value = $token;
+                    unset($tokens[$ind + 1]);
+                }
+            }
+            unset($tokens[$ind]);
+            $option->setValue($value);
+        }
+    }
+
+    /**
      * Проверяет наличие не известных опций
      *
      * @param string[] $tokens
@@ -185,6 +220,8 @@ class Definition implements DefinitionInterface
         foreach ($tokens as $token) {
             if (mb_substr($token, 0, 2) === '--') {
                 $token = mb_substr($token, 2);
+            } elseif (mb_substr($token, 0, 1) === '-') {
+                $token = mb_substr($token, 1);
             } else {
                 continue;
             }
