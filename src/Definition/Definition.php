@@ -6,8 +6,8 @@ namespace Fi1a\Console\Definition;
 
 use Fi1a\Console\Definition\Exception\DefinitionException;
 use Fi1a\Console\IO\InputArgumentsInterface;
-use Fi1a\Validation\Result;
 use Fi1a\Validation\ResultInterface;
+use Fi1a\Validation\Validator;
 use InvalidArgumentException;
 
 /**
@@ -350,26 +350,22 @@ class Definition implements DefinitionInterface
      */
     public function validate(): ResultInterface
     {
-        $total = new Result();
-        $total->setSuccess(true);
+        $validator = new Validator();
+        $values = [];
+        $rules = [];
         foreach ($this->allOptions() + $this->allArguments() as $name => $entity) {
             $validation = $entity->getValidation();
             if ($validation && ($chain = $validation->getChain())) {
-                $value = [];
                 if (!is_null($entity->getValue())) {
-                    $value = [(string) $name => $entity->getValue()];
+                    /** @psalm-suppress MixedAssignment */
+                    $values[(string) $name] = $entity->getValue();
                 }
-                $result = $chain->validate(
-                    $value,
-                    (string) $name
-                );
-                $total->setSuccess($total->isSuccess() && $result->isSuccess());
-                if (!$result->isSuccess()) {
-                    $total->addErrors($result->getErrors());
-                }
+                /** @psalm-suppress MixedAssignment */
+                $rules[(string) $name] = $chain;
             }
         }
+        $validation = $validator->make($values, $rules);
 
-        return $total;
+        return $validation->validate();
     }
 }
