@@ -65,6 +65,35 @@ interface DefinitionInterface
     public function allShortOptions(): array;
 
     /**
+     * Добавить аргумент
+     */
+    public function addArgument(string $name): ArgumentInterface;
+
+    /**
+     * Есть ли аргумент
+     */
+    public function hasArgument(string $name): bool;
+
+    /**
+     * Возвращает аргумент
+     *
+     * @return ArgumentInterface|false
+     */
+    public function getArgument(string $name);
+
+    /**
+     * Удалить аргумент
+     */
+    public function deleteArgument(string $name): bool;
+
+    /**
+     * Возвращает аргументы
+     *
+     * @return ArgumentInterface[]
+     */
+    public function allArguments(): array;
+
+    /**
      * Парсинг значений
      */
     public function parseValues(InputArgumentsInterface $input): void;
