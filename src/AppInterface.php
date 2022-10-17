@@ -20,19 +20,19 @@ interface AppInterface
     );
 
     /**
-     * Запуск комманды
+     * Запуск команды
      */
     public function run(?string $command = null): int;
 
     /**
-     * Добавить комманду
+     * Добавить команду
      *
      * @return static
      */
     public function addCommand(string $name, string $command): AppInterface;
 
     /**
-     * Наличие комманды с таким именем
+     * Наличие команды с таким именем
      */
     public function hasCommand(string $name): bool;
 
@@ -44,7 +44,14 @@ interface AppInterface
     public function getCommand(string $name);
 
     /**
-     * Удаление комманды с таким именем
+     * Удаление команды с таким именем
      */
     public function deleteCommand(string $name): bool;
+
+    /**
+     * Возвращает все добавленные команды
+     *
+     * @return string[]
+     */
+    public function allCommands(): array;
 }

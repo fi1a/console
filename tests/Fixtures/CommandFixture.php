@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\Fixtures;
 
+use Fi1a\Console\AppInterface;
 use Fi1a\Console\Definition\DefinitionInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
 use Fi1a\Console\IO\InputArgumentsInterface;
@@ -29,8 +30,17 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
         InputArgumentsInterface $input,
         ConsoleOutputInterface $output,
         InputInterface $stream,
-        DefinitionInterface $definition
+        DefinitionInterface $definition,
+        AppInterface $app
     ): int {
         return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function info(): string
+    {
+        return 'тестовая команда';
     }
 }

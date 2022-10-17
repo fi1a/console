@@ -81,7 +81,7 @@ abstract class AbstractOutput implements OutputInterface
      * @inheritDoc
      */
     public function write(
-        $messages,
+        $messages = '',
         array $variables = [],
         $style = null,
         bool $newLine = false,
@@ -107,7 +107,7 @@ abstract class AbstractOutput implements OutputInterface
      * @inheritDoc
      */
     public function writeln(
-        $messages,
+        $messages = '',
         array $variables = [],
         $style = null,
         int $verbose = self::VERBOSE_NORMAL

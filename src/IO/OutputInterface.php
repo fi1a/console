@@ -29,7 +29,7 @@ interface OutputInterface
      * @param string|StyleInterface|null $style
      */
     public function write(
-        $messages,
+        $messages = '',
         array $variables = [],
         $style = null,
         bool $newLine = false,
@@ -44,7 +44,7 @@ interface OutputInterface
      * @param string|StyleInterface|null $style
      */
     public function writeln(
-        $messages,
+        $messages = '',
         array $variables = [],
         $style = null,
         int $verbose = self::VERBOSE_NORMAL

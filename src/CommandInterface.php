@@ -26,6 +26,12 @@ interface CommandInterface
         InputArgumentsInterface $input,
         ConsoleOutputInterface $output,
         InputInterface $stream,
-        DefinitionInterface $definition
+        DefinitionInterface $definition,
+        AppInterface $app
     ): int;
+
+    /**
+     * Возвращает информацию по команде
+     */
+    public function info(): string;
 }

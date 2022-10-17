@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console;
 
+use Fi1a\Console\Command\InfoCommand;
 use Fi1a\Console\Definition\Definition;
 use Fi1a\Console\Definition\DefinitionValidator;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
@@ -55,6 +56,8 @@ class App implements AppInterface
         $this->input = $input;
         $this->output = $output;
         $this->stream = $stream;
+
+        $this->addCommand('info', InfoCommand::class);
     }
 
     /**
@@ -95,7 +98,7 @@ class App implements AppInterface
             $command = $this->getCommand($name);
             if ($command === false) {
                 $output->getErrorOutput()->writeln(
-                    'Комманда "{{name}}" не найдена',
+                    'Команда "{{name}}" не найдена',
                     ['name' => $name],
                     'error'
                 );
@@ -129,7 +132,7 @@ class App implements AppInterface
         }
         assert($instance instanceof CommandInterface);
 
-        return $instance->run($input, $output, $stream, $definition);
+        return $instance->run($input, $output, $stream, $definition, $this);
     }
 
     /**
@@ -144,7 +147,7 @@ class App implements AppInterface
             throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
         }
         if ($this->hasCommand($name)) {
-            throw new InvalidArgumentException(sprintf('Комманда с именем "%s" уже имеется', $name));
+            throw new InvalidArgumentException(sprintf('Команда с именем "%s" уже имеется', $name));
         }
 
         $this->commands[$name] = $command;
@@ -193,5 +196,13 @@ class App implements AppInterface
         unset($this->commands[mb_strtolower($name)]);
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function allCommands(): array
+    {
+        return $this->commands;
     }
 }

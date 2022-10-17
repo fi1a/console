@@ -50,7 +50,7 @@ class AppTest extends TestCase
     /**
      * Запуск команды
      */
-    public function testRunInInfo(): void
+    public function testRunInfo(): void
     {
         $input = new ArrayInputArguments([]);
         $output = new ConsoleOutput(new Formatter());
@@ -60,7 +60,7 @@ class AppTest extends TestCase
             ->addCommand('command1', CommandFixture::class)
             ->addCommand('command2', CommandFixture::class)
             ->run();
-        $this->assertEquals(1, $code);
+        $this->assertEquals(0, $code);
     }
 
     /**
@@ -121,7 +121,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Методы работы с коммандами
+     * Методы работы с командами
      */
     public function testCommands(): void
     {
@@ -130,13 +130,14 @@ class AppTest extends TestCase
         $this->assertFalse($app->getCommand('command1'));
         $app->addCommand('command1', CommandFixture::class);
         $this->assertTrue($app->hasCommand('command1'));
+        $this->assertCount(2, $app->allCommands());
         $this->assertEquals(CommandFixture::class, $app->getCommand('command1'));
         $this->assertTrue($app->deleteCommand('command1'));
         $this->assertFalse($app->deleteCommand('command1'));
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testAddCommandExisting(): void
     {
@@ -147,7 +148,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testAddCommandEmptyName(): void
     {
@@ -157,7 +158,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testHasCommandEmptyName(): void
     {
@@ -167,7 +168,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testGetCommandEmptyName(): void
     {
@@ -177,7 +178,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testDeleteCommandEmptyName(): void
     {
@@ -187,7 +188,7 @@ class AppTest extends TestCase
     }
 
     /**
-     * Исключение при пустом имени комманды
+     * Исключение при пустом имени команды
      */
     public function testAddCommandSubbclass(): void
     {
