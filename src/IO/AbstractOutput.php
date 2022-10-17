@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
-use Fi1a\Console\IO\Style\StyleInterface;
 use Fi1a\Format\Formatter as StringFormatter;
 
 /**
@@ -84,7 +83,7 @@ abstract class AbstractOutput implements OutputInterface
     public function write(
         $messages,
         array $variables = [],
-        ?StyleInterface $style = null,
+        $style = null,
         bool $newLine = false,
         int $verbose = self::VERBOSE_NORMAL
     ): bool {
@@ -110,7 +109,7 @@ abstract class AbstractOutput implements OutputInterface
     public function writeln(
         $messages,
         array $variables = [],
-        ?StyleInterface $style = null,
+        $style = null,
         int $verbose = self::VERBOSE_NORMAL
     ): bool {
         return $this->write($messages, $variables, $style, true, $verbose);

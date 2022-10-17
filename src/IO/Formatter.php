@@ -108,7 +108,7 @@ class Formatter implements FormatterInterface
     /**
      * @inheritDoc
      */
-    public function format(string $message, ?StyleInterface $style = null): string
+    public function format(string $message, $style = null): string
     {
         $offset = 0;
         $output = '';
@@ -119,7 +119,12 @@ class Formatter implements FormatterInterface
         preg_match_all("#<(($openTagRegex) | /($closeTagRegex)?)>#ix", $message, $matches, PREG_OFFSET_CAPTURE);
 
         if ($style) {
-            $this->getQueue()->addEnd($style);
+            if (is_string($style)) {
+                $style = $this->getStyle(mb_strtolower($style));
+            }
+            if ($style) {
+                $this->getQueue()->addEnd($style);
+            }
         }
 
         foreach ($matches[0] as $i => $match) {

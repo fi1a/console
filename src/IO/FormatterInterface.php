@@ -29,12 +29,16 @@ interface FormatterInterface
     /**
      * Возвращает стиль
      *
+     * @param string|StyleInterface|null $style
+     *
      * @return StyleInterface|false
      */
     public function getStyle(string $name);
 
     /**
      * Форматирование вывода
+     *
+     * @param string|StyleInterface|null $style
      */
-    public function format(string $message, ?StyleInterface $style = null): string;
+    public function format(string $message, $style = null): string;
 }

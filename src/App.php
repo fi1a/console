@@ -88,7 +88,7 @@ class App implements AppInterface
         try {
             $valueSetter->setValues();
         } catch (ValueSetterException $exception) {
-            $output->getErrorOutput()->writeln('<error>' . $exception->getMessage() . '</error>');
+            $output->getErrorOutput()->writeln($exception->getMessage(), [], 'error');
 
             return 1;
         }
@@ -100,7 +100,7 @@ class App implements AppInterface
              */
             foreach ($result->getErrors() as $error) {
                 $message = (string) $error->getMessage();
-                $output->getErrorOutput()->writeln('<error>' . $message . '</error>');
+                $output->getErrorOutput()->writeln($message, [], 'error');
             }
 
             return 1;

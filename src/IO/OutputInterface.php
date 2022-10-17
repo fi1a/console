@@ -26,11 +26,12 @@ interface OutputInterface
      *
      * @param string|string[] $messages
      * @param mixed[] $variables
+     * @param string|StyleInterface|null $style
      */
     public function write(
         $messages,
         array $variables = [],
-        ?StyleInterface $style = null,
+        $style = null,
         bool $newLine = false,
         int $verbose = self::VERBOSE_NORMAL
     ): bool;
@@ -40,11 +41,12 @@ interface OutputInterface
      *
      * @param string|string[] $messages
      * @param mixed[] $variables
+     * @param string|StyleInterface|null $style
      */
     public function writeln(
         $messages,
         array $variables = [],
-        ?StyleInterface $style = null,
+        $style = null,
         int $verbose = self::VERBOSE_NORMAL
     ): bool;
 
