@@ -37,7 +37,7 @@ class Formatter implements FormatterInterface
             $styleClass = ANSIStyle::class;
         }
         $this->setStyleClass($styleClass);
-        $this->setQueue(new StyleQueue($styleClass));
+        $this->setQueue(new StyleQueue(StyleInterface::class));
     }
 
     /**

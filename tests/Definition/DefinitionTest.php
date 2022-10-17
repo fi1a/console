@@ -230,7 +230,7 @@ class DefinitionTest extends TestCase
         $definition->addArgument('arg1')->validation()->allOf()->required()->array();
         $valueSetter = new ValueSetter(
             $definition,
-            new ArrayInputArguments([])
+            new ArrayInputArguments(['arg1'])
         );
         $valueSetter->setValues();
         $definitionValidator = new DefinitionValidator($definition);

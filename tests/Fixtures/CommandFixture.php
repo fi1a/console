@@ -20,7 +20,10 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
      */
     public function __construct(DefinitionInterface $definition)
     {
-        $definition->addOption('option1')->validation()->allOf()->integer();
+        $definition->addOption('option1')
+            ->validation()
+            ->allOf()
+            ->integer();
     }
 
     /**
@@ -39,7 +42,7 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
     /**
      * @inheritDoc
      */
-    public function info(): string
+    public function label(): string
     {
         return 'тестовая команда';
     }

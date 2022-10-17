@@ -43,6 +43,7 @@ class InfoCommand extends AbstractCommand
         uasort($commandNames, function (string $a, string $b) {
             return strcmp($a, $b);
         });
+        $output->writeln();
         $output->writeln('<info>Команды:</info>');
         $output->writeln();
         foreach ($commandNames as $name) {
@@ -53,21 +54,22 @@ class InfoCommand extends AbstractCommand
              * @psalm-suppress InvalidStringClass
              */
             $instance = new $command($definition);
-            $output->writeln('<comment>{{name}}</comment>{{if(info)}} - {{info}}{{endif}}', [
+            $output->writeln('<comment>{{name}}</comment>{{if(info)}} - {{info}};{{endif}}', [
                 'name' => $name,
-                'info' => $instance->info(),
+                'info' => $instance->label(),
             ]);
         }
 
         $output->writeln();
         $output->writeln('<info>Опции:</info>');
         $output->writeln();
-        $output->writeln('<comment>--colors, -c (ansi|ext|trueColor)</comment> - используемый цвет консоли');
+        $output->writeln('<comment>--colors, -c (ansi|ext|trueColor|none)</comment> - используемый цвет консоли;');
         $output->writeln(
             '<comment>--verbose, -v (none, normal, hight, hightest, debug)</comment>'
-            . ' - определяет уровень подробности вывода сообщений при работе консольных команда'
+            . ' - определяет уровень подробности вывода сообщений при работе консольных команд;'
         );
-        $output->writeln('<comment>--help, -h</comment> - справка по выбранной команде');
+        $output->writeln('<comment>--help, -h</comment> - справка по выбранной команде;');
+        $output->writeln();
 
         return 0;
     }
@@ -75,7 +77,7 @@ class InfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function info(): string
+    public function label(): string
     {
         return 'список доступных команд и опций';
     }

@@ -7,6 +7,7 @@ namespace Fi1a\Console;
 use Fi1a\Console\Command\InfoCommand;
 use Fi1a\Console\Definition\Definition;
 use Fi1a\Console\Definition\DefinitionValidator;
+use Fi1a\Console\Definition\EntityInterface;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
 use Fi1a\Console\Definition\ValueSetter;
 use Fi1a\Console\IO\ArgvInputArguments;
@@ -17,6 +18,8 @@ use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\InputArgumentsInterface;
 use Fi1a\Console\IO\InputInterface;
 use Fi1a\Console\IO\Style\ANSIStyle;
+use Fi1a\Console\IO\Style\ExtendedStyle;
+use Fi1a\Console\IO\Style\TrueColorStyle;
 use Fi1a\Validation\Error;
 use InvalidArgumentException;
 
@@ -81,8 +84,12 @@ class App implements AppInterface
         // @codeCoverageIgnoreEnd
 
         $definition = new Definition();
-        $definition->addOption('colors', 'cl')
-            ->default('ansi');
+
+        $definition->addOption('colors', 'c')
+            ->default('ansi')
+            ->validation()
+            ->allOf()
+            ->in('ansi', 'ext', 'trueColor', 'none');
 
         if ($command) {
             if (!is_subclass_of($command, CommandInterface::class)) {
@@ -90,16 +97,18 @@ class App implements AppInterface
             }
         } else {
             $tokens = $input->getTokens();
-            $name = array_shift($tokens);
-            $input->setTokens($tokens);
-            if (!$name) {
-                $name = 'info';
+            $commandName = reset($tokens);
+            if (!$commandName || substr($commandName, 0, 1) === '-') {
+                $commandName = 'info';
+            } else {
+                array_shift($tokens);
             }
-            $command = $this->getCommand($name);
+            $input->setTokens($tokens);
+            $command = $this->getCommand($commandName);
             if ($command === false) {
                 $output->getErrorOutput()->writeln(
-                    'Команда "{{name}}" не найдена',
-                    ['name' => $name],
+                    'Команда "{{commandName}}" не найдена',
+                    ['commandName' => $commandName],
                     'error'
                 );
 
@@ -130,6 +139,28 @@ class App implements AppInterface
 
             return 1;
         }
+
+        $colorsOption = $definition->getOption('colors');
+        assert($colorsOption instanceof EntityInterface);
+        switch (mb_strtolower((string) $colorsOption->getValue())) {
+            case 'ext':
+                $output->setFormatter(new Formatter(ExtendedStyle::class));
+
+                break;
+            case 'truecolor':
+                $output->setFormatter(new Formatter(TrueColorStyle::class));
+
+                break;
+            case 'ansi':
+                $output->setFormatter(new Formatter(ANSIStyle::class));
+
+                break;
+            case 'none':
+                $output->setDecorated(false);
+
+                break;
+        }
+
         assert($instance instanceof CommandInterface);
 
         return $instance->run($input, $output, $stream, $definition, $this);

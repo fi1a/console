@@ -196,4 +196,60 @@ class AppTest extends TestCase
         $app = new App();
         $app->addCommand('command1', static::class);
     }
+
+    /**
+     * Цвета консоли
+     */
+    public function testColorsExt(): void
+    {
+        $input = new ArrayInputArguments(['--colors=ext']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Цвета консоли
+     */
+    public function testColorsTrueColor(): void
+    {
+        $input = new ArrayInputArguments(['--colors=trueColor']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Цвета консоли
+     */
+    public function testColorsNone(): void
+    {
+        $input = new ArrayInputArguments(['--colors=none']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Цвета консоли
+     */
+    public function testColorsAnsi(): void
+    {
+        $input = new ArrayInputArguments(['--colors=ansi']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(0, $code);
+    }
 }
