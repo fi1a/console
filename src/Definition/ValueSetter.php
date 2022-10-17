@@ -13,7 +13,7 @@ use Fi1a\Console\IO\InputArgumentsInterface;
 class ValueSetter implements ValueSetterInterface
 {
     /**
-     * @var Definition
+     * @var DefinitionInterface
      */
     private $definition;
 
@@ -25,7 +25,7 @@ class ValueSetter implements ValueSetterInterface
     /**
      * @inheritDoc
      */
-    public function __construct(Definition $definition, InputArgumentsInterface $input)
+    public function __construct(DefinitionInterface $definition, InputArgumentsInterface $input)
     {
         $this->definition = $definition;
         $this->input = $input;

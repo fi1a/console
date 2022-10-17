@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\Definition;
 
-use Fi1a\Validation\ResultInterface;
-use Fi1a\Validation\Validator;
 use InvalidArgumentException;
 
 /**
@@ -190,29 +188,5 @@ class Definition implements DefinitionInterface
     public function allArguments(): array
     {
         return $this->arguments;
-    }
-
-    /**
-     * Валидация
-     */
-    public function validate(): ResultInterface
-    {
-        $validator = new Validator();
-        $values = [];
-        $rules = [];
-        foreach ($this->allOptions() + $this->allArguments() as $name => $entity) {
-            $validation = $entity->getValidation();
-            if ($validation && ($chain = $validation->getChain())) {
-                if (!is_null($entity->getValue())) {
-                    /** @psalm-suppress MixedAssignment */
-                    $values[(string) $name] = $entity->getValue();
-                }
-                /** @psalm-suppress MixedAssignment */
-                $rules[(string) $name] = $chain;
-            }
-        }
-        $validation = $validator->make($values, $rules);
-
-        return $validation->validate();
     }
 }

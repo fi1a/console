@@ -6,6 +6,7 @@ namespace Fi1a\Unit\Console\Definition;
 
 use Fi1a\Console\Definition\Argument;
 use Fi1a\Console\Definition\Definition;
+use Fi1a\Console\Definition\DefinitionValidator;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
 use Fi1a\Console\Definition\Option;
 use Fi1a\Console\Definition\ValueSetter;
@@ -232,7 +233,8 @@ class DefinitionTest extends TestCase
             new ArrayInputArguments([])
         );
         $valueSetter->setValues();
-        $result = $definition->validate();
+        $definitionValidator = new DefinitionValidator($definition);
+        $result = $definitionValidator->validate();
         $this->assertFalse($result->isSuccess());
     }
 }

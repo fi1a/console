@@ -14,7 +14,7 @@ interface ValueSetterInterface
     /**
      * Конструктор
      */
-    public function __construct(Definition $definition, InputArgumentsInterface $input);
+    public function __construct(DefinitionInterface $definition, InputArgumentsInterface $input);
 
     /**
      * Установить значения

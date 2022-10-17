@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console;
 
 use Fi1a\Console\Definition\Definition;
+use Fi1a\Console\Definition\DefinitionValidator;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
 use Fi1a\Console\Definition\ValueSetter;
 use Fi1a\Console\IO\ArgvInputArguments;
@@ -91,7 +92,8 @@ class App implements AppInterface
 
             return 1;
         }
-        $result = $definition->validate();
+        $definitionValidator = new DefinitionValidator($definition);
+        $result = $definitionValidator->validate();
         if (!$result->isSuccess()) {
             /**
              * @var Error $error
