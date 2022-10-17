@@ -23,4 +23,26 @@ interface AppInterface
      * Запуск комманды
      */
     public function run(?string $command = null): int;
+
+    /**
+     * Добавить комманду
+     */
+    public function addCommand(string $name, string $command): bool;
+
+    /**
+     * Наличие комманды с таким именем
+     */
+    public function hasCommand(string $name): bool;
+
+    /**
+     * Возвращает класс команды с таким именем
+     *
+     * @return string|false
+     */
+    public function getCommand(string $name);
+
+    /**
+     * Удаление комманды с таким именем
+     */
+    public function deleteCommand(string $name): bool;
 }

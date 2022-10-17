@@ -40,6 +40,11 @@ class App implements AppInterface
     private $stream;
 
     /**
+     * @var string[]
+     */
+    private $commands = [];
+
+    /**
      * @inheritDoc
      */
     public function __construct(
@@ -79,7 +84,7 @@ class App implements AppInterface
         $instance = null;
         if ($command) {
             if (!is_subclass_of($command, CommandInterface::class)) {
-                throw new InvalidArgumentException('The class must implement the interface ' . CommandInterface::class);
+                throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
             }
             $instance = new $command($definition);
         }
@@ -108,5 +113,68 @@ class App implements AppInterface
         assert($instance instanceof CommandInterface);
 
         return $instance->run($input, $output, $stream, $definition);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addCommand(string $name, string $command): bool
+    {
+        if (!$name) {
+            throw new InvalidArgumentException('Аргумент $name не может быть пустым');
+        }
+        if (!is_subclass_of($command, CommandInterface::class)) {
+            throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
+        }
+        if ($this->hasCommand($name)) {
+            return false;
+        }
+
+        $this->commands[$name] = $command;
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasCommand(string $name): bool
+    {
+        if (!$name) {
+            throw new InvalidArgumentException('Аргумент $name не может быть пустым');
+        }
+
+        return array_key_exists(mb_strtolower($name), $this->commands);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCommand(string $name)
+    {
+        if (!$name) {
+            throw new InvalidArgumentException('Аргумент $name не может быть пустым');
+        }
+        if (!$this->hasCommand($name)) {
+            return false;
+        }
+
+        return $this->commands[mb_strtolower($name)];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteCommand(string $name): bool
+    {
+        if (!$name) {
+            throw new InvalidArgumentException('Аргумент $name не может быть пустым');
+        }
+        if (!$this->hasCommand($name)) {
+            return false;
+        }
+        unset($this->commands[mb_strtolower($name)]);
+
+        return true;
     }
 }

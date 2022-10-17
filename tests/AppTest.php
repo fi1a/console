@@ -72,4 +72,70 @@ class AppTest extends TestCase
             ->run(CommandFixture::class);
         $this->assertEquals(1, $code);
     }
+
+    /**
+     * Методы работы с коммандами
+     */
+    public function testCommands(): void
+    {
+        $app = new App();
+        $this->assertFalse($app->hasCommand('command1'));
+        $this->assertFalse($app->getCommand('command1'));
+        $this->assertTrue($app->addCommand('command1', CommandFixture::class));
+        $this->assertFalse($app->addCommand('command1', CommandFixture::class));
+        $this->assertTrue($app->hasCommand('command1'));
+        $this->assertEquals(CommandFixture::class, $app->getCommand('command1'));
+        $this->assertTrue($app->deleteCommand('command1'));
+        $this->assertFalse($app->deleteCommand('command1'));
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testAddCommandEmptyName(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->addCommand('', '');
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testHasCommandEmptyName(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->hasCommand('');
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testGetCommandEmptyName(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->getCommand('');
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testDeleteCommandEmptyName(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->deleteCommand('');
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testAddCommandSubbclass(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->addCommand('command1', static::class);
+    }
 }
