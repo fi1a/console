@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\Definition;
 
-use Fi1a\Console\IO\InputArgumentsInterface;
-
 /**
  * Определение входных опций и аргументов
  */
@@ -92,9 +90,4 @@ interface DefinitionInterface
      * @return ArgumentInterface[]
      */
     public function allArguments(): array;
-
-    /**
-     * Парсинг значений
-     */
-    public function parseValues(InputArgumentsInterface $input): void;
 }

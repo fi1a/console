@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Fi1a\Console;
 
 use Fi1a\Console\Definition\Definition;
-use Fi1a\Console\Definition\Exception\DefinitionException;
+use Fi1a\Console\Definition\Exception\ValueSetterException;
+use Fi1a\Console\Definition\ValueSetter;
 use Fi1a\Console\IO\ArgvInputArguments;
 use Fi1a\Console\IO\ConsoleInput;
 use Fi1a\Console\IO\ConsoleOutput;
@@ -82,9 +83,10 @@ class App implements AppInterface
             $instance = new $command($definition);
         }
 
+        $valueSetter = new ValueSetter($definition, $input);
         try {
-            $definition->parseValues($input);
-        } catch (DefinitionException $exception) {
+            $valueSetter->setValues();
+        } catch (ValueSetterException $exception) {
             $output->getErrorOutput()->writeln('<error>' . $exception->getMessage() . '</error>');
 
             return 1;

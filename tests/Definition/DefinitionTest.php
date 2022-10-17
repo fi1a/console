@@ -6,8 +6,9 @@ namespace Fi1a\Unit\Console\Definition;
 
 use Fi1a\Console\Definition\Argument;
 use Fi1a\Console\Definition\Definition;
-use Fi1a\Console\Definition\Exception\DefinitionException;
+use Fi1a\Console\Definition\Exception\ValueSetterException;
 use Fi1a\Console\Definition\Option;
+use Fi1a\Console\Definition\ValueSetter;
 use Fi1a\Console\IO\ArrayInputArguments;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -128,9 +129,11 @@ class DefinitionTest extends TestCase
         $definition->addOption('option2', 'opt2');
         $definition->addOption('option3', 'opt3');
         $definition->addArgument('arg1')->multiple();
-        $definition->parseValues(
+        $valueSetter = new ValueSetter(
+            $definition,
             new ArrayInputArguments(['--option1=1', 'argument1', 'argument2', '--option2', '-opt3', 'value'])
         );
+        $this->assertTrue($valueSetter->setValues());
         $this->assertEquals('1', $definition->getOption('option1')->getValue());
         $this->assertTrue($definition->getOption('option2')->getValue());
         $this->assertEquals('value', $definition->getShortOption('opt3')->getValue());
@@ -145,7 +148,11 @@ class DefinitionTest extends TestCase
         $definition = new Definition();
         $definition->addOption('option1', 'opt1')->multiple();
         $definition->addOption('option2', 'opt2')->multiple();
-        $definition->parseValues(new ArrayInputArguments(['--option1=1, 2, 3', '-opt2', '1, 2, 3']));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments(['--option1=1, 2, 3', '-opt2', '1, 2, 3'])
+        );
+        $this->assertTrue($valueSetter->setValues());
         $this->assertEquals(['1', '2', '3'], $definition->getOption('option1')->getValue());
         $this->assertEquals(['1', '2', '3'], $definition->getShortOption('opt2')->getValue());
     }
@@ -159,7 +166,11 @@ class DefinitionTest extends TestCase
         $definition->addArgument('arg1');
         $definition->addArgument('arg2');
         $definition->addArgument('arg3')->multiple();
-        $definition->parseValues(new ArrayInputArguments(['argument1', 'argument2',]));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments(['argument1', 'argument2',])
+        );
+        $this->assertTrue($valueSetter->setValues());
         $this->assertEquals('argument1', $definition->getArgument('arg1')->getValue());
         $this->assertEquals('argument2', $definition->getArgument('arg2')->getValue());
         $this->assertNull($definition->getArgument('arg3')->getValue());
@@ -170,10 +181,14 @@ class DefinitionTest extends TestCase
      */
     public function testValuesUnknownArguments(): void
     {
-        $this->expectException(DefinitionException::class);
+        $this->expectException(ValueSetterException::class);
         $definition = new Definition();
         $definition->addArgument('arg1');
-        $definition->parseValues(new ArrayInputArguments(['argument1', 'argument2',]));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments(['argument1', 'argument2',])
+        );
+        $valueSetter->setValues();
     }
 
     /**
@@ -181,9 +196,13 @@ class DefinitionTest extends TestCase
      */
     public function testValuesUnknownOption(): void
     {
-        $this->expectException(DefinitionException::class);
+        $this->expectException(ValueSetterException::class);
         $definition = new Definition();
-        $definition->parseValues(new ArrayInputArguments(['--option1=1']));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments(['--option1=1'])
+        );
+        $valueSetter->setValues();
     }
 
     /**
@@ -191,9 +210,13 @@ class DefinitionTest extends TestCase
      */
     public function testValuesUnknownShortOption(): void
     {
-        $this->expectException(DefinitionException::class);
+        $this->expectException(ValueSetterException::class);
         $definition = new Definition();
-        $definition->parseValues(new ArrayInputArguments(['-opt1', 'value']));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments(['-opt1', 'value'])
+        );
+        $valueSetter->setValues();
     }
 
     /**
@@ -204,7 +227,11 @@ class DefinitionTest extends TestCase
         $definition = new Definition();
         $definition->addOption('option1', 'opt1')->validation()->allOf()->required()->integer();
         $definition->addArgument('arg1')->validation()->allOf()->required()->array();
-        $definition->parseValues(new ArrayInputArguments([]));
+        $valueSetter = new ValueSetter(
+            $definition,
+            new ArrayInputArguments([])
+        );
+        $valueSetter->setValues();
         $result = $definition->validate();
         $this->assertFalse($result->isSuccess());
     }

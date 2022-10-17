@@ -9,6 +9,6 @@ use LogicException;
 /**
  * Исключение при отсутствии опции или аргумента
  */
-class DefinitionException extends LogicException
+class ValueSetterException extends LogicException
 {
 }
