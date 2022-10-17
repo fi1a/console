@@ -11,13 +11,8 @@ use Fi1a\Tokenizer\ITokenizer;
 /**
  * Ввод из строки
  */
-class StringInputArguments implements InputArgumentsInterface
+class StringInputArguments extends AbstractInputArguments
 {
-    /**
-     * @var string[]
-     */
-    private $tokens = [];
-
     /**
      * Конструктор
      */
@@ -40,14 +35,6 @@ class StringInputArguments implements InputArgumentsInterface
             $tokens[] = $token->getImage();
         }
 
-        $this->tokens = $tokens;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTokens(): array
-    {
-        return $this->tokens;
+        $this->setTokens($tokens);
     }
 }

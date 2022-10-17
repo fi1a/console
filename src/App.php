@@ -81,13 +81,30 @@ class App implements AppInterface
         $definition->addOption('colors', 'cl')
             ->default('ansi');
 
-        $instance = null;
         if ($command) {
             if (!is_subclass_of($command, CommandInterface::class)) {
                 throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
             }
-            $instance = new $command($definition);
+        } else {
+            $tokens = $input->getTokens();
+            $name = array_shift($tokens);
+            $input->setTokens($tokens);
+            if (!$name) {
+                $name = 'info';
+            }
+            $command = $this->getCommand($name);
+            if ($command === false) {
+                $output->getErrorOutput()->writeln(
+                    'Комманда "{{name}}" не найдена',
+                    ['name' => $name],
+                    'error'
+                );
+
+                return 1;
+            }
         }
+        /** @psalm-suppress InvalidStringClass */
+        $instance = new $command($definition);
 
         $valueSetter = new ValueSetter($definition, $input);
         try {
@@ -118,7 +135,7 @@ class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function addCommand(string $name, string $command): bool
+    public function addCommand(string $name, string $command): AppInterface
     {
         if (!$name) {
             throw new InvalidArgumentException('Аргумент $name не может быть пустым');
@@ -127,12 +144,12 @@ class App implements AppInterface
             throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
         }
         if ($this->hasCommand($name)) {
-            return false;
+            throw new InvalidArgumentException(sprintf('Комманда с именем "%s" уже имеется', $name));
         }
 
         $this->commands[$name] = $command;
 
-        return true;
+        return $this;
     }
 
     /**

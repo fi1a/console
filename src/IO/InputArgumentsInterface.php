@@ -15,4 +15,11 @@ interface InputArgumentsInterface
      * @return string[]
      */
     public function getTokens(): array;
+
+    /**
+     * Установить токены
+     *
+     * @param string[] $tokens
+     */
+    public function setTokens(array $tokens): bool;
 }

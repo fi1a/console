@@ -35,6 +35,53 @@ class AppTest extends TestCase
     /**
      * Запуск команды
      */
+    public function testRunByName(): void
+    {
+        $input = new ArrayInputArguments(['command1']);
+        $output = new ConsoleOutput(new Formatter());
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->addCommand('command1', CommandFixture::class)
+            ->addCommand('command2', CommandFixture::class)
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Запуск команды
+     */
+    public function testRunInInfo(): void
+    {
+        $input = new ArrayInputArguments([]);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose($output::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->addCommand('command1', CommandFixture::class)
+            ->addCommand('command2', CommandFixture::class)
+            ->run();
+        $this->assertEquals(1, $code);
+    }
+
+    /**
+     * Запуск команды
+     */
+    public function testRunUnknown(): void
+    {
+        $input = new ArrayInputArguments(['unknown']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose($output::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->addCommand('command1', CommandFixture::class)
+            ->addCommand('command2', CommandFixture::class)
+            ->run();
+        $this->assertEquals(1, $code);
+    }
+
+    /**
+     * Запуск команды
+     */
     public function testRunCommandException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -81,12 +128,22 @@ class AppTest extends TestCase
         $app = new App();
         $this->assertFalse($app->hasCommand('command1'));
         $this->assertFalse($app->getCommand('command1'));
-        $this->assertTrue($app->addCommand('command1', CommandFixture::class));
-        $this->assertFalse($app->addCommand('command1', CommandFixture::class));
+        $app->addCommand('command1', CommandFixture::class);
         $this->assertTrue($app->hasCommand('command1'));
         $this->assertEquals(CommandFixture::class, $app->getCommand('command1'));
         $this->assertTrue($app->deleteCommand('command1'));
         $this->assertFalse($app->deleteCommand('command1'));
+    }
+
+    /**
+     * Исключение при пустом имени комманды
+     */
+    public function testAddCommandExisting(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $app = new App();
+        $app->addCommand('command1', CommandFixture::class);
+        $app->addCommand('command1', CommandFixture::class);
     }
 
     /**

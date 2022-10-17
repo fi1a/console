@@ -7,13 +7,8 @@ namespace Fi1a\Console\IO;
 /**
  * Ввод из массива
  */
-class ArrayInputArguments implements InputArgumentsInterface
+class ArrayInputArguments extends AbstractInputArguments
 {
-    /**
-     * @var string[]
-     */
-    private $tokens;
-
     /**
      * Конструктор
      *
@@ -21,14 +16,6 @@ class ArrayInputArguments implements InputArgumentsInterface
      */
     public function __construct(array $argv)
     {
-        $this->tokens = $argv;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTokens(): array
-    {
-        return $this->tokens;
+        $this->setTokens($argv);
     }
 }

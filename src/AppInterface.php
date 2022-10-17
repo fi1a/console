@@ -26,8 +26,10 @@ interface AppInterface
 
     /**
      * Добавить комманду
+     *
+     * @return static
      */
-    public function addCommand(string $name, string $command): bool;
+    public function addCommand(string $name, string $command): AppInterface;
 
     /**
      * Наличие комманды с таким именем
