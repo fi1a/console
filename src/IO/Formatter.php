@@ -19,9 +19,9 @@ class Formatter implements FormatterInterface
     private static $styles = [];
 
     /**
-     * @var FormatterStyleStack
+     * @var StyleQueue
      */
-    private $stack;
+    private $queue;
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class Formatter implements FormatterInterface
             $styleClass = ANSIStyle::class;
         }
         $this->setStyleClass($styleClass);
-        $this->setStack(new FormatterStyleStack());
+        $this->setQueue(new StyleQueue($styleClass));
     }
 
     /**
@@ -119,12 +119,16 @@ class Formatter implements FormatterInterface
         preg_match_all("#<(($openTagRegex) | /($closeTagRegex)?)>#ix", $message, $matches, PREG_OFFSET_CAPTURE);
 
         if ($style) {
-            $this->getStack()->push($style);
+            $this->getQueue()->addEnd($style);
         }
 
         foreach ($matches[0] as $i => $match) {
             $pos = $match[1];
             $text = $match[0];
+
+            if ($pos !== 0 && $message[$pos - 1] === '\\') {
+                continue;
+            }
 
             $output .= $this->applyCurrent(substr($message, $offset, $pos - $offset));
             $offset = $pos + mb_strlen($text);
@@ -136,13 +140,13 @@ class Formatter implements FormatterInterface
             }
 
             if (!$open && !$tag) {
-                $this->getStack()->pop();
+                $this->getQueue()->pollEnd();
             } elseif (($inlineStyle = $this->getStyle(mb_strtolower($tag))) === false) {
                 $output .= $this->applyCurrent($text);
             } elseif ($open) {
-                $this->getStack()->push($inlineStyle);
+                $this->getQueue()->addEnd($inlineStyle);
             } else {
-                $this->getStack()->pop($inlineStyle);
+                $this->getQueue()->pollEnd($inlineStyle);
             }
         }
 
@@ -150,21 +154,21 @@ class Formatter implements FormatterInterface
     }
 
     /**
-     * Устанавливает экземпляр класса стека
+     * Устанавливает экземпляр класса очереди
      */
-    private function setStack(FormatterStyleStack $stack): bool
+    private function setQueue(StyleQueue $queue): bool
     {
-        $this->stack = $stack;
+        $this->queue = $queue;
 
         return true;
     }
 
     /**
-     * Возвращает экземпляр класса стека
+     * Возвращает экземпляр класса очереди
      */
-    private function getStack(): FormatterStyleStack
+    private function getQueue(): StyleQueue
     {
-        return $this->stack;
+        return $this->queue;
     }
 
     /**
@@ -172,12 +176,19 @@ class Formatter implements FormatterInterface
      */
     private function applyCurrent(string $message): string
     {
-        $style = $this->getStack()->getCurrent();
+        /**
+         * @var StyleInterface|null $style
+         */
+        $style = $this->getQueue()->peekEnd();
         if (!mb_strlen($message) || !$style) {
             return $message;
         }
+        $result = [];
+        foreach (explode("\n", $message) as $line) {
+            $result[] = $style->apply($line);
+        }
 
-        return $style->apply($message);
+        return implode("\n", $result);
     }
 
     /**

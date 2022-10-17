@@ -137,4 +137,12 @@ class FormatterTest extends TestCase
             )
         ));
     }
+
+    /**
+    * Форматирование с escape
+    */
+    public function testFormatEscape(): void
+    {
+        $this->assertTrue(is_string(static::$formatter->format('\<error>Error text\</error>')));
+    }
 }
