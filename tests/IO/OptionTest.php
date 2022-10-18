@@ -49,4 +49,14 @@ class OptionTest extends TestCase
         $this->assertInstanceOf(Validation::class, $option->validation());
         $this->assertInstanceOf(Validation::class, $option->getValidation());
     }
+
+    /**
+     * Описание
+     */
+    public function testDescription(): void
+    {
+        $option = new Option();
+        $option->description('test');
+        $this->assertEquals('test', $option->getDescription());
+    }
 }

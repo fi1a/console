@@ -49,4 +49,14 @@ class ArgumentTest extends TestCase
         $this->assertInstanceOf(Validation::class, $argument->validation());
         $this->assertInstanceOf(Validation::class, $argument->getValidation());
     }
+
+    /**
+     * Описание
+     */
+    public function testDescription(): void
+    {
+        $argument = new Argument();
+        $argument->description('test');
+        $this->assertEquals('test', $argument->getDescription());
+    }
 }
