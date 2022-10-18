@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\Definition;
+namespace Fi1a\Console\IO;
+
+use Fi1a\Console\Definition\Validation;
+use Fi1a\Console\Definition\ValidationInterface;
 
 /**
  * Абстрактный класс сущности опции или аргумента

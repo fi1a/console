@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\Definition;
 
+use Fi1a\Console\IO\ArgumentInterface;
+use Fi1a\Console\IO\OptionInterface;
+
 /**
  * Определение входных опций и аргументов
  */

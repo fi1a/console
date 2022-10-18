@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\Definition;
+namespace Fi1a\Console\IO;
 
 /**
  * Аргумент

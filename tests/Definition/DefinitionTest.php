@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\Definition;
 
-use Fi1a\Console\Definition\Argument;
 use Fi1a\Console\Definition\Definition;
 use Fi1a\Console\Definition\DefinitionValidator;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
-use Fi1a\Console\Definition\Option;
 use Fi1a\Console\Definition\ValueSetter;
+use Fi1a\Console\IO\Argument;
 use Fi1a\Console\IO\ArrayInputArguments;
+use Fi1a\Console\IO\Option;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

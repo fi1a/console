@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Unit\Console\Definition;
+namespace Fi1a\Unit\Console\IO;
 
-use Fi1a\Console\Definition\Option;
 use Fi1a\Console\Definition\Validation;
+use Fi1a\Console\IO\Option;
 use PHPUnit\Framework\TestCase;
 
 /**

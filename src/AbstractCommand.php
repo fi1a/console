@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fi1a\Console;
 
-use Fi1a\Console\Definition\Argument;
 use Fi1a\Console\Definition\DefinitionInterface;
-use Fi1a\Console\Definition\Option;
+use Fi1a\Console\IO\Argument;
 use Fi1a\Console\IO\ConsoleOutputInterface;
 use Fi1a\Console\IO\InputArgumentsInterface;
 use Fi1a\Console\IO\InputInterface;
+use Fi1a\Console\IO\Option;
 
 /**
  * Команда
