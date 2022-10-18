@@ -11,6 +11,7 @@ use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Stream;
 use Fi1a\Console\IO\StreamInput;
 use Fi1a\Unit\Console\Fixtures\CommandFixture;
+use Fi1a\Unit\Console\Fixtures\CommandFixtureWithoutDescription;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -274,5 +275,35 @@ class AppTest extends TestCase
         $code = (new App($input, $output, $stream))
             ->run();
         $this->assertEquals(1, $code);
+    }
+
+    /**
+     * Вызов справки по команде
+     */
+    public function testRunHelp(): void
+    {
+        $input = new ArrayInputArguments(['command1', '--help=Y', '--verbose=none']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->addCommand('command1', CommandFixture::class)
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Вызов справки по команде
+     */
+    public function testRunHelpWithoutDescription(): void
+    {
+        $input = new ArrayInputArguments(['command2', '--help=Y', '--verbose=none']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->addCommand('command2', CommandFixtureWithoutDescription::class)
+            ->run();
+        $this->assertEquals(0, $code);
     }
 }

@@ -23,6 +23,8 @@ use Fi1a\Console\IO\Style\TrueColorStyle;
 use Fi1a\Validation\Error;
 use InvalidArgumentException;
 
+use const PHP_EOL;
+
 /**
  * Консольное приложение
  */
@@ -87,15 +89,32 @@ class App implements AppInterface
 
         $definition->addOption('colors', 'c')
             ->default('ansi')
+            ->description(
+                'Используемый цвет в консоли.' . PHP_EOL
+                . 'Возможные значения: none, ansi, ext, trueColor.'
+            )
             ->validation()
             ->allOf()
             ->in('ansi', 'ext', 'trueColor', 'none');
 
         $definition->addOption('verbose', 'v')
             ->default('normal')
+            ->description(
+                'Определяет уровень подробности вывода сообщений при работе консольных команд.' . PHP_EOL
+                . 'Возможные значения: none, normal, hight, hightest, debug.'
+            )
             ->validation()
             ->allOf()
             ->in('none', 'normal', 'hight', 'hightest', 'debug');
+
+        $definition->addOption('help', 'h')
+            ->default(false)
+            ->description('Справка по выбранной команде.')
+            ->validation()
+            ->allOf()
+            ->boolean();
+
+        $commandName = null;
 
         if ($command) {
             if (!is_subclass_of($command, CommandInterface::class)) {
@@ -123,6 +142,7 @@ class App implements AppInterface
         }
         /** @psalm-suppress InvalidStringClass */
         $instance = new $command($definition);
+        assert($instance instanceof CommandInterface);
 
         $valueSetter = new ValueSetter($definition, $input);
         try {
@@ -182,6 +202,19 @@ class App implements AppInterface
         }
         $output->setVerbose($verbose[mb_strtolower((string) $verboseOption->getValue())]);
 
+        $helpOption = $definition->getOption('help');
+        assert($helpOption instanceof EntityInterface);
+        /**
+         * @var bool|string $helpValue
+         */
+        $helpValue = $helpOption->getValue();
+        if (is_string($helpValue)) {
+            $helpValue = mb_strtolower($helpValue);
+        }
+        if (in_array($helpValue, ['y', true, '1', 1])) {
+            return $instance->help($input, $output, $stream, $definition, $this, $commandName);
+        }
+
         $definitionValidator = new DefinitionValidator($definition);
         $result = $definitionValidator->validate();
         if (!$result->isSuccess()) {
@@ -195,8 +228,6 @@ class App implements AppInterface
 
             return 1;
         }
-
-        assert($instance instanceof CommandInterface);
 
         return $instance->run($input, $output, $stream, $definition, $this);
     }

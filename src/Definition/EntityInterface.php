@@ -53,4 +53,14 @@ interface EntityInterface
      * Возвращает класс с цепочкой правил для проверки
      */
     public function getValidation(): ?ValidationInterface;
+
+    /**
+     * Описание
+     */
+    public function description(string $description): EntityInterface;
+
+    /**
+     * Возвращает описание
+     */
+    public function getDescription(): ?string;
 }

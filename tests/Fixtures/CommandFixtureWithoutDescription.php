@@ -13,7 +13,7 @@ use Fi1a\Console\IO\InputInterface;
 /**
  * Команда
  */
-class CommandFixture extends \Fi1a\Console\AbstractCommand
+class CommandFixtureWithoutDescription extends \Fi1a\Console\AbstractCommand
 {
     /**
      * @inheritDoc
@@ -41,13 +41,5 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
         AppInterface $app
     ): int {
         return 0;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function description(): ?string
-    {
-        return 'Command fixture';
     }
 }

@@ -30,6 +30,11 @@ abstract class AbstractEntity implements EntityInterface
     private $validation;
 
     /**
+     * @var string|null
+     */
+    private $description;
+
+    /**
      * @inheritDoc
      */
     public function setValue($value): EntityInterface
@@ -93,5 +98,23 @@ abstract class AbstractEntity implements EntityInterface
     public function getValidation(): ?ValidationInterface
     {
         return $this->validation;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function description(string $description): EntityInterface
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

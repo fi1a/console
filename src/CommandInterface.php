@@ -31,6 +31,18 @@ interface CommandInterface
     ): int;
 
     /**
+     * Справка по команде
+     */
+    public function help(
+        InputArgumentsInterface $input,
+        ConsoleOutputInterface $output,
+        InputInterface $stream,
+        DefinitionInterface $definition,
+        AppInterface $app,
+        ?string $commandName
+    ): int;
+
+    /**
      * Возвращает информацию по команде
      */
     public function description(): ?string;
