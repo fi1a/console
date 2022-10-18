@@ -9,4 +9,11 @@ namespace Fi1a\Console;
  */
 abstract class AbstractCommand implements CommandInterface
 {
+    /**
+     * @inheritDoc
+     */
+    public function description(): ?string
+    {
+        return null;
+    }
 }

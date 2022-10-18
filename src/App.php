@@ -91,6 +91,12 @@ class App implements AppInterface
             ->allOf()
             ->in('ansi', 'ext', 'trueColor', 'none');
 
+        $definition->addOption('verbose', 'v')
+            ->default('normal')
+            ->validation()
+            ->allOf()
+            ->in('none', 'normal', 'hight', 'hightest', 'debug');
+
         if ($command) {
             if (!is_subclass_of($command, CommandInterface::class)) {
                 throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
@@ -101,7 +107,7 @@ class App implements AppInterface
             if (!$commandName || substr($commandName, 0, 1) === '-') {
                 $commandName = 'info';
             } else {
-                array_shift($tokens);
+                $tokens = array_slice($tokens, 1);
             }
             $input->setTokens($tokens);
             $command = $this->getCommand($commandName);
@@ -126,19 +132,6 @@ class App implements AppInterface
 
             return 1;
         }
-        $definitionValidator = new DefinitionValidator($definition);
-        $result = $definitionValidator->validate();
-        if (!$result->isSuccess()) {
-            /**
-             * @var Error $error
-             */
-            foreach ($result->getErrors() as $error) {
-                $message = (string) $error->getMessage();
-                $output->getErrorOutput()->writeln($message, [], 'error');
-            }
-
-            return 1;
-        }
 
         $colorsOption = $definition->getOption('colors');
         assert($colorsOption instanceof EntityInterface);
@@ -159,6 +152,48 @@ class App implements AppInterface
                 $output->setDecorated(false);
 
                 break;
+            default:
+                $output->getErrorOutput()->writeln(
+                    'Доступные значения для опции --colors (none, ansi, ext, trueColor)',
+                    [],
+                    'error'
+                );
+
+                return 1;
+        }
+
+        $verboseOption = $definition->getOption('verbose');
+        assert($verboseOption instanceof EntityInterface);
+        $verbose = [
+            'none' => ConsoleOutputInterface::VERBOSE_NONE,
+            'normal' => ConsoleOutputInterface::VERBOSE_NORMAL,
+            'hight' => ConsoleOutputInterface::VERBOSE_HIGHT,
+            'hightest' => ConsoleOutputInterface::VERBOSE_HIGHTEST,
+            'debug' => ConsoleOutputInterface::VERBOSE_DEBUG,
+        ];
+        if (!array_key_exists(mb_strtolower((string) $verboseOption->getValue()), $verbose)) {
+            $output->getErrorOutput()->writeln(
+                'Доступные значения для опции --verbose (none, normal, hight, hightest, debug)',
+                [],
+                'error'
+            );
+
+            return 1;
+        }
+        $output->setVerbose($verbose[mb_strtolower((string) $verboseOption->getValue())]);
+
+        $definitionValidator = new DefinitionValidator($definition);
+        $result = $definitionValidator->validate();
+        if (!$result->isSuccess()) {
+            /**
+             * @var Error $error
+             */
+            foreach ($result->getErrors() as $error) {
+                $message = (string) $error->getMessage();
+                $output->getErrorOutput()->writeln($message, [], 'error');
+            }
+
+            return 1;
         }
 
         assert($instance instanceof CommandInterface);

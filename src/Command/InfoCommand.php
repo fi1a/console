@@ -54,21 +54,29 @@ class InfoCommand extends AbstractCommand
              * @psalm-suppress InvalidStringClass
              */
             $instance = new $command($definition);
-            $output->writeln('<comment>{{name}}</comment>{{if(info)}} - {{info}};{{endif}}', [
-                'name' => $name,
-                'info' => $instance->label(),
-            ]);
+            $output->writeln($name, [], 'comment');
+            $description = $instance->description();
+            if ($description) {
+                $output->writeln($description);
+                $output->writeln();
+            }
         }
 
-        $output->writeln();
         $output->writeln('<info>Опции:</info>');
         $output->writeln();
-        $output->writeln('<comment>--colors, -c (ansi|ext|trueColor|none)</comment> - используемый цвет консоли;');
-        $output->writeln(
-            '<comment>--verbose, -v (none, normal, hight, hightest, debug)</comment>'
-            . ' - определяет уровень подробности вывода сообщений при работе консольных команд;'
-        );
-        $output->writeln('<comment>--help, -h</comment> - справка по выбранной команде;');
+
+        $output->writeln('<comment>--colors, -c</comment>');
+        $output->writeln('Используемый цвет в консоли.');
+        $output->writeln('Возможные значения: none, ansi, ext, trueColor.');
+        $output->writeln();
+
+        $output->writeln('<comment>--verbose, -v</comment>');
+        $output->writeln('Определяет уровень подробности вывода сообщений при работе консольных команд.');
+        $output->writeln('Возможные значения: none, normal, hight, hightest, debug.');
+        $output->writeln();
+
+        $output->writeln('<comment>--help, -h</comment>');
+        $output->writeln('Справка по выбранной команде.');
         $output->writeln();
 
         return 0;
@@ -77,8 +85,8 @@ class InfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function label(): string
+    public function description(): ?string
     {
-        return 'список доступных команд и опций';
+        return 'Список доступных команд и опций.';
     }
 }

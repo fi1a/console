@@ -155,7 +155,13 @@ class Formatter implements FormatterInterface
             }
         }
 
-        return $output . $this->applyCurrent(substr($message, $offset));
+        $output = $output . $this->applyCurrent(substr($message, $offset));
+
+        if ($style) {
+            $this->getQueue()->pollEnd($style);
+        }
+
+        return $output;
     }
 
     /**

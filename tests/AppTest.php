@@ -52,9 +52,8 @@ class AppTest extends TestCase
      */
     public function testRunInfo(): void
     {
-        $input = new ArrayInputArguments([]);
+        $input = new ArrayInputArguments(['--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
-        $output->setVerbose($output::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->addCommand('command1', CommandFixture::class)
@@ -68,9 +67,9 @@ class AppTest extends TestCase
      */
     public function testRunUnknown(): void
     {
-        $input = new ArrayInputArguments(['unknown']);
+        $input = new ArrayInputArguments(['unknown', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
-        $output->setVerbose($output::VERBOSE_NONE);
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->addCommand('command1', CommandFixture::class)
@@ -97,7 +96,7 @@ class AppTest extends TestCase
      */
     public function testRunUnknownOption(): void
     {
-        $input = new ArrayInputArguments(['--unknown=1']);
+        $input = new ArrayInputArguments(['--unknown=1', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
         $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
@@ -111,7 +110,7 @@ class AppTest extends TestCase
      */
     public function testRunValidationError(): void
     {
-        $input = new ArrayInputArguments(['--option1=abc']);
+        $input = new ArrayInputArguments(['--option1=abc', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
         $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
@@ -202,9 +201,8 @@ class AppTest extends TestCase
      */
     public function testColorsExt(): void
     {
-        $input = new ArrayInputArguments(['--colors=ext']);
+        $input = new ArrayInputArguments(['--colors=ext', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
-        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->run();
@@ -216,9 +214,8 @@ class AppTest extends TestCase
      */
     public function testColorsTrueColor(): void
     {
-        $input = new ArrayInputArguments(['--colors=trueColor']);
+        $input = new ArrayInputArguments(['--colors=trueColor', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
-        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->run();
@@ -230,9 +227,8 @@ class AppTest extends TestCase
      */
     public function testColorsNone(): void
     {
-        $input = new ArrayInputArguments(['--colors=none']);
+        $input = new ArrayInputArguments(['--colors=none', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
-        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->run();
@@ -244,12 +240,39 @@ class AppTest extends TestCase
      */
     public function testColorsAnsi(): void
     {
-        $input = new ArrayInputArguments(['--colors=ansi']);
+        $input = new ArrayInputArguments(['--colors=ansi', '--verbose=none']);
+        $output = new ConsoleOutput(new Formatter());
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Цвета консоли
+     */
+    public function testColorsUnknown(): void
+    {
+        $input = new ArrayInputArguments(['--colors=unknown', '--verbose=none']);
         $output = new ConsoleOutput(new Formatter());
         $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
         $stream = new StreamInput(new Stream('php://memory'));
         $code = (new App($input, $output, $stream))
             ->run();
-        $this->assertEquals(0, $code);
+        $this->assertEquals(1, $code);
+    }
+
+    /**
+     * Цвета консоли
+     */
+    public function testVerboseUnknown(): void
+    {
+        $input = new ArrayInputArguments(['--verbose=unknown']);
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(ConsoleOutput::VERBOSE_NONE);
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run();
+        $this->assertEquals(1, $code);
     }
 }

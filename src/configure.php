@@ -14,3 +14,4 @@ Formatter::addStyle('success', new TrueColorStyle(TrueColor::BLACK, TrueColor::G
 Formatter::addStyle('info', new TrueColorStyle(TrueColor::GREEN));
 Formatter::addStyle('comment', new TrueColorStyle(TrueColor::YELLOW));
 Formatter::addStyle('question', new TrueColorStyle(TrueColor::BLACK, TrueColor::CYAN));
+Formatter::addStyle('notice', new TrueColorStyle(TrueColor::GRAY));

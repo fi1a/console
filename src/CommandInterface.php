@@ -33,5 +33,5 @@ interface CommandInterface
     /**
      * Возвращает информацию по команде
      */
-    public function label(): string;
+    public function description(): ?string;
 }

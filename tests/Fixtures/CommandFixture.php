@@ -38,12 +38,4 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
     ): int {
         return 0;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function label(): string
-    {
-        return 'тестовая команда';
-    }
 }
