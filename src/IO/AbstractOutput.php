@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
+use Fi1a\Console\IO\Formatter\FormatterInterface;
 use Fi1a\Format\Formatter as StringFormatter;
 
 /**

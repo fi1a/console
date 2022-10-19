@@ -14,7 +14,7 @@ use Fi1a\Console\IO\ConsoleInput;
 use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\ConsoleOutputInterface;
 use Fi1a\Console\IO\EntityInterface;
-use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\InputArgumentsInterface;
 use Fi1a\Console\IO\InputInterface;
 use Fi1a\Console\IO\Style\ANSIStyle;

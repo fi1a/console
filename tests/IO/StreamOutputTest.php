@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\IO;
 
-use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\Stream;
 use Fi1a\Console\IO\StreamOutput;
 use InvalidArgumentException;

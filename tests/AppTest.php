@@ -7,7 +7,7 @@ namespace Fi1a\Unit\Console;
 use Fi1a\Console\App;
 use Fi1a\Console\IO\ArrayInputArguments;
 use Fi1a\Console\IO\ConsoleOutput;
-use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\Stream;
 use Fi1a\Console\IO\StreamInput;
 use Fi1a\Unit\Console\Fixtures\CommandFixture;

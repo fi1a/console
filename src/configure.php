@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\Style\TrueColor;
 use Fi1a\Console\IO\Style\TrueColorStyle;
 use Fi1a\Console\Registry;

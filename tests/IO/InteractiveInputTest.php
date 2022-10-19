@@ -6,7 +6,7 @@ namespace Fi1a\Unit\Console\IO;
 
 use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\ConsoleOutputInterface;
-use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\InputInterface;
 use Fi1a\Console\IO\InteractiveInput;
 use Fi1a\Console\IO\InteractiveValue;

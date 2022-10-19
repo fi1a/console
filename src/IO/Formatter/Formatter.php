@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO;
+namespace Fi1a\Console\IO\Formatter;
 
 use Fi1a\Console\IO\Style\ANSIStyle;
 use Fi1a\Console\IO\Style\StyleInterface;
