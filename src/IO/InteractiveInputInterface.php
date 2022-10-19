@@ -12,7 +12,7 @@ interface InteractiveInputInterface
     /**
      * Конструктор
      */
-    public function __construct(ConsoleOutputInterface $output, InputInterface $input);
+    public function __construct(ConsoleOutputInterface $output, InputInterface $stream);
 
     /**
      * Устанавливает вывод
@@ -67,4 +67,16 @@ interface InteractiveInputInterface
      * Чтение
      */
     public function read(): bool;
+
+    /**
+     * Возвращает массив со значениями
+     *
+     * @return mixed[]
+     */
+    public function asArray(): array;
+
+    /**
+     * Сбрасывает прочитанные значения
+     */
+    public function refresh(): bool;
 }

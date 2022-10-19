@@ -16,6 +16,8 @@ use Fi1a\Console\IO\StreamInterface;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+use const PHP_EOL;
+
 /**
  * Тестирование интерактивного ввода
  */
@@ -34,7 +36,7 @@ class InteractiveInputTest extends TestCase
     /**
      * Конструктор
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         static::$resource = new Stream('php://temp', 'w');
         $output = new ConsoleOutput(new Formatter());
@@ -58,10 +60,17 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testConstructor
      */
-    public function testAdd()
+    public function testAdd(): void
     {
-        $this->assertInstanceOf(InteractiveValue::class, static::$interactive->addValue('value1'));
+        $value = static::$interactive->addValue('value1');
+        $this->assertInstanceOf(InteractiveValue::class, $value);
+        $value->description('Тест1');
+        $value->validation()->allOf()->required()->integer();
         $this->assertInstanceOf(InteractiveValue::class, static::$interactive->addValue('value2'));
+        $value = static::$interactive->addValue('value3');
+        $this->assertInstanceOf(InteractiveValue::class, $value);
+        $value->description('Тест3');
+        $value->multipleValidation()->allOf()->required()->array();
     }
 
     /**
@@ -69,7 +78,7 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testConstructor
      */
-    public function testAddEmptyNameException()
+    public function testAddEmptyNameException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         static::$interactive->addValue('');
@@ -80,7 +89,7 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testConstructor
      */
-    public function testAddExistException()
+    public function testAddExistException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         static::$interactive->addValue('value1');
@@ -91,7 +100,7 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testAdd
      */
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $this->assertFalse(static::$interactive->getValue('unknown'));
         $this->assertInstanceOf(InteractiveValue::class, static::$interactive->getValue('value1'));
@@ -102,7 +111,7 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testGetValue
      */
-    public function testDeleteValue()
+    public function testDeleteValue(): void
     {
         $this->assertTrue(static::$interactive->deleteValue('value2'));
         $this->assertFalse(static::$interactive->deleteValue('value2'));
@@ -113,9 +122,9 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testGetValue
      */
-    public function testAllValues()
+    public function testAllValues(): void
     {
-        $this->assertCount(1, static::$interactive->allValues());
+        $this->assertCount(2, static::$interactive->allValues());
     }
 
     /**
@@ -123,8 +132,49 @@ class InteractiveInputTest extends TestCase
      *
      * @depends testAllValues
      */
-    public function testRead()
+    public function testRead(): void
     {
+        static::$resource->write(chr(27) . PHP_EOL);
+        static::$resource->write('abc' . PHP_EOL);
+        static::$resource->write('1' . PHP_EOL);
+        static::$resource->write('2' . PHP_EOL);
+        static::$resource->write('3' . PHP_EOL);
+        static::$resource->write(chr(27) . PHP_EOL);
+        static::$resource->seek(0);
         $this->assertTrue(static::$interactive->read());
+    }
+
+    /**
+     * Чтение значений
+     *
+     * @depends testAllValues
+     */
+    public function testReadMultipleValidatorError(): void
+    {
+        static::$resource->flush();
+        static::$resource->seek(0);
+        static::$resource->write(chr(27) . PHP_EOL);
+        static::$resource->write('1' . PHP_EOL);
+        static::$resource->write(chr(27) . PHP_EOL);
+        static::$resource->write('2' . PHP_EOL);
+        static::$resource->write('3' . PHP_EOL);
+        static::$resource->write(chr(27) . PHP_EOL);
+        static::$resource->seek(0);
+        $this->assertTrue(static::$interactive->refresh());
+        $this->assertTrue(static::$interactive->read());
+        $this->assertTrue(static::$interactive->read());
+    }
+
+    /**
+     * Значения в виде массива
+     *
+     * @depends testReadMultipleValidatorError
+     */
+    public function testAsArray(): void
+    {
+        $this->assertEquals([
+            'value1' => '1',
+            'value3' => ['2', '3'],
+        ], static::$interactive->asArray());
     }
 }

@@ -33,6 +33,11 @@ abstract class AbstractEntity implements EntityInterface
     private $validation;
 
     /**
+     * @var Validation|null
+     */
+    private $multipleValidation;
+
+    /**
      * @var string|null
      */
     private $description;
@@ -98,9 +103,27 @@ abstract class AbstractEntity implements EntityInterface
     /**
      * @inheritDoc
      */
+    public function multipleValidation(): ValidationInterface
+    {
+        $this->multiple();
+
+        return $this->multipleValidation = new Validation();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getValidation(): ?ValidationInterface
     {
         return $this->validation;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMultipleValidation(): ?ValidationInterface
+    {
+        return $this->multipleValidation;
     }
 
     /**

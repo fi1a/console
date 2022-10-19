@@ -29,12 +29,17 @@ class InteractiveInput implements InteractiveInputInterface
     private $values = [];
 
     /**
+     * @var string[]
+     */
+    private $success = [];
+
+    /**
      * @inheritDoc
      */
-    public function __construct(ConsoleOutputInterface $output, InputInterface $input)
+    public function __construct(ConsoleOutputInterface $output, InputInterface $stream)
     {
         $this->setOutput($output);
-        $this->setInput($input);
+        $this->setInput($stream);
     }
 
     /**
@@ -138,6 +143,114 @@ class InteractiveInput implements InteractiveInputInterface
      */
     public function read(): bool
     {
+        $output = $this->getOutput();
+        foreach ($this->allValues() as $name => $value) {
+            assert(is_string($name));
+            if (in_array($name, $this->success)) {
+                continue;
+            }
+            $label = $name;
+            $description = $value->getDescription();
+            if ($description) {
+                $label = $description;
+            }
+            $index = 1;
+            if ($value->isMultiple()) {
+                $values = [];
+                do {
+                    $output->write($index . ') ');
+                    $readValue = $this->readValue($value);
+                    if ($readValue === chr(27)) {
+                        /** @psalm-suppress PossiblyNullReference */
+                        if ($value->getMultipleValidation() && $value->getMultipleValidation()->getChain()) {
+                            /** @psalm-suppress PossiblyNullReference */
+                            $result = $value->getMultipleValidation()->getChain()->validate($values);
+                            if (!$result->isSuccess()) {
+                                $output->writeln($result->getErrors()->join('; '), [], 'error');
+
+                                continue;
+                            }
+                        }
+
+                        break;
+                    }
+                    $values[] = $readValue;
+                    $index++;
+                } while (true);
+                $value->setValue($values);
+                $this->success[] = $name;
+
+                continue;
+            }
+
+            $output->write($label . ': ');
+            $readValue = $this->readValue($value);
+            $value->setValue($readValue);
+            $this->success[] = $name;
+        }
+
+        return true;
+    }
+
+    /**
+     * Чтение значения
+     */
+    private function readValue(InteractiveValue $value): ?string
+    {
+        $output = $this->getOutput();
+        $input = $this->getInput();
+
+        $read = true;
+        $readValue = null;
+        while ($read) {
+            $readValue = (string) $input->read();
+            if ($readValue === chr(27)) {
+                if ($value->isMultiple()) {
+                    return $readValue;
+                }
+                $readValue = null;
+            }
+            /** @psalm-suppress PossiblyNullReference */
+            if ($value->getValidation() && $value->getValidation()->getChain()) {
+                /** @psalm-suppress PossiblyNullReference */
+                $result = $value->getValidation()->getChain()->validate($readValue);
+                if (!$result->isSuccess()) {
+                    $output->writeln($result->getErrors()->join('; '), [], 'error');
+
+                    continue;
+                }
+            }
+
+            $read = false;
+        }
+
+        return $readValue;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asArray(): array
+    {
+        $values = [];
+        foreach ($this->allValues() as $name => $value) {
+            /** @psalm-suppress MixedAssignment */
+            $values[(string) $name] = $value->getValue();
+        }
+
+        return $values;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function refresh(): bool
+    {
+        $this->success = [];
+        foreach ($this->allValues() as $value) {
+            $value->setValue(null);
+        }
+
         return true;
     }
 }

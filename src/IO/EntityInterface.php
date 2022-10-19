@@ -47,14 +47,24 @@ interface EntityInterface
     public function isMultiple(): bool;
 
     /**
-     * Валидация аргументов и опций
+     * Валидация значений
      */
     public function validation(): ValidationInterface;
+
+    /**
+     * Валидация множественного значения
+     */
+    public function multipleValidation(): ValidationInterface;
 
     /**
      * Возвращает класс с цепочкой правил для проверки
      */
     public function getValidation(): ?ValidationInterface;
+
+    /**
+     * Возвращает класс с цепочкой правил для проверки
+     */
+    public function getMultipleValidation(): ?ValidationInterface;
 
     /**
      * Описание

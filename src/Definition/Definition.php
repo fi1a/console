@@ -100,7 +100,7 @@ class Definition implements DefinitionInterface
      */
     public function hasShortOption(string $shortName): bool
     {
-        return array_key_exists(mb_strtolower($shortName), $this->shortOptions);
+        return array_key_exists($shortName, $this->shortOptions);
     }
 
     /**
@@ -112,7 +112,7 @@ class Definition implements DefinitionInterface
             return false;
         }
 
-        return $this->shortOptions[mb_strtolower($shortName)];
+        return $this->shortOptions[$shortName];
     }
 
     /**
@@ -123,7 +123,7 @@ class Definition implements DefinitionInterface
         if (!$this->hasShortOption($shortName)) {
             return false;
         }
-        unset($this->shortOptions[mb_strtolower($shortName)]);
+        unset($this->shortOptions[$shortName]);
 
         return true;
     }

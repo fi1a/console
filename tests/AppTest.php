@@ -36,6 +36,19 @@ class AppTest extends TestCase
     /**
      * Запуск команды
      */
+    public function testRunWithArgv(): void
+    {
+        $input = new ArrayInputArguments(['--option1=1,2,3', 'arg1', 'arg2']);
+        $output = new ConsoleOutput(new Formatter());
+        $stream = new StreamInput(new Stream('php://memory'));
+        $code = (new App($input, $output, $stream))
+            ->run(CommandFixture::class);
+        $this->assertEquals(0, $code);
+    }
+
+    /**
+     * Запуск команды
+     */
     public function testRunByName(): void
     {
         $input = new ArrayInputArguments(['command1']);

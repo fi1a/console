@@ -20,9 +20,15 @@ class CommandFixture extends \Fi1a\Console\AbstractCommand
      */
     public function __construct(DefinitionInterface $definition)
     {
-        $definition->addOption('option1')
+        $option = $definition->addOption('option1')
             ->description('Тестовая опция')
-            ->validation()
+            ->multiple();
+
+        $option->multipleValidation()
+            ->allOf()
+            ->array();
+
+        $option->validation()
             ->allOf()
             ->integer();
 
