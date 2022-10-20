@@ -191,6 +191,19 @@ class TokenizerTest extends TestCase
                     Token::T_VALUE, Token::T_COMMA_SEPARATOR, Token::T_VALUE, Token::T_CLOSE_TAG_STYLE,
                 ],
             ],
+            // 15
+            [
+                '<color=black;bg;option>e</>',
+                11,
+                [
+                    '<', 'color', '=', 'black', ';', 'bg', ';', 'option', '>', 'e', '</>',
+                ],
+                [
+                    Token::T_OPEN_TAG_STYLE, Token::T_COLOR, Token::T_ASSIGMENT, Token::T_VALUE, Token::T_SEMICOLON,
+                    Token::T_BG, Token::T_SEMICOLON, Token::T_OPTION, Token::T_CLOSE_TAG_STYLE, Token::T_TEXT,
+                    Token::T_END_TAG_STYLE,
+                ],
+            ],
         ];
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\Formatter;
 
+use Fi1a\Console\IO\Formatter\AST\SymbolsInterface;
 use Fi1a\Console\IO\Style\StyleInterface;
 
 /**
@@ -40,7 +41,7 @@ interface FormatterInterface
      *
      * @return StyleInterface|false
      */
-    public function getStyle(string $name);
+    public static function getStyle(string $name);
 
     /**
      * Форматирование вывода
@@ -48,4 +49,9 @@ interface FormatterInterface
      * @param string|StyleInterface|null $style
      */
     public function format(string $message, $style = null): string;
+
+    /**
+     * Форматирование вывода
+     */
+    public function formatAST(SymbolsInterface $symbols): string;
 }

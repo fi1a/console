@@ -379,6 +379,9 @@ class Tokenizer extends AParseFunction
             }
             if ($symbol === ';') {
                 $this->setParseFunction('parseSemicolon');
+                if ($image !== '') {
+                    $this->checkKeywords($image, $type);
+                }
 
                 return;
             }

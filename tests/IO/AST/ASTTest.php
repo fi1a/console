@@ -287,6 +287,27 @@ class ASTTest extends TestCase
     }
 
     /**
+     * Кейс 10
+     */
+    public function testCase10(): void
+    {
+        $ast = new AST(
+            '<bg=red>colorized <color=green>text <option=underscore>underscor<color=black;bg;option>e</></></></>',
+            StyleConverter::convertArray(Formatter::allStyles())
+        );
+        /**
+         * @var SymbolInterface[] $symbols
+         */
+        $symbols = $ast->getSymbols();
+        $this->assertCount(25, $symbols);
+
+        $this->assertEquals('e', $symbols[24]->getValue());
+        $this->assertEquals('black', $symbols[24]->getStyles()->getComputedStyle()->getColor());
+        $this->assertNull($symbols[24]->getStyles()->getComputedStyle()->getBackground());
+        $this->assertNull($symbols[24]->getStyles()->getComputedStyle()->getOptions());
+    }
+
+    /**
      * Провайдер данных для метода testExceptions
      *
      * @return string[][]

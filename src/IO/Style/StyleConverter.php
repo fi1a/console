@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\IO\Style;
 
 use Fi1a\Console\IO\Formatter\AST\Style;
-use Fi1a\Console\IO\Formatter\AST\StyleInterface;
-use Fi1a\Console\IO\Style\StyleInterface as IOStyleInterface;
+use Fi1a\Console\IO\Formatter\AST\StyleInterface as StyleInterfaceAST;
 
 /**
  * Преобразует стили для AST
@@ -16,15 +15,15 @@ class StyleConverter
     /**
      * Конвертирует массив стилей
      *
-     * @param IOStyleInterface[] $styles
+     * @param StyleInterface[] $styles
      *
-     * @return StyleInterface[]
+     * @return StyleInterfaceAST[]
      */
     public static function convertArray(array $styles): array
     {
         $converted = [];
         foreach ($styles as $name => $style) {
-            $instance = static::convert($style);
+            $instance = static::convertToAST($style);
             $instance->setStyleName((string) $name);
             $converted[$name] = $instance;
         }
@@ -35,7 +34,7 @@ class StyleConverter
     /**
      * Конвертирует стиль
      */
-    public static function convert(IOStyleInterface $style): StyleInterface
+    public static function convertToAST(StyleInterface $style): StyleInterfaceAST
     {
         $instance = new Style();
         $instance->setColor(
@@ -55,5 +54,26 @@ class StyleConverter
         $instance->setOptions($options);
 
         return $instance;
+    }
+
+    /**
+     * Конвертирует стиль
+     */
+    public static function convertFromAST(StyleInterfaceAST $styleAST, StyleInterface $style): StyleInterface
+    {
+        $color = $styleAST->getColor();
+        if ($color) {
+            $style->setColor($color);
+        }
+        $background = $styleAST->getBackground();
+        if ($background) {
+            $style->setBackground($background);
+        }
+        $options = $styleAST->getOptions();
+        if ($options) {
+            $style->setOptions($options);
+        }
+
+        return $style;
     }
 }

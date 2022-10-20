@@ -12,7 +12,7 @@ interface ASTInterface
     /**
      * Конструктор
      *
-     * @param Style[]|null $styles
+     * @param StyleInterface[]|null $styles
      */
     public function __construct(string $format, ?array $styles = [], ?StyleInterface $style = null);
 

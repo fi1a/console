@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\IO;
 
+use Fi1a\Console\IO\Formatter\AST\Exception\SyntaxErrorException;
 use Fi1a\Console\IO\Formatter\Formatter;
 use Fi1a\Console\IO\Style\ANSIColor;
 use Fi1a\Console\IO\Style\ANSIStyle;
@@ -83,11 +84,29 @@ class FormatterTest extends TestCase
             static::$formatter->format('<error>Error text</>')
         ));
         $this->assertTrue(is_string(
-            static::$formatter->format('<not_exist>Error text</not_exist>')
+            static::$formatter->format('<color=black;bg=white;option=bold>Error text</>')
         ));
         $this->assertTrue(is_string(
-            static::$formatter->format('<color=black;bg=white;option=bold;>Error text</>')
+            static::$formatter->format("<color=black;bg=white;option=bold>Error\ntext</>")
         ));
+    }
+
+    /**
+     * @depends testFormat
+     */
+    public function testFormatExceptionOnNotExistStyle(): void
+    {
+        $this->expectException(SyntaxErrorException::class);
+        static::$formatter->format('<not_exist>Error text</not_exist>');
+    }
+
+    /**
+     * @depends testFormat
+     */
+    public function testFormatExceptionOnNotExistPreDefineStyle(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        static::$formatter->format('Error text', 'not_exists');
     }
 
     /**
@@ -95,7 +114,7 @@ class FormatterTest extends TestCase
      */
     public function testFormatException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(SyntaxErrorException::class);
         static::$formatter->format('<error>Error text</error></error> test');
     }
 
@@ -108,10 +127,6 @@ class FormatterTest extends TestCase
     {
         $this->assertInstanceOf(ANSIStyle::class, static::$formatter->getStyle('error'));
         $this->assertFalse(static::$formatter->getStyle('not_exist'));
-        $this->assertInstanceOf(
-            ANSIStyle::class,
-            static::$formatter->getStyle('black;bg=white;option=bold;option=not_exist;')
-        );
     }
 
     /**

@@ -206,23 +206,19 @@ class AST implements ASTInterface
     {
         $token = $tokenizer->next();
         if ($token === ITokenizer::T_EOF) {
-            $token = $tokenizer->current();
-
             throw new SyntaxErrorException(sprintf(
                 'Синтаксическая ошибка (%d, %d)',
-                $token->getEndLine(),
-                $token->getEndColumn()
+                $tokenizer->current()->getEndLine(),
+                $tokenizer->current()->getEndColumn()
             ));
         }
         if ($token->getType() === Token::T_WHITESPACE) {
             $token = $tokenizer->next();
             if ($token === ITokenizer::T_EOF) {
-                $token = $tokenizer->current();
-
                 throw new SyntaxErrorException(sprintf(
                     'Синтаксическая ошибка (%d, %d)',
-                    $token->getEndLine(),
-                    $token->getEndColumn()
+                    $tokenizer->current()->getEndLine(),
+                    $tokenizer->current()->getEndColumn()
                 ));
             }
         }
