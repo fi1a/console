@@ -9,7 +9,7 @@ use InvalidArgumentException;
 /**
  * ANSI класс цвета текста и фона
  */
-class ANSIColor implements ColorInterface
+class ANSIColor extends AbstractColor
 {
     use ColorTrait;
 
@@ -28,17 +28,6 @@ class ANSIColor implements ColorInterface
         self::LIGHT_BLUE => 94, self::LIGHT_MAGENTA => 95, self::LIGHT_CYAN => 96, self::WHITE => 97,
         self::DARK_GRAY => 90,
     ];
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(?string $color = null)
-    {
-        if (is_null($color)) {
-            $color = self::DEFAULT;
-        }
-        $this->setColor($color);
-    }
 
     /**
      * @inheritDoc

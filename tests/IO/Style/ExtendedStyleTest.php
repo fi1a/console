@@ -27,24 +27,28 @@ class ExtendedStyleTest extends TestCase
         $style = new ExtendedStyle();
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Bold::NAME,]);
+        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Bold::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Underscore::NAME,]);
+        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Underscore::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Blink::NAME,]);
+        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Blink::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Conceal::NAME,]);
+        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Conceal::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Reverse::NAME,]);
+        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Reverse::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ExtendedStyle(ExtendedColor::BLACK, ExtendedColor::WHITE, [Bold::NAME, Reverse::NAME,]);
-        $this->assertTrue($style->unsetOption(Reverse::NAME));
-        $this->assertFalse($style->unsetOption(Reverse::NAME));
+        $style = new ExtendedStyle(
+            ExtendedColor::BLACK,
+            ExtendedColor::WHITE,
+            [Bold::getName(), Reverse::getName(),]
+        );
+        $this->assertTrue($style->unsetOption(Reverse::getName()));
+        $this->assertFalse($style->unsetOption(Reverse::getName()));
         $this->assertTrue(is_string($style->apply('text')));
     }
 

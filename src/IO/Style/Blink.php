@@ -9,13 +9,19 @@ namespace Fi1a\Console\IO\Style;
  */
 class Blink extends AbstractOption
 {
-    public const NAME = 'blink';
-
     /**
      * @inheritDoc
      */
     public function getCode(): string
     {
         return '5';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getName(): string
+    {
+        return 'blink';
     }
 }

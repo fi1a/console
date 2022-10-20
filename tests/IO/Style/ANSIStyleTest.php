@@ -27,24 +27,28 @@ class ANSIStyleTest extends TestCase
         $style = new ANSIStyle();
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Bold::NAME,]);
+        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Bold::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Underscore::NAME,]);
+        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Underscore::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Blink::NAME,]);
+        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Blink::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Conceal::NAME,]);
+        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Conceal::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Reverse::NAME,]);
+        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Reverse::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new ANSIStyle(ANSIColor::BLACK, ANSIColor::WHITE, [Bold::NAME, Reverse::NAME,]);
-        $this->assertTrue($style->unsetOption(Reverse::NAME));
-        $this->assertFalse($style->unsetOption(Reverse::NAME));
+        $style = new ANSIStyle(
+            ANSIColor::BLACK,
+            ANSIColor::WHITE,
+            [Bold::getName(), Reverse::getName(),]
+        );
+        $this->assertTrue($style->unsetOption(Reverse::getName()));
+        $this->assertFalse($style->unsetOption(Reverse::getName()));
         $this->assertTrue(is_string($style->apply('text')));
     }
 

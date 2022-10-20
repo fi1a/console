@@ -9,13 +9,19 @@ namespace Fi1a\Console\IO\Style;
  */
 class Reverse extends AbstractOption
 {
-    public const NAME = 'reverse';
-
     /**
      * @inheritDoc
      */
     public function getCode(): string
     {
         return '7';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getName(): string
+    {
+        return 'reverse';
     }
 }

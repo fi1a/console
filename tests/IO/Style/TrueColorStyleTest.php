@@ -27,24 +27,28 @@ class TrueColorStyleTest extends TestCase
         $style = new TrueColorStyle();
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Bold::NAME,]);
+        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Bold::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Underscore::NAME,]);
+        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Underscore::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Blink::NAME,]);
+        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Blink::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Conceal::NAME,]);
+        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Conceal::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Reverse::NAME,]);
+        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Reverse::getName(),]);
         $this->assertTrue(is_string($style->apply('text')));
 
-        $style = new TrueColorStyle(TrueColor::BLACK, TrueColor::WHITE, [Bold::NAME, Reverse::NAME,]);
-        $this->assertTrue($style->unsetOption(Reverse::NAME));
-        $this->assertFalse($style->unsetOption(Reverse::NAME));
+        $style = new TrueColorStyle(
+            TrueColor::BLACK,
+            TrueColor::WHITE,
+            [Bold::getName(), Reverse::getName(),]
+        );
+        $this->assertTrue($style->unsetOption(Reverse::getName()));
+        $this->assertFalse($style->unsetOption(Reverse::getName()));
         $this->assertTrue(is_string($style->apply('text')));
     }
 

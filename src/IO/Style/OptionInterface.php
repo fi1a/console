@@ -13,4 +13,9 @@ interface OptionInterface
      * Цифровой код опции
      */
     public function getCode(): string;
+
+    /**
+     * Возвращает название
+     */
+    public static function getName(): string;
 }

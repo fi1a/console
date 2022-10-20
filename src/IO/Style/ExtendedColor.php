@@ -9,7 +9,7 @@ use InvalidArgumentException;
 /**
  * Расширенный класс цвета текста и фона
  */
-class ExtendedColor implements ColorInterface
+class ExtendedColor extends AbstractColor
 {
     use ColorTrait;
 
@@ -28,17 +28,6 @@ class ExtendedColor implements ColorInterface
         self::LIGHT_BLUE => 14, self::LIGHT_MAGENTA => 13, self::LIGHT_CYAN => 14,
         self::DARK_GRAY => 244,
     ];
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(?string $color = null)
-    {
-        if (is_null($color)) {
-            $color = self::DEFAULT;
-        }
-        $this->setColor($color);
-    }
 
     /**
      * @inheritDoc

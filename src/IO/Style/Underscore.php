@@ -9,13 +9,19 @@ namespace Fi1a\Console\IO\Style;
  */
 class Underscore extends AbstractOption
 {
-    public const NAME = 'underscore';
-
     /**
      * @inheritDoc
      */
     public function getCode(): string
     {
         return '4';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getName(): string
+    {
+        return 'underscore';
     }
 }

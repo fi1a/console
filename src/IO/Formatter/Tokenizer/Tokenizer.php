@@ -84,11 +84,11 @@ class Tokenizer extends AParseFunction
     }
 
     /**
-     * Парсинг открытия тега
+     * Парсинг закрытия тега
      *
-     *  -
-     *  <color=red></>
-     *  -
+     *           -
+     * <color=red></>
+     *           -
      *
      * @param IToken[]    $tokens
      */
@@ -113,9 +113,9 @@ class Tokenizer extends AParseFunction
     /**
      * Парсинг открытия тега
      *
-     *  -
-     *  <color=red></>
-     *  -
+     * -
+     * <color=red></>
+     * -
      *
      * @param IToken[]    $tokens
      */
@@ -165,9 +165,9 @@ class Tokenizer extends AParseFunction
     /**
      * Парсинг присвоения
      *
-     *        -
-     *  <color=red></>
-     *        -
+     *       -
+     * <color=red></>
+     *       -
      *
      * @param IToken[] $tokens
      */
@@ -191,9 +191,9 @@ class Tokenizer extends AParseFunction
     /**
      * Парсинг запятой
      *
-     *              -
-     *  <option=bold, underscore></>
-     *              -
+     *             -
+     * <option=bold, underscore></>
+     *             -
      *
      * @param IToken[] $tokens
      */
@@ -221,7 +221,7 @@ class Tokenizer extends AParseFunction
      * <color=red;bg=white></>
      *                     ---
      *
-     * @param IToken[]    $tokens
+     * @param IToken[] $tokens
      */
     protected function parseEndTagStyle(
         bool &$finish,
@@ -249,9 +249,9 @@ class Tokenizer extends AParseFunction
     /**
      * Парсинг значения
      *
-     *         ---    -----
-     *  <color=red;bg=white></>
-     *         ---    -----
+     *        ---    -----
+     * <color=red;bg=white></>
+     *        ---    -----
      *
      * @param IToken[]    $tokens
      */
@@ -314,11 +314,11 @@ class Tokenizer extends AParseFunction
     }
 
     /**
-     * Парсинг открытия скобки указания модификаторов
+     * Парсинг кавычек
      *
-     *          -          -  -    -
-     *  <option="underscore", "bold";color=white></>
-     *          -          -  -    -
+     *         -          -  -    -
+     * <option="underscore", "bold";color=white></>
+     *         -          -  -    -
      *
      * @param IToken[]    $tokens
      */
@@ -348,9 +348,9 @@ class Tokenizer extends AParseFunction
     /**
      * Парсинг стилей
      *
-     *   -----     --
-     *  <color=red;bg=white></>
-     *   -----     --
+     *  -----     --
+     * <color=red;bg=white></>
+     *  -----     --
      *
      * @param IToken[]    $tokens
      */
@@ -419,9 +419,9 @@ class Tokenizer extends AParseFunction
 
     /**
      * Парсинг пробела
-     *   -         - -
-     * {{ key1:key2 | specifier("1", "2")}}
-     *   -         - -
+     *            -
+     * <color=red; bg=white></>
+     *            -
      *
      * @param IToken[]    $tokens
      */

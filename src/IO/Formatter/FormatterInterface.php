@@ -27,6 +27,13 @@ interface FormatterInterface
     public static function deleteStyle(string $name): bool;
 
     /**
+     * Возвращает все стили
+     *
+     * @return StyleInterface[]
+     */
+    public static function allStyles(): array;
+
+    /**
      * Возвращает стиль
      *
      * @param string|StyleInterface|null $style

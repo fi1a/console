@@ -9,13 +9,19 @@ namespace Fi1a\Console\IO\Style;
  */
 class Conceal extends AbstractOption
 {
-    public const NAME = 'conceal';
-
     /**
      * @inheritDoc
      */
     public function getCode(): string
     {
         return '8';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getName(): string
+    {
+        return 'conceal';
     }
 }

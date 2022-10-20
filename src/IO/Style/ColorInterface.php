@@ -51,4 +51,9 @@ interface ColorInterface
      * Установить цвет
      */
     public function setColor(string $color): bool;
+
+    /**
+     * Возвращает значение цвета
+     */
+    public function getColorValue(): ?string;
 }

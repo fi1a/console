@@ -9,13 +9,19 @@ namespace Fi1a\Console\IO\Style;
  */
 class Bold extends AbstractOption
 {
-    public const NAME = 'bold';
-
     /**
      * @inheritDoc
      */
     public function getCode(): string
     {
         return '1';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getName(): string
+    {
+        return 'bold';
     }
 }

@@ -7,7 +7,7 @@ namespace Fi1a\Console\IO\Style;
 /**
  * TrueColor класс цвета текста и фона
  */
-class TrueColor implements ColorInterface
+class TrueColor extends AbstractColor
 {
     use ColorTrait;
 
@@ -154,17 +154,6 @@ class TrueColor implements ColorInterface
         self::LIGHT_YELLOW => '#fefb7e', self::LIGHT_BLUE => '#6a71f6', self::LIGHT_MAGENTA => '#f07ef8',
         self::LIGHT_CYAN => '#8ef9fd', self::DARK_GRAY => '#c7c7c7',
     ];
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(?string $color = null)
-    {
-        if (is_null($color)) {
-            $color = self::DEFAULT;
-        }
-        $this->setColor($color);
-    }
 
     /**
      * @inheritDoc

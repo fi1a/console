@@ -11,6 +11,9 @@ use InvalidArgumentException;
 use const PREG_OFFSET_CAPTURE;
 use const PREG_SET_ORDER;
 
+/**
+ * Форматирование в консоли
+ */
 class Formatter implements FormatterInterface
 {
     /**
@@ -48,7 +51,7 @@ class Formatter implements FormatterInterface
         if (static::hasStyle($name)) {
             return false;
         }
-        static::$styles[$name] = $style;
+        static::$styles[mb_strtolower($name)] = $style;
 
         return true;
     }
@@ -58,7 +61,7 @@ class Formatter implements FormatterInterface
      */
     public static function hasStyle(string $name): bool
     {
-        return array_key_exists($name, static::$styles);
+        return array_key_exists(mb_strtolower($name), static::$styles);
     }
 
     /**
@@ -70,9 +73,17 @@ class Formatter implements FormatterInterface
             return false;
         }
 
-        unset(static::$styles[$name]);
+        unset(static::$styles[mb_strtolower($name)]);
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function allStyles(): array
+    {
+        return static::$styles;
     }
 
     /**
@@ -81,7 +92,7 @@ class Formatter implements FormatterInterface
     public function getStyle(string $name)
     {
         if (static::hasStyle($name)) {
-            return static::$styles[$name];
+            return static::$styles[mb_strtolower($name)];
         }
         if (!preg_match_all('/([^=]+)=([^;]+)(;|$)/', $name, $matches, PREG_SET_ORDER)) {
             return false;
