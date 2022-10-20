@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO\Formatter\Tokenizer;
+namespace Fi1a\Console\IO\Tokenizer;
 
 use Fi1a\Tokenizer\AToken;
 

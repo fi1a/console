@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO\Formatter\AST;
+namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Console\IO\Formatter\AST\Exception\SyntaxErrorException;
-use Fi1a\Console\IO\Formatter\Tokenizer\Token;
-use Fi1a\Console\IO\Formatter\Tokenizer\Tokenizer;
+use Fi1a\Console\IO\AST\Exception\SyntaxErrorException;
+use Fi1a\Console\IO\Tokenizer\Token;
+use Fi1a\Console\IO\Tokenizer\Tokenizer;
 use Fi1a\Tokenizer\IToken;
 use Fi1a\Tokenizer\ITokenizer;
 

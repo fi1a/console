@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\Style;
 
-use Fi1a\Console\IO\Formatter\AST\Style;
-use Fi1a\Console\IO\Formatter\AST\StyleInterface as StyleInterfaceAST;
+use Fi1a\Console\IO\AST\Style;
+use Fi1a\Console\IO\AST\StyleInterface as StyleInterfaceAST;
 
 /**
  * Преобразует стили для AST

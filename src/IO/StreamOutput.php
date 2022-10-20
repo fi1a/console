@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO;
 
-use Fi1a\Console\IO\Formatter\FormatterInterface;
-
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 

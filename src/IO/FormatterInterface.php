@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO\Formatter;
+namespace Fi1a\Console\IO;
 
-use Fi1a\Console\IO\Formatter\AST\SymbolsInterface;
+use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\Style\StyleInterface;
 
 /**

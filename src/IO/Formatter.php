@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO\Formatter;
+namespace Fi1a\Console\IO;
 
-use Fi1a\Console\IO\Formatter\AST\AST;
-use Fi1a\Console\IO\Formatter\AST\Symbol;
-use Fi1a\Console\IO\Formatter\AST\SymbolsInterface;
+use Fi1a\Console\IO\AST\AST;
+use Fi1a\Console\IO\AST\Symbol;
+use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\Style\ANSIStyle;
 use Fi1a\Console\IO\Style\StyleConverter;
 use Fi1a\Console\IO\Style\StyleInterface;

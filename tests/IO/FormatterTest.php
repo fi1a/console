@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\IO;
 
-use Fi1a\Console\IO\Formatter\AST\Exception\SyntaxErrorException;
-use Fi1a\Console\IO\Formatter\Formatter;
+use Fi1a\Console\IO\AST\Exception\SyntaxErrorException;
+use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\ANSIColor;
 use Fi1a\Console\IO\Style\ANSIStyle;
 use Fi1a\Console\IO\Style\TrueColor;

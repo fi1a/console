@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\Console\IO\AST;
 
-use Fi1a\Console\IO\Formatter\AST\AST;
-use Fi1a\Console\IO\Formatter\AST\Exception\SyntaxErrorException;
-use Fi1a\Console\IO\Formatter\AST\Style;
-use Fi1a\Console\IO\Formatter\AST\SymbolInterface;
-use Fi1a\Console\IO\Formatter\Formatter;
+use Fi1a\Console\IO\AST\AST;
+use Fi1a\Console\IO\AST\Exception\SyntaxErrorException;
+use Fi1a\Console\IO\AST\Style;
+use Fi1a\Console\IO\AST\SymbolInterface;
+use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\Bold;
 use Fi1a\Console\IO\Style\StyleConverter;
 use Fi1a\Console\IO\Style\TrueColorStyle;

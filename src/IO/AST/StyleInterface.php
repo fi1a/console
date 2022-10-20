@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Console\IO\Formatter\AST;
+namespace Fi1a\Console\IO\AST;
 
 /**
  * Стиль
