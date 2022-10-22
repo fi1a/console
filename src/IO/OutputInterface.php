@@ -51,6 +51,11 @@ interface OutputInterface
     ): bool;
 
     /**
+     * Вывод без обработки
+     */
+    public function writeRaw(string $message = '', bool $newLine = false): bool;
+
+    /**
      * Возвращает класс форматирования
      */
     public function getFormatter(): FormatterInterface;

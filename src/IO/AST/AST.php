@@ -36,8 +36,8 @@ class AST implements ASTInterface
      */
     public function __construct(string $format, ?array $stylesCollection = [], ?StyleInterface $preDefineStyle = null)
     {
-        $this->symbols = new Symbols(SymbolInterface::class);
-        $this->styles = new Styles(StyleInterface::class);
+        $this->symbols = new Symbols();
+        $this->styles = new Styles();
         $this->stylesCollection = $stylesCollection;
         if ($preDefineStyle) {
             $this->styles->add($preDefineStyle);

@@ -66,6 +66,17 @@ class StreamOutputTest extends TestCase
     public function testWrite()
     {
         $this->assertTrue(static::$output->write('test'));
+        $this->assertTrue(static::$output->write(htmlspecialchars('<unknown>test</unknown>')));
+    }
+
+    /**
+     * Вывод
+     *
+     * @depends testConstructDecorate
+     */
+    public function testWriteRaw()
+    {
+        $this->assertTrue(static::$output->writeRaw('test', true));
     }
 
     /**

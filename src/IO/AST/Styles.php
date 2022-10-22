@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Collection\Collection;
+use Fi1a\Collection\DataType\MapArrayObject;
 
 /**
  * Коллекция стилей
  */
-class Styles extends Collection implements StylesInterface
+class Styles extends MapArrayObject implements StylesInterface
 {
+    /**
+     * @var StyleInterface|null
+     */
+    private $cache;
+
     /**
      * @inheritDoc
      */
     public function getComputedStyle(): StyleInterface
     {
+        if ($this->cache) {
+            return $this->cache;
+        }
+
         /**
          * @var StyleInterface $style
          */
@@ -33,6 +42,16 @@ class Styles extends Collection implements StylesInterface
             return $style;
         }, new Style());
 
-        return $style;
+        return $this->cache = $style;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function resetComputedStyleCache(): bool
+    {
+        $this->cache = null;
+
+        return true;
     }
 }

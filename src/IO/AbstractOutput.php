@@ -6,6 +6,8 @@ namespace Fi1a\Console\IO;
 
 use Fi1a\Format\Formatter as StringFormatter;
 
+use const ENT_COMPAT;
+
 /**
  * Абстрактный класс вывода
  */
@@ -97,6 +99,7 @@ abstract class AbstractOutput implements OutputInterface
         foreach ($messages as $message) {
             $message = StringFormatter::format($message, $variables);
             $message = $this->isDecorated() ? $formatter->format($message, $style) : strip_tags($message);
+            $message = htmlspecialchars_decode($message, ENT_COMPAT);
             $result = $this->doWrite($message, $newLine) && $result;
         }
 
@@ -113,6 +116,14 @@ abstract class AbstractOutput implements OutputInterface
         int $verbose = self::VERBOSE_NORMAL
     ): bool {
         return $this->write($messages, $variables, $style, true, $verbose);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function writeRaw(string $message = '', bool $newLine = false): bool
+    {
+        return $this->doWrite($message, $newLine);
     }
 
     /**

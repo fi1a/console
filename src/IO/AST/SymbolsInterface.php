@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Collection\ICollection;
+use Fi1a\Collection\DataType\IMapArrayObject;
 
 /**
  * Символы
@@ -17,6 +17,6 @@ use Fi1a\Collection\ICollection;
  * @method SymbolInterface replace($key, $value)
  * @method SymbolInterface[] column(string $name)
  */
-interface SymbolsInterface extends ICollection
+interface SymbolsInterface extends IMapArrayObject
 {
 }

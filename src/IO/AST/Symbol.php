@@ -53,7 +53,7 @@ class Symbol implements SymbolInterface
      */
     public function setStyles(array $styles): bool
     {
-        $this->styles = new Styles(StyleInterface::class, $styles);
+        $this->styles = new Styles($styles);
 
         return true;
     }

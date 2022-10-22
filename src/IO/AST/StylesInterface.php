@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Collection\ICollection;
+use Fi1a\Collection\DataType\IMapArrayObject;
 
 /**
  * Коллекция стилей
@@ -18,10 +18,15 @@ use Fi1a\Collection\ICollection;
  * @method StyleInterface[] column(string $name)
  * @method StyleInterface[] getArrayCopy()
  */
-interface StylesInterface extends ICollection
+interface StylesInterface extends IMapArrayObject
 {
     /**
      * Возвращает вычисленный стиль
      */
     public function getComputedStyle(): StyleInterface;
+
+    /**
+     * Сбросить вычисляемый кеш
+     */
+    public function resetComputedStyleCache(): bool;
 }
