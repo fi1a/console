@@ -54,7 +54,7 @@ class Grid implements GridInterface
     public function wordWrap(int $width, ?int $left = null): bool
     {
         $symbols = $this->getSymbols();
-        if ($symbols->isEmpty()) {
+        if ($symbols->isEmpty() || !$width) {
             return true;
         }
         $current = 0;
@@ -436,7 +436,7 @@ class Grid implements GridInterface
     /**
      * @inheritDoc
      */
-    public function set(int $line, int $column, string $value): bool
+    public function setValue(int $line, int $column, string $value): bool
     {
         $currentLine = 1;
         $currentColumn = 1;
@@ -468,8 +468,23 @@ class Grid implements GridInterface
      */
     public function getHeight(): int
     {
+        /**
+         * @var SymbolInterface[] $symbols
+         */
+        $symbols = $this->getSymbols()->getArrayCopy();
+
+        return $this->getInternalHeight($symbols);
+    }
+
+    /**
+     * Вычисляет высоту
+     *
+     * @param SymbolInterface[] $symbols
+     */
+    private function getInternalHeight(array $symbols): int
+    {
         $height = 1;
-        foreach ($this->getSymbols() as $symbol) {
+        foreach ($symbols as $symbol) {
             assert($symbol instanceof SymbolInterface);
             if ($symbol->getValue() === PHP_EOL) {
                 $height++;
@@ -527,5 +542,170 @@ class Grid implements GridInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function appendRight(array $rightSymbols): bool
+    {
+        $resultSymbols = new Symbols();
+        $leftSymbols = $this->getSymbols();
+        if ($leftSymbols->isEmpty()) {
+            $this->getSymbols()->exchangeArray($rightSymbols);
+
+            return true;
+        }
+        $leftWidth = $this->getWidth();
+        $rightWidth = $this->getInternalWidth(1, $rightSymbols);
+
+        $leftSymbolCounter = 0;
+        $leftStartLine = 0;
+        $rightSymbolCounter = 0;
+        $rightStartLine = 0;
+        do {
+            /**
+             * @var SymbolInterface|null $leftSymbol
+             */
+            $leftSymbol = $leftSymbols[$leftSymbolCounter] ?? null;
+
+            if (($leftSymbol && $leftSymbol->getValue() === PHP_EOL) || $leftSymbolCounter >= count($leftSymbols)) {
+                if ($rightSymbolCounter >= count($rightSymbols) - 1) {
+                    $fill = array_fill(0, $rightWidth, new Symbol(' ', []));
+                    $resultSymbols->exchangeArray(
+                        array_merge(
+                            $resultSymbols->getArrayCopy(),
+                            array_slice(
+                                $leftSymbols->getArrayCopy(),
+                                $leftStartLine,
+                                $leftSymbolCounter - $leftStartLine
+                            ),
+                            $fill,
+                            $leftSymbol ? [new Symbol("\n", [])] : []
+                        )
+                    );
+                } else {
+                    do {
+                        $rightSymbol = $rightSymbols[$rightSymbolCounter] ?? null;
+                        if (
+                            ($rightSymbol && $rightSymbol->getValue() === PHP_EOL)
+                            || $rightSymbolCounter >= count($rightSymbols)
+                        ) {
+                            $resultSymbols->exchangeArray(
+                                array_merge(
+                                    $resultSymbols->getArrayCopy(),
+                                    array_slice(
+                                        $leftSymbols->getArrayCopy(),
+                                        $leftStartLine,
+                                        $leftSymbolCounter - $leftStartLine
+                                    ),
+                                    array_slice(
+                                        $rightSymbols,
+                                        $rightStartLine,
+                                        $rightSymbolCounter - $rightStartLine
+                                    ),
+                                    $rightSymbol || $leftSymbolCounter < count($leftSymbols)
+                                        ? [new Symbol("\n", [])]
+                                        : []
+                                )
+                            );
+
+                            $rightStartLine = $rightSymbolCounter + 1;
+                            $rightSymbolCounter++;
+
+                            break;
+                        }
+                        $rightSymbolCounter++;
+                    } while ($rightSymbolCounter <= count($rightSymbols));
+                }
+
+                $leftStartLine = $leftSymbolCounter + 1;
+            }
+
+            $leftSymbolCounter++;
+        } while ($leftSymbolCounter <= count($leftSymbols));
+
+        if ($rightSymbolCounter < count($rightSymbols)) {
+            do {
+                $rightSymbol = $rightSymbols[$rightSymbolCounter] ?? null;
+                if (
+                    ($rightSymbol && $rightSymbol->getValue() === PHP_EOL)
+                    || $rightSymbolCounter >= count($rightSymbols)
+                ) {
+                    $fill = array_fill(0, $leftWidth, new Symbol(' ', []));
+                    $resultSymbols->exchangeArray(
+                        array_merge(
+                            $resultSymbols->getArrayCopy(),
+                            $fill,
+                            array_slice(
+                                $rightSymbols,
+                                $rightStartLine,
+                                $rightSymbolCounter - $rightStartLine
+                            ),
+                            $rightSymbol ? [new Symbol("\n", [])] : []
+                        )
+                    );
+
+                    $rightStartLine = $rightSymbolCounter + 1;
+                }
+                $rightSymbolCounter++;
+            } while ($rightSymbolCounter <= count($rightSymbols));
+        }
+
+        $this->setSymbols($resultSymbols);
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWidth(int $line = 1): int
+    {
+        /**
+         * @var SymbolInterface[] $symbols
+         */
+        $symbols = $this->getSymbols()->getArrayCopy();
+
+        return $this->getInternalWidth($line, $symbols);
+    }
+
+    /**
+     * Вычисляет ширину
+     *
+     * @param SymbolInterface[] $symbols
+     */
+    private function getInternalWidth(int $line, array $symbols): int
+    {
+        $height = 1;
+        $width = 0;
+        foreach ($symbols as $symbol) {
+            assert($symbol instanceof SymbolInterface);
+            if ($height === $line && $symbol->getValue() !== PHP_EOL) {
+                $width++;
+            }
+            if ($symbol->getValue() === PHP_EOL) {
+                $height++;
+                if ($height > $line) {
+                    break;
+                }
+            }
+        }
+
+        return $width;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getImage(): string
+    {
+        $image = '';
+        foreach ($this->getSymbols() as $symbol) {
+            assert($symbol instanceof SymbolInterface);
+            $image .= $symbol->getValue();
+        }
+
+        return $image;
     }
 }

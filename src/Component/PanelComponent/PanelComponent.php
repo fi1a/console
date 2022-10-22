@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\PanelComponent;
 
 use Fi1a\Console\Component\AbstractComponent;
+use Fi1a\Console\Component\OutputTrait;
 use Fi1a\Console\Component\Rectangle;
 use Fi1a\Console\Component\RectangleInterface;
 use Fi1a\Console\IO\AST\AST;
@@ -19,11 +20,7 @@ use Fi1a\Console\IO\Style\TrueColorStyle;
  */
 class PanelComponent extends AbstractComponent implements PanelComponentInterface
 {
-    /**
-     * @var ConsoleOutputInterface
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private $output;
+    use OutputTrait;
 
     /**
      * @var string
@@ -44,24 +41,6 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         $this->setOutput($output);
         $this->setText($text);
         $this->setStyle($style);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOutput(): ConsoleOutputInterface
-    {
-        return $this->output;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOutput(ConsoleOutputInterface $output): bool
-    {
-        $this->output = $output;
-
-        return true;
     }
 
     /**
@@ -231,10 +210,10 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
                 $this->getBorderTopBottomSymbol(),
                 $styles
             );
-            $grid->set(1, 1, $this->getBorderTopLeft());
-            $grid->set(1, $width - 1, $this->getBorderTopRight());
-            $grid->set($grid->getHeight(), 1, $this->getBorderBottomLeft());
-            $grid->set($grid->getHeight(), $width - 1, $this->getBorderBottomRight());
+            $grid->setValue(1, 1, $this->getBorderTopLeft());
+            $grid->setValue(1, $width - 1, $this->getBorderTopRight());
+            $grid->setValue($grid->getHeight(), 1, $this->getBorderBottomLeft());
+            $grid->setValue($grid->getHeight(), $width - 1, $this->getBorderBottomRight());
         }
 
         return $grid->getSymbols();

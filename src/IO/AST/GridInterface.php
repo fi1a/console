@@ -78,7 +78,7 @@ interface GridInterface
     /**
      * Установить значение
      */
-    public function set(int $line, int $column, string $value): bool;
+    public function setValue(int $line, int $column, string $value): bool;
 
     /**
      * Возвращает высоту
@@ -103,4 +103,21 @@ interface GridInterface
      * Обрезает по высоте
      */
     public function truncateHeight(int $height): bool;
+
+    /**
+     * Добавить справа
+     *
+     * @param SymbolInterface[] $rightSymbols
+     */
+    public function appendRight(array $rightSymbols): bool;
+
+    /**
+     * Возвращает ширину линии
+     */
+    public function getWidth(int $line = 1): int;
+
+    /**
+     * Возвращает склееный текст на основе символов
+     */
+    public function getImage(): string;
 }
