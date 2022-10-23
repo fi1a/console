@@ -16,7 +16,7 @@ use Fi1a\Console\IO\AST\SymbolInterface;
 use Fi1a\Console\IO\AST\Symbols;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
-use Fi1a\Console\IO\Style\StyleConverter;
+use Fi1a\Console\IO\Style\ASTStyleConverter;
 use InvalidArgumentException;
 
 /**
@@ -138,7 +138,7 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
             foreach ($panels as $panel) {
                 $ast = new AST(
                     $panel->getText(),
-                    StyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
+                    ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
                 );
                 $symbols = $ast->getSymbols();
                 $panelGrid = new Grid($symbols);

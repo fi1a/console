@@ -10,7 +10,7 @@ use Fi1a\Console\IO\AST\StyleInterface as StyleInterfaceAST;
 /**
  * Преобразует стили для AST
  */
-class StyleConverter
+class ASTStyleConverter
 {
     /**
      * Конвертирует массив стилей
@@ -23,7 +23,7 @@ class StyleConverter
     {
         $converted = [];
         foreach ($styles as $name => $style) {
-            $instance = static::convertToAST($style);
+            $instance = static::convert($style);
             $instance->setStyleName((string) $name);
             $converted[$name] = $instance;
         }
@@ -34,7 +34,7 @@ class StyleConverter
     /**
      * Конвертирует стиль
      */
-    public static function convertToAST(StyleInterface $style): StyleInterfaceAST
+    public static function convert(StyleInterface $style): StyleInterfaceAST
     {
         $instance = new Style();
         $instance->setColor(
@@ -54,26 +54,5 @@ class StyleConverter
         $instance->setOptions($options);
 
         return $instance;
-    }
-
-    /**
-     * Конвертирует стиль
-     */
-    public static function convertFromAST(StyleInterfaceAST $styleAST, StyleInterface $style): StyleInterface
-    {
-        $color = $styleAST->getColor();
-        if ($color) {
-            $style->setColor($color);
-        }
-        $background = $styleAST->getBackground();
-        if ($background) {
-            $style->setBackground($background);
-        }
-        $options = $styleAST->getOptions();
-        if ($options) {
-            $style->setOptions($options);
-        }
-
-        return $style;
     }
 }

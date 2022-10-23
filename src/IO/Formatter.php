@@ -8,7 +8,8 @@ use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\Symbol;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\Style\ANSIStyle;
-use Fi1a\Console\IO\Style\StyleConverter;
+use Fi1a\Console\IO\Style\ASTStyleConverter;
+use Fi1a\Console\IO\Style\IOStyleConverter;
 use Fi1a\Console\IO\Style\StyleInterface;
 use InvalidArgumentException;
 
@@ -106,7 +107,7 @@ class Formatter implements FormatterInterface
         foreach ($symbols as $symbol) {
             assert($symbol instanceof Symbol);
             $styleAST = $symbol->getStyles()->getComputedStyle();
-            $style = StyleConverter::convertFromAST($styleAST, $this->factoryStyle());
+            $style = IOStyleConverter::convert($styleAST, $this->factoryStyle());
             if ((!$prevStyle || $style->apply('') === $prevStyle->apply('')) && $symbol->getValue() !== PHP_EOL) {
                 $string .= $symbol->getValue();
             } else {
@@ -143,11 +144,11 @@ class Formatter implements FormatterInterface
             }
         }
         if ($style) {
-            $style = StyleConverter::convertToAST($style);
+            $style = ASTStyleConverter::convert($style);
         }
         $ast = new AST(
             $message,
-            StyleConverter::convertArray(static::allStyles()),
+            ASTStyleConverter::convertArray(static::allStyles()),
             $style
         );
 

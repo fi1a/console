@@ -9,8 +9,8 @@ use Fi1a\Console\IO\AST\Exception\SyntaxErrorException;
 use Fi1a\Console\IO\AST\Style;
 use Fi1a\Console\IO\AST\SymbolInterface;
 use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\Style\ASTStyleConverter;
 use Fi1a\Console\IO\Style\Bold;
-use Fi1a\Console\IO\Style\StyleConverter;
 use Fi1a\Console\IO\Style\TrueColorStyle;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error>error</error> text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -52,7 +52,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error><success>e</success>rror</error> text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -83,7 +83,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error>e<color=yellow>r</>ror</error> text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -114,7 +114,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text < error >e< color = yellow >r</>ror</ error > text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -145,7 +145,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error>e<color>r</>ror</ error > text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -176,7 +176,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error>e<bg>r</>ror</ error > text',
-            StyleConverter::convertArray(
+            ASTStyleConverter::convertArray(
                 Formatter::allStyles() + ['bold' => new TrueColorStyle(null, null, [Bold::getName()])]
             )
         );
@@ -209,7 +209,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <error>e<option=bold, underscore>r</>ror</ error > text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -240,7 +240,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <option=bold, underscore>e<option>r</></>ror text',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -266,7 +266,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             'text <option=bold, underscore>e<option>r</></>ror text',
-            StyleConverter::convertArray(Formatter::allStyles()),
+            ASTStyleConverter::convertArray(Formatter::allStyles()),
             new Style(null, 'red', 'white')
         );
         /**
@@ -293,7 +293,7 @@ class ASTTest extends TestCase
     {
         $ast = new AST(
             '<bg=red>colorized <color=green>text <option=underscore>underscor<color=black;bg;option>e</></></></>',
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
         /**
          * @var SymbolInterface[] $symbols
@@ -382,7 +382,7 @@ class ASTTest extends TestCase
         $this->expectException(SyntaxErrorException::class);
         new AST(
             $format,
-            StyleConverter::convertArray(Formatter::allStyles())
+            ASTStyleConverter::convertArray(Formatter::allStyles())
         );
     }
 }

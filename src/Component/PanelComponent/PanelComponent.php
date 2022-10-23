@@ -12,7 +12,7 @@ use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\Grid;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
-use Fi1a\Console\IO\Style\StyleConverter;
+use Fi1a\Console\IO\Style\ASTStyleConverter;
 use Fi1a\Console\IO\Style\TrueColorStyle;
 
 /**
@@ -114,7 +114,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
 
         $ast = new AST(
             $this->getText(),
-            StyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
+            ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
         );
         $symbols = $ast->getSymbols();
         $grid = new Grid($symbols);
@@ -169,7 +169,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         if ($backgroundColor) {
             $grid->prependStyles(
                 [
-                    StyleConverter::convertToAST(
+                    ASTStyleConverter::convert(
                         new TrueColorStyle(null, $backgroundColor)
                     ),
                 ]
@@ -179,19 +179,19 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             $styles = [];
             $leftBorderColor = $this->getStyle()->getLeftBorderColor();
             if ($leftBorderColor) {
-                $styles[] = StyleConverter::convertToAST(new TrueColorStyle($leftBorderColor));
+                $styles[] = ASTStyleConverter::convert(new TrueColorStyle($leftBorderColor));
             }
             $grid->wrapLeft(1, $this->getBorderLeftRightSymbol(), $styles);
             $styles = [];
             $rightBorderColor = $this->getStyle()->getRightBorderColor();
             if ($rightBorderColor) {
-                $styles[] = StyleConverter::convertToAST(new TrueColorStyle($rightBorderColor));
+                $styles[] = ASTStyleConverter::convert(new TrueColorStyle($rightBorderColor));
             }
             $grid->wrapRight(1, $this->getBorderLeftRightSymbol(), $styles);
             $styles = [];
             $topBorderColor = $this->getStyle()->getTopBorderColor();
             if ($this->getStyle()->getTopBorderColor()) {
-                $styles[] = StyleConverter::convertToAST(new TrueColorStyle($topBorderColor));
+                $styles[] = ASTStyleConverter::convert(new TrueColorStyle($topBorderColor));
             }
             $grid->wrapTop(
                 1,
@@ -202,7 +202,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             $styles = [];
             $bottomBorderColor = $this->getStyle()->getBottomBorderColor();
             if ($bottomBorderColor) {
-                $styles[] = StyleConverter::convertToAST(new TrueColorStyle($bottomBorderColor));
+                $styles[] = ASTStyleConverter::convert(new TrueColorStyle($bottomBorderColor));
             }
             $grid->wrapBottom(
                 1,
