@@ -53,5 +53,5 @@ interface FormatterInterface
     /**
      * Форматирование вывода
      */
-    public function formatAST(SymbolsInterface $symbols): string;
+    public function formatSymbols(SymbolsInterface $symbols): string;
 }

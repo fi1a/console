@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\GroupComponent;
 
 use Fi1a\Console\Component\AbstractComponent;
+use Fi1a\Console\Component\ComponentInterface;
 use Fi1a\Console\Component\OutputTrait;
 use Fi1a\Console\Component\PanelComponent\PanelComponentInterface;
 use Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
@@ -12,7 +13,6 @@ use Fi1a\Console\Component\Rectangle;
 use Fi1a\Console\Component\RectangleInterface;
 use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\Grid;
-use Fi1a\Console\IO\AST\SymbolInterface;
 use Fi1a\Console\IO\AST\Symbols;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
@@ -115,7 +115,7 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
         );
 
         $symbols = $this->getSymbols($rectangle);
-        $message = $this->getOutput()->getFormatter()->formatAST($symbols);
+        $message = $this->getOutput()->getFormatter()->formatSymbols($symbols);
         $this->getOutput()->writeRaw($message, true);
 
         return true;
@@ -136,13 +136,7 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
         if (!$height) {
             $heights = [1];
             foreach ($panels as $panel) {
-                $ast = new AST(
-                    $panel->getText(),
-                    ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
-                );
-                $symbols = $ast->getSymbols();
-                $panelGrid = new Grid($symbols);
-
+                $panelGrid = new Grid();
                 $width = (int) ($panel->getStyle()->getWidth()
                     ? $panel->getStyle()->getWidth()
                     : $rectangle->getWidth());
@@ -150,7 +144,26 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
                 $textWidth = $width - (int) $panel->getStyle()->getPaddingLeft()
                     - (int) $panel->getStyle()->getPaddingRight() - (2 * $border);
                 $textWidth = max($textWidth, 0);
-                $panelGrid->wordWrap($textWidth);
+                foreach ($panel->getText() as $text) {
+                    if ($text instanceof ComponentInterface) {
+                        $textRectangle = new Rectangle(
+                            $textWidth,
+                            null,
+                            null,
+                            null,
+                            $panel->getStyle()->getAlign()
+                        );
+                        $panelGrid->appendBottom($text->getSymbols($textRectangle)->getArrayCopy());
+
+                        continue;
+                    }
+                    $ast = new AST(
+                        $text,
+                        ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
+                    );
+                    $panelGrid->appendBottom($ast->getSymbols()->getArrayCopy());
+                    $panelGrid->wordWrap($textWidth);
+                }
 
                 $heights[] = $panelGrid->getHeight() + (int) $panel->getStyle()->getPaddingTop()
                     + (int) $panel->getStyle()->getPaddingBottom() + ($panel->getStyle()->getBorder() ? 1 : 0) * 2;
@@ -171,11 +184,7 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
             if ($panelSpacing && $index < count($panels)) {
                 $grid->wrapRight($panelSpacing, ' ');
             }
-            /**
-             * @var SymbolInterface[] $panelSymbols
-             */
-            $panelSymbols = $panel->getSymbols($panelRectangle)->getArrayCopy();
-            $grid->appendRight($panelSymbols);
+            $grid->appendRight($panel->getSymbols($panelRectangle)->getArrayCopy());
         }
 
         return $grid->getSymbols();

@@ -16,6 +16,7 @@ use Fi1a\Collection\DataType\IMapArrayObject;
  * @method SymbolInterface putIfAbsent($key, $value)
  * @method SymbolInterface replace($key, $value)
  * @method SymbolInterface[] column(string $name)
+ * @method SymbolInterface[] getArrayCopy()
  */
 interface SymbolsInterface extends IMapArrayObject
 {

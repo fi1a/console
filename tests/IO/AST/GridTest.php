@@ -147,12 +147,10 @@ class GridTest extends TestCase
     {
         $ast = new AST("1234567890\n1234567890\n1234567890", []);
         $grid = new Grid($ast->getSymbols());
-        $this->assertEquals('1', $grid->getSymbols()[0]->getValue());
-        $this->assertEquals('1', $grid->getSymbols()[11]->getValue());
         $this->assertTrue($grid->setValue(1, 1, 'a'));
-        $this->assertEquals('a', $grid->getSymbols()[0]->getValue());
         $this->assertTrue($grid->setValue(2, 1, 'a'));
-        $this->assertEquals('a', $grid->getSymbols()[11]->getValue());
+        $this->assertTrue($grid->setValue(3, 10, 'abc'));
+        $this->assertEquals("a234567890\na234567890\n123456789abc", $grid->getImage());
     }
 
     /**
@@ -245,6 +243,28 @@ class GridTest extends TestCase
         $grid->appendRight($astRight->getSymbols()->getArrayCopy());
         $this->assertEquals(
             "12345678901234567890\n12345678901234567890\n          1234567890",
+            $grid->getImage()
+        );
+    }
+
+    /**
+     * Добавить справа
+     */
+    public function testAppendBottom(): void
+    {
+        $astBottom = new AST("1234567890\n1234567890\n1234567890", []);
+
+        $ast = new AST("1234567890\n1234567890\n1234567890", []);
+        $grid = new Grid($ast->getSymbols());
+        $grid->appendBottom([]);
+        $this->assertEquals(
+            "1234567890\n1234567890\n1234567890",
+            $grid->getImage()
+        );
+
+        $grid->appendBottom($astBottom->getSymbols()->getArrayCopy());
+        $this->assertEquals(
+            "1234567890\n1234567890\n1234567890\n1234567890\n1234567890\n1234567890",
             $grid->getImage()
         );
     }

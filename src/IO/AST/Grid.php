@@ -436,7 +436,7 @@ class Grid implements GridInterface
     /**
      * @inheritDoc
      */
-    public function setValue(int $line, int $column, string $value): bool
+    public function setValue(int $line, int $column, string $value, array $styles = []): bool
     {
         $currentLine = 1;
         $currentColumn = 1;
@@ -445,9 +445,26 @@ class Grid implements GridInterface
             assert($symbol instanceof SymbolInterface);
             assert(is_int($index));
             if ($currentLine === $line && $currentColumn === $column) {
-                $clone = clone $symbol;
-                $clone->setValue($value);
-                $symbols->set($index, $clone);
+                $currentSymbol = 0;
+                while ($currentSymbol < mb_strlen($value)) {
+                    $currentSymbolValue = mb_substr($value, $currentSymbol, 1);
+
+                    if (isset($symbols[$index + $currentSymbol])) {
+                        /**
+                         * @var SymbolInterface $item
+                         */
+                        $item = $symbols[$index + $currentSymbol];
+                        $item = clone $item;
+                        $item->setValue($currentSymbolValue);
+                        $item->setStyles(array_merge($item->getStyles()->getArrayCopy(), $styles));
+                    } else {
+                        $item = new Symbol($currentSymbolValue, $styles);
+                    }
+
+                    $symbols->set($index + $currentSymbol, $item);
+
+                    $currentSymbol++;
+                }
 
                 break;
             }
@@ -468,12 +485,7 @@ class Grid implements GridInterface
      */
     public function getHeight(): int
     {
-        /**
-         * @var SymbolInterface[] $symbols
-         */
-        $symbols = $this->getSymbols()->getArrayCopy();
-
-        return $this->getInternalHeight($symbols);
+        return $this->getInternalHeight($this->getSymbols()->getArrayCopy());
     }
 
     /**
@@ -660,14 +672,29 @@ class Grid implements GridInterface
     /**
      * @inheritDoc
      */
+    public function appendBottom(array $bottomSymbols): bool
+    {
+        if (!count($bottomSymbols)) {
+            return true;
+        }
+
+        $this->getSymbols()->exchangeArray(
+            array_merge(
+                $this->getSymbols()->getArrayCopy(),
+                count($this->getSymbols()->getArrayCopy()) ? [new Symbol(PHP_EOL, [])] : [],
+                $bottomSymbols
+            )
+        );
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getWidth(int $line = 1): int
     {
-        /**
-         * @var SymbolInterface[] $symbols
-         */
-        $symbols = $this->getSymbols()->getArrayCopy();
-
-        return $this->getInternalWidth($line, $symbols);
+        return $this->getInternalWidth($line, $this->getSymbols()->getArrayCopy());
     }
 
     /**
@@ -680,7 +707,6 @@ class Grid implements GridInterface
         $height = 1;
         $width = 0;
         foreach ($symbols as $symbol) {
-            assert($symbol instanceof SymbolInterface);
             if ($height === $line && $symbol->getValue() !== PHP_EOL) {
                 $width++;
             }

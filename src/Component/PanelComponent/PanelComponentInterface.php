@@ -14,18 +14,24 @@ interface PanelComponentInterface extends ComponentInterface
 {
     /**
      * Конструктор
+     *
+     * @param string|ComponentInterface|string[]|ComponentInterface[] $text
      */
-    public function __construct(ConsoleOutputInterface $output, string $text, PanelStyleInterface $style);
+    public function __construct(ConsoleOutputInterface $output, $text, PanelStyleInterface $style);
 
     /**
      * Получить текст
+     *
+     * @return string[]|ComponentInterface[]
      */
-    public function getText(): string;
+    public function getText(): array;
 
     /**
      * Установить текст
+     *
+     * @param string|ComponentInterface|string[]|ComponentInterface[] $text
      */
-    public function setText(string $text): bool;
+    public function setText($text): bool;
 
     /**
      * Вернуть вывод

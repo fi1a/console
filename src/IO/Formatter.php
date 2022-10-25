@@ -99,7 +99,7 @@ class Formatter implements FormatterInterface
     /**
      * @inheritDoc
      */
-    public function formatAST(SymbolsInterface $symbols): string
+    public function formatSymbols(SymbolsInterface $symbols): string
     {
         $output = '';
         $string = '';
@@ -152,7 +152,7 @@ class Formatter implements FormatterInterface
             $style
         );
 
-        return $this->formatAST($ast->getSymbols());
+        return $this->formatSymbols($ast->getSymbols());
     }
 
     /**

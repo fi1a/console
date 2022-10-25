@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\PanelComponent;
 
 use Fi1a\Console\Component\AbstractComponent;
+use Fi1a\Console\Component\ComponentInterface;
 use Fi1a\Console\Component\OutputTrait;
 use Fi1a\Console\Component\Rectangle;
 use Fi1a\Console\Component\RectangleInterface;
@@ -23,9 +24,9 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
     use OutputTrait;
 
     /**
-     * @var string
+     * @var string[]|ComponentInterface[]
      */
-    private $text = '';
+    private $text = [];
 
     /**
      * @var PanelStyleInterface
@@ -36,7 +37,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
     /**
      * @inheritDoc
      */
-    public function __construct(ConsoleOutputInterface $output, string $text, PanelStyleInterface $style)
+    public function __construct(ConsoleOutputInterface $output, $text, PanelStyleInterface $style)
     {
         $this->setOutput($output);
         $this->setText($text);
@@ -46,7 +47,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
     /**
      * @inheritDoc
      */
-    public function getText(): string
+    public function getText(): array
     {
         return $this->text;
     }
@@ -54,8 +55,12 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
     /**
      * @inheritDoc
      */
-    public function setText(string $text): bool
+    public function setText($text): bool
     {
+        if (!is_array($text)) {
+            $text = [$text];
+        }
+
         $this->text = $text;
 
         return true;
@@ -93,7 +98,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         );
 
         $symbols = $this->getSymbols($rectangle);
-        $message = $this->getOutput()->getFormatter()->formatAST($symbols);
+        $message = $this->getOutput()->getFormatter()->formatSymbols($symbols);
         $this->getOutput()->writeRaw($message, true);
 
         return true;
@@ -112,16 +117,30 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         $width = $rectangle->getWidth();
         $height = $rectangle->getHeight();
 
-        $ast = new AST(
-            $this->getText(),
-            ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
-        );
-        $symbols = $ast->getSymbols();
-        $grid = new Grid($symbols);
+        $grid = new Grid();
+        foreach ($this->getText() as $text) {
+            if ($text instanceof ComponentInterface) {
+                $textRectangle = new Rectangle(
+                    $width ? $this->getTextWidth($width) : null,
+                    null,
+                    null,
+                    null,
+                    $rectangle->getAlign()
+                );
+                $grid->appendBottom($text->getSymbols($textRectangle)->getArrayCopy());
 
-        if ($width) {
-            $grid->wordWrap($this->getTextWidth($width));
-            $grid->pad($this->getTextWidth($width), ' ', $align);
+                continue;
+            }
+            $ast = new AST(
+                $text,
+                ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
+            );
+            $textGrid = new Grid($ast->getSymbols());
+            if ($width) {
+                $textGrid->wordWrap($this->getTextWidth($width));
+                $textGrid->pad($this->getTextWidth($width), ' ', $align);
+            }
+            $grid->appendBottom($textGrid->getSymbols()->getArrayCopy());
         }
 
         if ($height) {

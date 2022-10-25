@@ -77,8 +77,10 @@ interface GridInterface
 
     /**
      * Установить значение
+     *
+     * @param StyleInterface[] $styles
      */
-    public function setValue(int $line, int $column, string $value): bool;
+    public function setValue(int $line, int $column, string $value, array $styles = []): bool;
 
     /**
      * Возвращает высоту
@@ -110,6 +112,13 @@ interface GridInterface
      * @param SymbolInterface[] $rightSymbols
      */
     public function appendRight(array $rightSymbols): bool;
+
+    /**
+     * Добавить снизу
+     *
+     * @param SymbolInterface[] $bottomSymbols
+     */
+    public function appendBottom(array $bottomSymbols): bool;
 
     /**
      * Возвращает ширину линии

@@ -34,7 +34,8 @@ class GroupComponentTest extends TestCase
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setHeight(10);
-        $panel1 = new PanelComponent($output, 'Lorem', $style);
+        $subPanel = new PanelComponent($output, 'Lorem', $style);
+        $panel1 = new PanelComponent($output, ['Lorem', $subPanel], $style);
         $panel2 = new PanelComponent($output, "Lorem\nLorem", $style);
         $panel3 = new PanelComponent($output, "Lorem\nLorem\nLorem\nLorem", $style);
 
