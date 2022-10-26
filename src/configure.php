@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Fi1a\Console\Component\SpinnerComponent\DotsSpinner;
+use Fi1a\Console\Component\SpinnerComponent\GrowVerticalSpinner;
 use Fi1a\Console\Component\SpinnerComponent\LineSpinner;
 use Fi1a\Console\Component\SpinnerComponent\SpinnerCollection;
 use Fi1a\Console\IO\Formatter;
@@ -21,3 +22,4 @@ Formatter::addStyle('notice', new TrueColorStyle(TrueColor::GRAY));
 
 SpinnerCollection::add('dots', new DotsSpinner());
 SpinnerCollection::add('line', new LineSpinner());
+SpinnerCollection::add('growVertical', new GrowVerticalSpinner());

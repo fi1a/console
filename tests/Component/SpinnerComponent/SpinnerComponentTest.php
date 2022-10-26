@@ -37,7 +37,7 @@ class SpinnerComponentTest extends TestCase
     /**
      * Отобразить
      */
-    public function testDisplayTitleLeft(): void
+    public function testDisplayTemplate(): void
     {
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
@@ -62,6 +62,24 @@ class SpinnerComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new SpinnerStyle();
         $style->setSpinner('line');
+        $spinner = new SpinnerComponent($output, $style);
+        for ($index = 0; $index < 20; $index++) {
+            if ($index % 2 === 0) {
+                $spinner->clear();
+            }
+            $this->assertTrue($spinner->display());
+        }
+    }
+
+    /**
+     * Отобразить
+     */
+    public function testDisplayGrowVerticalSpinner(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $style = new SpinnerStyle();
+        $style->setSpinner('growVertical');
         $spinner = new SpinnerComponent($output, $style);
         for ($index = 0; $index < 20; $index++) {
             if ($index % 2 === 0) {
