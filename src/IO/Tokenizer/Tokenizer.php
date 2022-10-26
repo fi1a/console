@@ -65,14 +65,15 @@ class Tokenizer extends AParseFunction
 
             $symbol = mb_substr($source, $current, 1);
             $prevSymbol = mb_substr($source, $current - 1, 1);
+            $prevPrevSymbol = mb_substr($source, $current - 2, 1);
             $nextSymbol = mb_substr($source, $current + 1, 1);
 
-            if ($symbol === '<' && $prevSymbol !== '\\' && $nextSymbol === '/') {
+            if ($symbol === '<' && ($prevSymbol !== '\\' || $prevPrevSymbol === '\\') && $nextSymbol === '/') {
                 $this->setParseFunction('parseEndTagStyle');
 
                 return;
             }
-            if ($symbol === '<' && $prevSymbol !== '\\') {
+            if ($symbol === '<' && ($prevSymbol !== '\\' || $prevPrevSymbol === '\\')) {
                 $this->setParseFunction('parseOpenTagStyle');
 
                 return;

@@ -308,6 +308,23 @@ class ASTTest extends TestCase
     }
 
     /**
+     * Кейс 11
+     */
+    public function testCase11(): void
+    {
+        $ast = new AST(
+            '\\\\<bg=red>\\\\</>',
+            ASTStyleConverter::convertArray(Formatter::allStyles())
+        );
+        $symbols = $ast->getSymbols();
+        $this->assertCount(2, $symbols);
+        $this->assertEquals('\\', $symbols[0]->getValue());
+        $this->assertNull($symbols[0]->getStyles()->getComputedStyle()->getBackground());
+        $this->assertEquals('\\', $symbols[1]->getValue());
+        $this->assertEquals('red', $symbols[1]->getStyles()->getComputedStyle()->getBackground());
+    }
+
+    /**
      * Провайдер данных для метода testExceptions
      *
      * @return string[][]

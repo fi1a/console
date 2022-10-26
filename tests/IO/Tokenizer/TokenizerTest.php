@@ -204,6 +204,32 @@ class TokenizerTest extends TestCase
                     Token::T_END_TAG_STYLE,
                 ],
             ],
+            // 16
+            [
+                '<color=black;bg;option>\\\\</>',
+                11,
+                [
+                    '<', 'color', '=', 'black', ';', 'bg', ';', 'option', '>', '\\\\', '</>',
+                ],
+                [
+                    Token::T_OPEN_TAG_STYLE, Token::T_COLOR, Token::T_ASSIGMENT, Token::T_VALUE, Token::T_SEMICOLON,
+                    Token::T_BG, Token::T_SEMICOLON, Token::T_OPTION, Token::T_CLOSE_TAG_STYLE, Token::T_TEXT,
+                    Token::T_END_TAG_STYLE,
+                ],
+            ],
+            // 17
+            [
+                '\\\\<color=black;bg;option>\\\\</>',
+                12,
+                [
+                    '\\\\', '<', 'color', '=', 'black', ';', 'bg', ';', 'option', '>', '\\\\', '</>',
+                ],
+                [
+                    Token::T_TEXT, Token::T_OPEN_TAG_STYLE, Token::T_COLOR, Token::T_ASSIGMENT, Token::T_VALUE,
+                    Token::T_SEMICOLON, Token::T_BG, Token::T_SEMICOLON, Token::T_OPTION, Token::T_CLOSE_TAG_STYLE,
+                    Token::T_TEXT, Token::T_END_TAG_STYLE,
+                ],
+            ],
         ];
     }
 
