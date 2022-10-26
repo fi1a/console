@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Fi1a\Console\Component\SpinnerComponent\BarSpinner;
 use Fi1a\Console\Component\SpinnerComponent\DotsSpinner;
 use Fi1a\Console\Component\SpinnerComponent\GrowHorizontalSpinner;
 use Fi1a\Console\Component\SpinnerComponent\GrowVerticalSpinner;
@@ -25,3 +26,4 @@ SpinnerCollection::add('dots', new DotsSpinner());
 SpinnerCollection::add('line', new LineSpinner());
 SpinnerCollection::add('growVertical', new GrowVerticalSpinner());
 SpinnerCollection::add('growHorizontal', new GrowHorizontalSpinner());
+SpinnerCollection::add('bar', new BarSpinner());

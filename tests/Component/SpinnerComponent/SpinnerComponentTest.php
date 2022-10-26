@@ -106,4 +106,22 @@ class SpinnerComponentTest extends TestCase
             $this->assertTrue($spinner->display());
         }
     }
+
+    /**
+     * Отобразить
+     */
+    public function testDisplayBarSpinner(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $style = new SpinnerStyle();
+        $style->setSpinner('bar');
+        $spinner = new SpinnerComponent($output, $style);
+        for ($index = 0; $index < 20; $index++) {
+            if ($index % 2 === 0) {
+                $spinner->clear();
+            }
+            $this->assertTrue($spinner->display());
+        }
+    }
 }
