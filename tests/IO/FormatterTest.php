@@ -168,4 +168,15 @@ class FormatterTest extends TestCase
     {
         $this->assertTrue(is_string(static::$formatter->format('\<error>Error text\</error>')));
     }
+
+    /**
+     * Экранирование
+     */
+    public function testFormatAddSlashes(): void
+    {
+        $this->assertEquals(
+            '\\<error>Error\\\\ text\\</error>',
+            static::$formatter::addSlashes('<error>Error\\ text</error>')
+        );
+    }
 }

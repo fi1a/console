@@ -18,7 +18,7 @@ use const PHP_EOL;
 /**
  * Форматирование в консоли
  */
-class Formatter implements FormatterInterface
+class Formatter extends AbstractFormatter
 {
     /**
      * @var StyleInterface[]

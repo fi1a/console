@@ -26,7 +26,7 @@ class SpinnerStyle implements SpinnerStyleInterface
      */
     public function setSpinner(string $name)
     {
-        if (!SpinnerCollection::has($name)) {
+        if (!SpinnerRegistry::has($name)) {
             throw new InvalidArgumentException(sprintf('Неизвестный спиннер "%s"', $name));
         }
 

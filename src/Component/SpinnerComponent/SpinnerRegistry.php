@@ -7,9 +7,9 @@ namespace Fi1a\Console\Component\SpinnerComponent;
 use InvalidArgumentException;
 
 /**
- * Коллекция спиннеров
+ * Реестр спиннеров
  */
-class SpinnerCollection implements SpinnerCollectionInterface
+class SpinnerRegistry implements SpinnerRegistryInterface
 {
     /**
      * @var SpinnerInterface[]

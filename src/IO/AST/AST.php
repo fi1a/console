@@ -233,7 +233,7 @@ class AST implements ASTInterface
     private function text(IToken $token): void
     {
         $current = 0;
-        $image = str_replace('\\\\', '\\', $token->getImage());
+        $image = str_replace(['\\\\', '\\<'], ['\\', '<'], $token->getImage());
         while ($current < mb_strlen($image)) {
             $string = mb_substr($image, $current, 1);
             $symbol = new Symbol($string, $this->styles->getArrayCopy());

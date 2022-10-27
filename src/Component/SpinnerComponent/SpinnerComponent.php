@@ -89,7 +89,7 @@ class SpinnerComponent extends AbstractComponent implements SpinnerComponentInte
      */
     public function getSymbols(RectangleInterface $rectangle): SymbolsInterface
     {
-        $spinner = SpinnerCollection::get($this->getStyle()->getSpinner());
+        $spinner = SpinnerRegistry::get($this->getStyle()->getSpinner());
         $frames = $spinner->getFrames();
 
         $frame = $frames[$this->frame];

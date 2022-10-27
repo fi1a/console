@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\SpinnerComponent;
 
 /**
- * Коллекция спиннеров
+ * Реестр спиннеров
  */
-interface SpinnerCollectionInterface
+interface SpinnerRegistryInterface
 {
     /**
      * Добавить спиннер в коллекцию

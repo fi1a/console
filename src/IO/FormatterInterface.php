@@ -54,4 +54,9 @@ interface FormatterInterface
      * Форматирование вывода
      */
     public function formatSymbols(SymbolsInterface $symbols): string;
+
+    /**
+     * Экранирует все спец. символы
+     */
+    public static function addSlashes(string $message): string;
 }
