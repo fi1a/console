@@ -68,7 +68,7 @@ class PanelStyleTest extends TestCase
     }
 
     /**
-     * Цвет границ
+     * Цвет фона
      */
     public function testBackgroundColor(): void
     {

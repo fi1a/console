@@ -27,4 +27,9 @@ interface InputInterface
      * Возвращает поток
      */
     public function getStream(): StreamInterface;
+
+    /**
+     * Возвращает escape символ
+     */
+    public static function getEscapeSymbol(): string;
 }

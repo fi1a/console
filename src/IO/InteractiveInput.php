@@ -160,7 +160,7 @@ class InteractiveInput implements InteractiveInputInterface
                 do {
                     $output->write($index . ') ');
                     $readValue = $this->readValue($value);
-                    if ($readValue === chr(27)) {
+                    if ($readValue === StreamInput::getEscapeSymbol()) {
                         /** @psalm-suppress PossiblyNullReference */
                         if ($value->getMultipleValidation() && $value->getMultipleValidation()->getChain()) {
                             /** @psalm-suppress PossiblyNullReference */
@@ -204,7 +204,7 @@ class InteractiveInput implements InteractiveInputInterface
         $readValue = null;
         while ($read) {
             $readValue = (string) $input->read();
-            if ($readValue === chr(27)) {
+            if ($readValue === StreamInput::getEscapeSymbol()) {
                 if ($value->isMultiple()) {
                     return $readValue;
                 }

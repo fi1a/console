@@ -60,4 +60,12 @@ class StreamInput implements InputInterface
     {
         return $this->stream;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getEscapeSymbol(): string
+    {
+        return chr(27);
+    }
 }
