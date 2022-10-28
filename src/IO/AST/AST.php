@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\IO\AST;
 
 use Fi1a\Console\IO\AST\Exception\SyntaxErrorException;
+use Fi1a\Console\IO\Safe;
 use Fi1a\Console\IO\Tokenizer\Token;
 use Fi1a\Console\IO\Tokenizer\Tokenizer;
 use Fi1a\Tokenizer\IToken;
@@ -233,7 +234,7 @@ class AST implements ASTInterface
     private function text(IToken $token): void
     {
         $current = 0;
-        $image = str_replace(['\\\\', '\\<'], ['\\', '<'], $token->getImage());
+        $image = Safe::unescape($token->getImage());
         while ($current < mb_strlen($image)) {
             $string = mb_substr($image, $current, 1);
             $symbol = new Symbol($string, $this->styles->getArrayCopy());

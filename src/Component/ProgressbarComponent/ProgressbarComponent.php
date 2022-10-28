@@ -11,7 +11,7 @@ use Fi1a\Console\Component\RectangleInterface;
 use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
-use Fi1a\Console\IO\Formatter as FormatterConsole;
+use Fi1a\Console\IO\Safe;
 use Fi1a\Console\IO\Style\ASTStyleConverter;
 use Fi1a\Format\Formatter;
 
@@ -315,7 +315,7 @@ class ProgressbarComponent extends AbstractComponent implements ProgressbarCompo
                 . str_repeat($this->getStyle()->getEmptyCharacter(), $empty);
         }
 
-        return FormatterConsole::addSlashes($display);
+        return Safe::escape($display);
     }
 
     /**
@@ -323,7 +323,7 @@ class ProgressbarComponent extends AbstractComponent implements ProgressbarCompo
      */
     protected function renderElapsed(): string
     {
-        return FormatterConsole::addSlashes(Formatter::format('{{|time}}', [time() - $this->getStartTime()]));
+        return Safe::escape(Formatter::format('{{|time}}', [time() - $this->getStartTime()]));
     }
 
     /**
@@ -341,7 +341,7 @@ class ProgressbarComponent extends AbstractComponent implements ProgressbarCompo
         $remaining = round((time() - $this->getStartTime())
                            / $this->getProgress() * ($this->getMaxSteps() - $this->getProgress()));
 
-        return FormatterConsole::addSlashes(Formatter::format('{{|time}}', [$remaining]));
+        return Safe::escape(Formatter::format('{{|time}}', [$remaining]));
     }
 
     /**
