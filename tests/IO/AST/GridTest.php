@@ -33,7 +33,7 @@ class GridTest extends TestCase
         $ast = new AST('1234567890 1234567890 1234567890', []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->wordWrap(10, 0));
-        $this->assertEquals("123456789\n0\n123456789\n0\n123456789\n0", $grid->getImage());
+        $this->assertEquals("1234567890\n 123456789\n0\n 123456789\n0", $grid->getImage());
 
         $ast = new AST('', []);
         $grid = new Grid($ast->getSymbols());
@@ -43,7 +43,7 @@ class GridTest extends TestCase
         $ast = new AST('1234567890 1234567890 1234567890', []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->wordWrap(10, 1));
-        $this->assertEquals("1234567890\n1234567890\n1234567890", $grid->getImage());
+        $this->assertEquals("1234567890\n 1234567890\n 1234567890\n", $grid->getImage());
     }
 
     /**
@@ -54,7 +54,7 @@ class GridTest extends TestCase
         $ast = new AST("1234567890\n1234567890\n1234567890", []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->pad(12, 'a'));
-        $this->assertEquals("1234567890a\n1234567890a\n1234567890a", $grid->getImage());
+        $this->assertEquals("1234567890aa\n1234567890aa\n1234567890aa", $grid->getImage());
     }
 
     /**
@@ -65,7 +65,7 @@ class GridTest extends TestCase
         $ast = new AST("1234567890\n1234567890\n1234567890", []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->pad(12, 'a', $grid::ALIGN_RIGHT));
-        $this->assertEquals("a1234567890\na1234567890\na1234567890", $grid->getImage());
+        $this->assertEquals("aa1234567890\naa1234567890\naa1234567890", $grid->getImage());
     }
 
     /**
@@ -76,7 +76,7 @@ class GridTest extends TestCase
         $ast = new AST("1234567890\n1234567890\n1234567890", []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->pad(13, 'a', $grid::ALIGN_CENTER));
-        $this->assertEquals("a1234567890a\na1234567890a\na1234567890a", $grid->getImage());
+        $this->assertEquals("aa1234567890a\naa1234567890a\naa1234567890a", $grid->getImage());
     }
 
     /**

@@ -117,6 +117,28 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         $width = $rectangle->getWidth();
         $height = $rectangle->getHeight();
 
+        if ($width) {
+            foreach ($this->getText() as $text) {
+                if ($text instanceof ComponentInterface) {
+                    $textRectangle = new Rectangle(
+                        $width ? $this->getTextWidth($width) : null,
+                        null,
+                        null,
+                        null,
+                        $rectangle->getAlign()
+                    );
+                    $calcGrid = new Grid($text->getSymbols($textRectangle));
+
+                    if ($width < $calcGrid->getMaxWidth()) {
+                        $width = $calcGrid->getMaxWidth()
+                            + (int) $this->getStyle()->getPaddingLeft()
+                            + (int) $this->getStyle()->getPaddingRight()
+                            + ($isBorder ? 1 : 0);
+                    }
+                }
+            }
+        }
+
         $grid = new Grid();
         foreach ($this->getText() as $text) {
             if ($text instanceof ComponentInterface) {
@@ -149,10 +171,10 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             if ($gridHeight > $textHeight) {
                 $grid->truncateHeight($textHeight);
             } elseif ($gridHeight < $textHeight && $width) {
-                $textWidth = $this->getTextWidth($width) - 1;
+                $textWidth = $this->getTextWidth($width);
                 $grid->wrapBottom(
                     $textHeight - $gridHeight,
-                    max($textWidth, 0),
+                    max($textWidth, 1),
                     ' '
                 );
             }
@@ -171,7 +193,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             if ($paddingTop) {
                 $grid->wrapTop(
                     $paddingTop,
-                    $width - (2 * ($isBorder ? 1 : 0)) - 1,
+                    $grid->getWidth(),
                     ' '
                 );
             }
@@ -179,17 +201,18 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             if ($paddingBottom) {
                 $grid->wrapBottom(
                     $paddingBottom,
-                    $width - (2 * ($isBorder ? 1 : 0)) - 1,
+                    $grid->getWidth(),
                     ' '
                 );
             }
         }
         $backgroundColor = $this->getStyle()->getBackgroundColor();
-        if ($backgroundColor) {
+        $color = $this->getStyle()->getColor();
+        if ($backgroundColor || $color) {
             $grid->prependStyles(
                 [
                     ASTStyleConverter::convert(
-                        new TrueColorStyle(null, $backgroundColor)
+                        new TrueColorStyle($color, $backgroundColor)
                     ),
                 ]
             );
@@ -214,7 +237,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             }
             $grid->wrapTop(
                 1,
-                $width - 1,
+                $width,
                 $this->getBorderTopBottomSymbol(),
                 $styles
             );
@@ -225,14 +248,14 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             }
             $grid->wrapBottom(
                 1,
-                $width - 1,
+                $width,
                 $this->getBorderTopBottomSymbol(),
                 $styles
             );
             $grid->setValue(1, 1, $this->getBorderTopLeft());
-            $grid->setValue(1, $width - 1, $this->getBorderTopRight());
+            $grid->setValue(1, $width, $this->getBorderTopRight());
             $grid->setValue($grid->getHeight(), 1, $this->getBorderBottomLeft());
-            $grid->setValue($grid->getHeight(), $width - 1, $this->getBorderBottomRight());
+            $grid->setValue($grid->getHeight(), $width, $this->getBorderBottomRight());
         }
 
         return $grid->getSymbols();
@@ -247,7 +270,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         $textWidth = $width - (int) $this->getStyle()->getPaddingLeft()
             - (int) $this->getStyle()->getPaddingRight() - (2 * $border);
 
-        return max($textWidth, 0);
+        return max($textWidth, 1);
     }
 
     /**
@@ -259,7 +282,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         $textHeight = $height - (int) $this->getStyle()->getPaddingTop()
             - (int) $this->getStyle()->getPaddingBottom() - (2 * $border);
 
-        return max($textHeight, 0);
+        return max($textHeight, 1);
     }
 
     /**

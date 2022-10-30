@@ -126,6 +126,11 @@ interface GridInterface
     public function getWidth(int $line = 1): int;
 
     /**
+     * Возвращает ширину максимальной линии
+     */
+    public function getMaxWidth(): int;
+
+    /**
      * Возвращает склееный текст на основе символов
      */
     public function getImage(): string;

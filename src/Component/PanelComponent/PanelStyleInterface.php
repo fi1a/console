@@ -198,4 +198,16 @@ interface PanelStyleInterface
      * Вернуть цвет фона
      */
     public function getBackgroundColor(): ?string;
+
+    /**
+     * Установить цвет
+     *
+     * @return $this
+     */
+    public function setColor(?string $color);
+
+    /**
+     * Вернуть цвет
+     */
+    public function getColor(): ?string;
 }

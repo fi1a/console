@@ -8,7 +8,6 @@ use Fi1a\Console\Component\AbstractComponent;
 use Fi1a\Console\Component\ComponentInterface;
 use Fi1a\Console\Component\OutputTrait;
 use Fi1a\Console\Component\PanelComponent\PanelComponentInterface;
-use Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
 use Fi1a\Console\Component\Rectangle;
 use Fi1a\Console\Component\RectangleInterface;
 use Fi1a\Console\IO\AST\AST;
@@ -140,14 +139,11 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
                 $width = (int) ($panel->getStyle()->getWidth()
                     ? $panel->getStyle()->getWidth()
                     : $rectangle->getWidth());
-                $border = $panel->getStyle()->getBorder() === PanelStyleInterface::BORDER_NONE  ? 0 : 1;
-                $textWidth = $width - (int) $panel->getStyle()->getPaddingLeft()
-                    - (int) $panel->getStyle()->getPaddingRight() - (2 * $border);
-                $textWidth = max($textWidth, 0);
+
                 foreach ($panel->getText() as $text) {
                     if ($text instanceof ComponentInterface) {
                         $textRectangle = new Rectangle(
-                            $textWidth,
+                            $width,
                             null,
                             null,
                             null,
@@ -162,11 +158,11 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
                         ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
                     );
                     $panelGrid->appendBottom($ast->getSymbols()->getArrayCopy());
-                    $panelGrid->wordWrap($textWidth);
+                    $panelGrid->wordWrap($width);
                 }
 
                 $heights[] = $panelGrid->getHeight() + (int) $panel->getStyle()->getPaddingTop()
-                    + (int) $panel->getStyle()->getPaddingBottom() + ($panel->getStyle()->getBorder() ? 1 : 0) * 2;
+                    + (int) $panel->getStyle()->getPaddingBottom() + (($panel->getStyle()->getBorder() ? 1 : 0) * 2);
             }
             $height = max($heights);
         }

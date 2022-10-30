@@ -68,6 +68,17 @@ class PanelStyleTest extends TestCase
     }
 
     /**
+     * Цвет
+     */
+    public function testColor(): void
+    {
+        $style = new PanelStyle();
+        $this->assertNull($style->getColor());
+        $style->setColor('red');
+        $this->assertEquals('red', $style->getColor());
+    }
+
+    /**
      * Цвет фона
      */
     public function testBackgroundColor(): void

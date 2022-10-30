@@ -6,6 +6,7 @@ namespace Fi1a\Console\Component\PanelComponent;
 
 use Fi1a\Console\Component\AlignTrait;
 use Fi1a\Console\Component\HeightTrait;
+use Fi1a\Console\Component\PaddingTrait;
 use Fi1a\Console\Component\WidthTrait;
 use InvalidArgumentException;
 
@@ -17,31 +18,12 @@ class PanelStyle implements PanelStyleInterface
     use WidthTrait;
     use HeightTrait;
     use AlignTrait;
+    use PaddingTrait;
 
     /**
      * @var string|null
      */
     private $border = self::BORDER_NONE;
-
-    /**
-     * @var int|null
-     */
-    private $paddingLeft;
-
-    /**
-     * @var int|null
-     */
-    private $paddingRight;
-
-    /**
-     * @var int|null
-     */
-    private $paddingBottom;
-
-    /**
-     * @var int|null
-     */
-    private $paddingTop;
 
     /**
      * @var string|null
@@ -67,6 +49,11 @@ class PanelStyle implements PanelStyleInterface
      * @var string|null
      */
     private $backgroundColor;
+
+    /**
+     * @var string|null
+     */
+    private $color;
 
     /**
      * @inheritDoc
@@ -101,91 +88,6 @@ class PanelStyle implements PanelStyleInterface
         $this->border = $border;
 
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPadding(?int $padding)
-    {
-        $this->setPaddingLeft(is_null($padding) ? $padding : $padding * 3)
-            ->setPaddingRight(is_null($padding) ? $padding : $padding * 3)
-            ->setPaddingBottom($padding)
-            ->setPaddingTop($padding);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPaddingLeft(?int $padding)
-    {
-        $this->paddingLeft = $padding;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPaddingLeft(): ?int
-    {
-        return $this->paddingLeft;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPaddingTop(?int $padding)
-    {
-        $this->paddingTop = $padding;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPaddingTop(): ?int
-    {
-        return $this->paddingTop;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPaddingRight(?int $padding)
-    {
-        $this->paddingRight = $padding;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPaddingRight(): ?int
-    {
-        return $this->paddingRight;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPaddingBottom(?int $padding)
-    {
-        $this->paddingBottom = $padding;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPaddingBottom(): ?int
-    {
-        return $this->paddingBottom;
     }
 
     /**
@@ -289,5 +191,23 @@ class PanelStyle implements PanelStyleInterface
     public function getBackgroundColor(): ?string
     {
         return $this->backgroundColor;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setColor(?string $color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getColor(): ?string
+    {
+        return $this->color;
     }
 }

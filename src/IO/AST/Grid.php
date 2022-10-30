@@ -58,35 +58,22 @@ class Grid implements GridInterface
             return true;
         }
         $current = 0;
-        $lastPosition = 0;
+        $lastPosition = -1;
         $lineWidth = 0;
         if ($left) {
             $width += $left;
         }
+
         do {
             /**
              * @var SymbolInterface $symbol
              */
             $symbol = $symbols[$current];
             if ($lineWidth >= $width) {
-                if (!$lastPosition) {
-                    $lastPosition = $current - 1;
+                if ($lastPosition < 0) {
+                    $lastPosition = $current;
                 }
                 $startSlice = $lastPosition;
-                /**
-                 * @var SymbolInterface $startSliceSymbol
-                 */
-                $startSliceSymbol = $symbols[$startSlice];
-                while (
-                    preg_match('/[\s\t]+/mui', $startSliceSymbol->getValue()) > 0
-                    && $startSlice < count($symbols)
-                ) {
-                    $startSlice++;
-                    /**
-                     * @var Symbol $startSliceSymbol
-                     */
-                    $startSliceSymbol = $symbols[$startSlice];
-                }
                 $current = $startSlice;
                 $symbols->exchangeArray(
                     array_merge(
@@ -95,21 +82,22 @@ class Grid implements GridInterface
                         array_slice($symbols->getArrayCopy(), $startSlice),
                     )
                 );
+                $current++;
             }
-            if (preg_match('/[\s\t]+/mui', $symbol->getValue()) > 0) {
+            if (preg_match('/[\s]+/mui', $symbol->getValue()) > 0) {
                 $lastPosition = $current;
             }
             if ($symbol->getValue() === PHP_EOL || $lineWidth >= $width) {
                 $lineWidth = 0;
-                $lastPosition = 0;
+                $lastPosition = -1;
             }
 
             $current++;
             $lineWidth++;
         } while ($current < count($symbols));
         if ($lineWidth >= $width) {
-            if (!$lastPosition) {
-                $lastPosition = $current - 1;
+            if ($lastPosition < 0) {
+                $lastPosition = $current;
             }
             $startSlice = $lastPosition;
             $symbols->exchangeArray(
@@ -142,7 +130,7 @@ class Grid implements GridInterface
         }
         $symbols = $this->getSymbols();
         $current = 0;
-        $lineWidth = 1;
+        $lineWidth = 0;
         $startLine = 0;
         $symbol = null;
         if (!$symbols->isEmpty()) {
@@ -203,7 +191,7 @@ class Grid implements GridInterface
                             );
                         }
                     }
-                    $lineWidth = 0;
+                    $lineWidth = -1;
                     $startLine = $current + 1;
                 }
 
@@ -695,6 +683,27 @@ class Grid implements GridInterface
     public function getWidth(int $line = 1): int
     {
         return $this->getInternalWidth($line, $this->getSymbols()->getArrayCopy());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMaxWidth(): int
+    {
+        $widths = [0];
+        $width = 0;
+        foreach ($this->getSymbols()->getArrayCopy() as $symbol) {
+            if ($symbol->getValue() !== PHP_EOL) {
+                $width++;
+            }
+            if ($symbol->getValue() === PHP_EOL) {
+                $widths[] = $width + 1;
+                $width = 0;
+            }
+        }
+        $widths[] = $width;
+
+        return max($widths);
     }
 
     /**
