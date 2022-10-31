@@ -9,6 +9,11 @@ use Fi1a\Console\Component\SpinnerComponent\GrowHorizontalSpinner;
 use Fi1a\Console\Component\SpinnerComponent\GrowVerticalSpinner;
 use Fi1a\Console\Component\SpinnerComponent\LineSpinner;
 use Fi1a\Console\Component\SpinnerComponent\SpinnerRegistry;
+use Fi1a\Console\Component\TableComponent\AsciiBorder;
+use Fi1a\Console\Component\TableComponent\AsciiCompactBorder;
+use Fi1a\Console\Component\TableComponent\BorderRegistry;
+use Fi1a\Console\Component\TableComponent\DoubleBorder;
+use Fi1a\Console\Component\TableComponent\DoubleCompactBorder;
 use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\TrueColor;
 use Fi1a\Console\IO\Style\TrueColorStyle;
@@ -48,3 +53,8 @@ ProgressbarTemplateRegistry::add(
     . '{{elapsed|sprintf("10s")}} / {{remaining|sprintf("-10s")}}'
     . ' {{memory|memory}}{{if(title)}} {{title}}{{endif}}'
 );
+
+BorderRegistry::add('ascii', new AsciiBorder());
+BorderRegistry::add('ascii_compact', new AsciiCompactBorder());
+BorderRegistry::add('double', new DoubleBorder());
+BorderRegistry::add('double_compact', new DoubleCompactBorder());

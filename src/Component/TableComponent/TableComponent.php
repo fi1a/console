@@ -259,10 +259,11 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                     $header,
                     $columnsCount,
                     $columnWidths,
-                    count($headers),
+                    $headers,
                     $index,
                     true,
-                    !count($rows)
+                    $index === 0,
+                    !count($rows) && $index === count($headers) - 1
                 )->getArrayCopy()
             );
         }
@@ -273,10 +274,11 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                     $row,
                     $columnsCount,
                     $columnWidths,
-                    count($rows),
+                    $rows,
                     $index,
                     false,
-                    true
+                    !count($headers) && $index === 0,
+                    $index === count($rows) - 1
                 )->getArrayCopy()
             );
         }
@@ -290,16 +292,18 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
      * Пример: | 1 | Learn PHP | John Poul | 2007-05-21 |
      *
      * @param TableCellInterface[]  $row
+     * @param TableCellInterface[][]  $rows
      * @param int[]  $columnWidths
      */
     private function displayRow(
         array $row,
         int $columnsCount,
         array $columnWidths,
-        int $rowsCount,
+        array $rows,
         int $rowIndex,
         bool $header = false,
-        bool $drawEndLine = false
+        bool $firstRow = false,
+        bool $lastRow = false
     ): SymbolsInterface {
         $grid = new Grid();
 
@@ -316,6 +320,10 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
         $height = max($heights);
 
         foreach ($this->getRowColumns($row, $columnsCount) as $index => $column) {
+            assert(is_int($index));
+            $cell = $row[$column] ?? (new TableCell())->setValue(' ');
+            $prevRowCell = $rows[$rowIndex - 1][$column] ?? (new TableCell())->setValue(' ');
+            $prevRowCellNext = $rows[$rowIndex - 1][$column + 1] ?? (new TableCell())->setValue(' ');
             $borderStyles = [];
             if ($this->getStyle()->getBorderColor()) {
                 $borderStyles = [new Style(
@@ -328,6 +336,11 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                 ];
             }
 
+            $isHLine = $this->getBorder()->getHBorder() !== ' ';
+            if ($header || $rowIndex === 0) {
+                $isHLine = $this->getBorder()->getHBorderHeader() !== ' ';
+            }
+
             $panelGrid = new Grid($this->displayCell(
                 $row,
                 $column,
@@ -337,26 +350,144 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
             ));
 
             if ($index === 0) {
-                $panelGrid->wrapLeft(1, $this->getVBorderChar(), $borderStyles);
+                $panelGrid->wrapLeft(1, $this->getBorder()->getVBorderLeft(), $borderStyles);
             }
-            $panelGrid->wrapRight(1, $this->getVBorderChar(), $borderStyles);
-
-            $panelGrid->wrapTop(1, $panelGrid->getWidth(), $this->getHBorderChar(), $borderStyles);
-            $panelGrid->setValue(1, $panelGrid->getWidth(), $this->getCrossingChar(), $borderStyles);
-            if ($index === 0) {
-                $panelGrid->setValue(1, 1, $this->getCrossingChar(), $borderStyles);
+            if ($index === $columnsCount - 1) {
+                $panelGrid->wrapRight(1, $this->getBorder()->getVBorderRight(), $borderStyles);
+            } else {
+                $panelGrid->wrapRight(1, $this->getBorder()->getVBorder(), $borderStyles);
             }
-
-            if ($drawEndLine && $rowIndex === $rowsCount - 1) {
-                $panelGrid->wrapBottom(1, $panelGrid->getWidth(), $this->getHBorderChar(), $borderStyles);
-                $panelGrid->setValue(
-                    $panelGrid->getHeight(),
+            if ($firstRow) {
+                $panelGrid->wrapTop(
+                    1,
                     $panelGrid->getWidth(),
-                    $this->getCrossingChar(),
+                    $this->getBorder()->getHBorderTop(),
                     $borderStyles
                 );
+            } else {
+                if ($header || $rowIndex === 0) {
+                    $panelGrid->wrapTop(
+                        1,
+                        $panelGrid->getWidth(),
+                        $this->getBorder()->getHBorderHeader(),
+                        $borderStyles
+                    );
+                } else {
+                    $panelGrid->wrapTop(
+                        1,
+                        $panelGrid->getWidth(),
+                        $this->getBorder()->getHBorder(),
+                        $borderStyles
+                    );
+                }
+                if ($cell->getColspan() > 1) {
+                    $width = $columnWidths[$column] + ($header || $rowIndex === 0 ? 1 : 2);
+                    $panelGrid->setValue(
+                        1,
+                        $width,
+                        $isHLine ? $this->getBorder()->getBottomCrossing() : $this->getBorder()->getVBorder(),
+                        $borderStyles
+                    );
+                    foreach (range($column + 1, $column + $prevRowCell->getColspan() - 1) as $next) {
+                        $width += $columnWidths[$next] + 1;
+                        $panelGrid->setValue(
+                            1,
+                            $width,
+                            $isHLine ? $this->getBorder()->getBottomCrossing() : $this->getBorder()->getVBorder(),
+                            $borderStyles
+                        );
+                    }
+                }
+            }
+            if ($firstRow) {
+                $panelGrid->setValue(
+                    1,
+                    $panelGrid->getWidth(),
+                    $this->getBorder()->getTopCrossing(),
+                    $borderStyles
+                );
+            } else {
+                if (
+                    $prevRowCell->getColspan() > 1
+                    || (
+                        $prevRowCell instanceof TableCellColspan
+                        && $prevRowCellNext instanceof TableCellColspan
+                    )
+                ) {
+                    $panelGrid->setValue(
+                        1,
+                        $panelGrid->getWidth(),
+                        $isHLine ? $this->getBorder()->getTopCrossing() : $this->getBorder()->getVBorder(),
+                        $borderStyles
+                    );
+                } else {
+                    $panelGrid->setValue(
+                        1,
+                        $panelGrid->getWidth(),
+                        $isHLine ? $this->getBorder()->getCrossing() : $this->getBorder()->getVBorder(),
+                        $borderStyles
+                    );
+                }
+            }
+            if ($index + $cell->getColspan() - 1 === $columnsCount - 1) {
+                if ($firstRow) {
+                    $panelGrid->setValue(
+                        1,
+                        $panelGrid->getWidth(),
+                        $this->getBorder()->getRightTopCorner(),
+                        $borderStyles
+                    );
+                } else {
+                    $panelGrid->setValue(
+                        1,
+                        $panelGrid->getWidth(),
+                        $isHLine ? $this->getBorder()->getRightCrossing() : $this->getBorder()->getVBorder(),
+                        $borderStyles
+                    );
+                }
+            }
+            if ($index === 0) {
+                if ($firstRow) {
+                    $panelGrid->setValue(1, 1, $this->getBorder()->getLeftTopCorner(), $borderStyles);
+                } else {
+                    $panelGrid->setValue(
+                        1,
+                        1,
+                        $isHLine ? $this->getBorder()->getLeftCrossing() : $this->getBorder()->getVBorder(),
+                        $borderStyles
+                    );
+                }
+            }
+
+            if ($lastRow) {
+                $panelGrid->wrapBottom(
+                    1,
+                    $panelGrid->getWidth(),
+                    $this->getBorder()->getHBorderBottom(),
+                    $borderStyles
+                );
+                if ($index === $columnsCount - 1) {
+                    $panelGrid->setValue(
+                        $panelGrid->getHeight(),
+                        $panelGrid->getWidth(),
+                        $this->getBorder()->getRightBottomCorner(),
+                        $borderStyles
+                    );
+                } else {
+                    $panelGrid->setValue(
+                        $panelGrid->getHeight(),
+                        $panelGrid->getWidth(),
+                        $this->getBorder()->getBottomCrossing(),
+                        $borderStyles
+                    );
+                }
                 if ($index === 0) {
-                    $panelGrid->setValue($panelGrid->getHeight(), 1, $this->getCrossingChar(), $borderStyles);
+                    $panelGrid->setValue(
+                        $panelGrid->getHeight(),
+                        1,
+                        $this->getBorder()->getLeftBottomCorner(),
+                        $borderStyles
+                    );
                 }
             }
 
@@ -548,7 +679,7 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
             $newRow[] = $cell;
             if ($cell->getColspan() > 1) {
                 foreach (range($column + 1, $column + $cell->getColspan() - 1) as $index) {
-                    $newRow[$index] = (new TableCell())->setValue(' ');
+                    $newRow[$index] = (new TableCellColspan())->setValue(' ');
                 }
             }
         }
@@ -683,35 +814,10 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
     }
 
     /**
-     * Символ пересечения границ
+     * Возвращает оформление границ
      */
-    private function getCrossingChar(): string
+    private function getBorder(): BorderInterface
     {
-        switch ($this->getStyle()->getBorder()) {
-            default:
-                return '+';
-        }
-    }
-
-    /**
-     * Горизонтальная линия
-     */
-    private function getHBorderChar(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            default:
-                return '-';
-        }
-    }
-
-    /**
-     * Вертикальная линия
-     */
-    private function getVBorderChar(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            default:
-                return '|';
-        }
+        return BorderRegistry::get($this->getStyle()->getBorder());
     }
 }

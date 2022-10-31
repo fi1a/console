@@ -6,6 +6,7 @@ namespace Fi1a\Console\Component\TableComponent;
 
 use Fi1a\Console\Component\PaddingTrait;
 use Fi1a\Console\Component\WidthTrait;
+use Fi1a\Console\IO\Style\TrueColor;
 use InvalidArgumentException;
 
 /**
@@ -17,9 +18,9 @@ class TableStyle implements TableStyleInterface
     use PaddingTrait;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $border = self::BORDER_ASCII;
+    private $border = 'ascii_compact';
 
     /**
      * @var string|null
@@ -29,7 +30,7 @@ class TableStyle implements TableStyleInterface
     /**
      * @var string|null
      */
-    private $headerColor;
+    private $headerColor = TrueColor::GREEN;
 
     /**
      * @var string|null
@@ -61,7 +62,7 @@ class TableStyle implements TableStyleInterface
     /**
      * @inheritDoc
      */
-    public function getBorder(): ?string
+    public function getBorder(): string
     {
         return $this->border;
     }
@@ -69,23 +70,13 @@ class TableStyle implements TableStyleInterface
     /**
      * @inheritDoc
      */
-    public function setBorder(?string $border)
+    public function setBorder(string $border)
     {
-        if (!is_null($border)) {
-            $border = mb_strtolower($border);
-            if (
-                !in_array(
-                    $border,
-                    [
-                        self::BORDER_ASCII, self::BORDER_DOUBLE, self::BORDER_HEAVY, self::BORDER_HORIZONTALS,
-                        self::BORDER_NONE, self::BORDER_ROUNDED,
-                    ]
-                )
-            ) {
-                throw new InvalidArgumentException(
-                    sprintf('Ошибка в переданном значении "%s" границ', $border)
-                );
-            }
+        $border = mb_strtolower($border);
+        if (!BorderRegistry::has($border)) {
+            throw new InvalidArgumentException(
+                sprintf('Ошибка в переданном значении "%s" границ', $border)
+            );
         }
 
         $this->border = $border;

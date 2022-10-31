@@ -17,9 +17,9 @@ class TableStyleTest extends TestCase
      */
     public function testConstruct(): void
     {
-        $style = new TableStyle(10, TableStyle::BORDER_NONE);
+        $style = new TableStyle(10, 'ascii');
         $this->assertEquals(10, $style->getWidth());
-        $this->assertEquals($style::BORDER_NONE, $style->getBorder());
+        $this->assertEquals('ascii', $style->getBorder());
     }
 
     /**
@@ -28,9 +28,9 @@ class TableStyleTest extends TestCase
     public function testBorder(): void
     {
         $style = new TableStyle();
-        $this->assertEquals($style::BORDER_ASCII, $style->getBorder());
-        $style->setBorder($style::BORDER_NONE);
-        $this->assertEquals($style::BORDER_NONE, $style->getBorder());
+        $this->assertEquals('ascii_compact', $style->getBorder());
+        $style->setBorder('ascii');
+        $this->assertEquals('ascii', $style->getBorder());
     }
 
     /**
@@ -99,7 +99,7 @@ class TableStyleTest extends TestCase
     public function testHeaderColor(): void
     {
         $style = new TableStyle();
-        $this->assertNull($style->getHeaderColor());
+        $this->assertEquals('green', $style->getHeaderColor());
         $style->setHeaderColor('red');
         $this->assertEquals('red', $style->getHeaderColor());
     }

@@ -40,7 +40,7 @@ interface TableComponentInterface extends ComponentInterface
     /**
      * Заголовки таблицы
      *
-     * @param TableCellInterface[][]|string[][][]|string[]|TableCellInterface[] $headers
+     * @param TableCellInterface[][]|string[][][]|string[]|string[][]|TableCellInterface[] $headers
      *
      * @return $this
      */

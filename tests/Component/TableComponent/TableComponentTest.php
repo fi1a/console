@@ -55,13 +55,22 @@ class TableComponentTest extends TestCase
         ]);
         $table->setRows([
             [
-                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3',
+                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3', 'Row 2 column 4',
             ],
             [
                 'Row 2 column 1',
                 new TableCell([
                     'value' => 'Row 2 column 2',
                     'colspan' => 2,
+                    'style' => $cellStyle,
+                ]),
+                'Row 2 column 4',
+            ],
+            [
+                'Row 3 column 1',
+                new TableCell([
+                    'value' => 'Row 3 column 2',
+                    'colspan' => 3,
                     'style' => $cellStyle,
                 ]),
             ],
@@ -164,6 +173,141 @@ class TableComponentTest extends TestCase
         $this->assertCount(3, $table->getRow(0));
         $this->assertFalse($table->getRow(1));
         $this->assertEquals(1, $table->countRows());
+        $this->assertTrue($table->display());
+    }
+
+    /**
+     * Отобразить (ASCII границы)
+     */
+    public function testDisplayASCII(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $tableStyle = new TableStyle();
+        $tableStyle->setBorder('ascii');
+        $table = new TableComponent($output, $tableStyle);
+
+        $table->setHeaders([
+            [
+                'Header column 1',
+                'Header column 2',
+                'Header column 3',
+            ],
+        ]);
+        $table->setRows([
+            [
+                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3', 'Row 2 column 4',
+            ],
+            [
+                'Row 2 column 1',
+                new TableCell([
+                    'value' => 'Row 2 column 2',
+                    'colspan' => 2,
+                ]),
+                'Row 2 column 4',
+            ],
+            [
+                'Row 3 column 1',
+                new TableCell([
+                    'value' => 'Row 3 column 2',
+                    'colspan' => 3,
+                ]),
+            ],
+        ]);
+
+        $this->assertTrue($table->display());
+
+        $table->setRows([]);
+        $this->assertTrue($table->display());
+    }
+
+    /**
+     * Отобразить (Double границы)
+     */
+    public function testDisplayDouble(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $tableStyle = new TableStyle();
+        $tableStyle->setBorder('double');
+        $table = new TableComponent($output, $tableStyle);
+
+        $table->setHeaders([
+            [
+                'Header column 1',
+                'Header column 2',
+                'Header column 3',
+            ],
+        ]);
+        $table->setRows([
+            [
+                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3', 'Row 2 column 4',
+            ],
+            [
+                'Row 2 column 1',
+                new TableCell([
+                    'value' => 'Row 2 column 2',
+                    'colspan' => 2,
+                ]),
+                'Row 2 column 4',
+            ],
+            [
+                'Row 3 column 1',
+                new TableCell([
+                    'value' => 'Row 3 column 2',
+                    'colspan' => 3,
+                ]),
+            ],
+        ]);
+
+        $this->assertTrue($table->display());
+
+        $table->setRows([]);
+        $this->assertTrue($table->display());
+    }
+
+    /**
+     * Отобразить (Double compact границы)
+     */
+    public function testDisplayDoubleCompact(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $tableStyle = new TableStyle();
+        $tableStyle->setBorder('double_compact');
+        $table = new TableComponent($output, $tableStyle);
+
+        $table->setHeaders([
+            [
+                'Header column 1',
+                'Header column 2',
+                'Header column 3',
+            ],
+        ]);
+        $table->setRows([
+            [
+                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3', 'Row 2 column 4',
+            ],
+            [
+                'Row 2 column 1',
+                new TableCell([
+                    'value' => 'Row 2 column 2',
+                    'colspan' => 2,
+                ]),
+                'Row 2 column 4',
+            ],
+            [
+                'Row 3 column 1',
+                new TableCell([
+                    'value' => 'Row 3 column 2',
+                    'colspan' => 3,
+                ]),
+            ],
+        ]);
+
+        $this->assertTrue($table->display());
+
+        $table->setRows([]);
         $this->assertTrue($table->display());
     }
 }

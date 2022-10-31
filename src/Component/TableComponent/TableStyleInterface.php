@@ -24,14 +24,14 @@ interface TableStyleInterface
     /**
      * Вернуть границы
      */
-    public function getBorder(): ?string;
+    public function getBorder(): string;
 
     /**
      * Установить границы
      *
      * @return $this
      */
-    public function setBorder(?string $border);
+    public function setBorder(string $border);
 
     /**
      * Установить ширину
