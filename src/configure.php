@@ -14,6 +14,7 @@ use Fi1a\Console\Component\TableComponent\AsciiCompactBorder;
 use Fi1a\Console\Component\TableComponent\BorderRegistry;
 use Fi1a\Console\Component\TableComponent\DoubleBorder;
 use Fi1a\Console\Component\TableComponent\DoubleCompactBorder;
+use Fi1a\Console\Component\TableComponent\NoneBorder;
 use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\TrueColor;
 use Fi1a\Console\IO\Style\TrueColorStyle;
@@ -54,6 +55,7 @@ ProgressbarTemplateRegistry::add(
     . ' {{memory|memory}}{{if(title)}} {{title}}{{endif}}'
 );
 
+BorderRegistry::add('none', new NoneBorder());
 BorderRegistry::add('ascii', new AsciiBorder());
 BorderRegistry::add('ascii_compact', new AsciiCompactBorder());
 BorderRegistry::add('double', new DoubleBorder());
