@@ -9,8 +9,6 @@ namespace Fi1a\Console\Component\TableComponent;
  */
 interface TableStyleInterface
 {
-    public const BORDER_ROUNDED = 'rounded';
-
     /**
      * Вернуть границы
      */
