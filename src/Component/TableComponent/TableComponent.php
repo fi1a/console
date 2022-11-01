@@ -381,7 +381,7 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                     );
                 }
                 if ($cell->getColspan() > 1) {
-                    $width = $columnWidths[$column] + ($header || $rowIndex === 0 ? 1 : 2);
+                    $width = $columnWidths[$column] + 1 + ($column === 0 ? 1 : 0);
                     $panelGrid->setValue(
                         1,
                         $width,

@@ -9,8 +9,6 @@ namespace Fi1a\Console\Component\TableComponent;
  */
 interface TableStyleInterface
 {
-    public const BORDER_NONE = 'none';
-
     public const BORDER_HEAVY = 'heavy';
 
     public const BORDER_HORIZONTALS = 'horizontals';
