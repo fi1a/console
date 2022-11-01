@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\TableComponent;
 
 /**
- * Double compact границы
+ * Heavy compact границы
  */
-class DoubleCompactBorder implements BorderInterface
+class HeavyCompactBorder implements BorderInterface
 {
     /**
      * @inheritDoc
@@ -22,7 +22,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getHBorderHeader(): string
     {
-        return '═';
+        return '━';
     }
 
     /**
@@ -46,7 +46,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getVBorder(): string
     {
-        return '║';
+        return '┃';
     }
 
     /**
@@ -70,7 +70,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getLeftTopCorner(): string
     {
-        return '╔';
+        return '┏';
     }
 
     /**
@@ -78,7 +78,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getRightTopCorner(): string
     {
-        return '╗';
+        return '┓';
     }
 
     /**
@@ -86,7 +86,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getLeftBottomCorner(): string
     {
-        return '╚';
+        return '┗';
     }
 
     /**
@@ -94,7 +94,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getRightBottomCorner(): string
     {
-        return '╝';
+        return '┛';
     }
 
     /**
@@ -102,7 +102,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getTopCrossing(): string
     {
-        return '╦';
+        return '┳';
     }
 
     /**
@@ -110,7 +110,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getLeftCrossing(): string
     {
-        return '╠';
+        return '┣';
     }
 
     /**
@@ -118,7 +118,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getRightCrossing(): string
     {
-        return '╣';
+        return '┫';
     }
 
     /**
@@ -126,7 +126,7 @@ class DoubleCompactBorder implements BorderInterface
      */
     public function getBottomCrossing(): string
     {
-        return '╩';
+        return '┻';
     }
 
     /**
@@ -134,6 +134,6 @@ class DoubleCompactBorder implements BorderInterface
  */
     public function getCrossing(): string
     {
-        return '╬';
+        return '╋';
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Console\Component\TableComponent;
 
 /**
- * ASCII границы
+ * ASCII compact границы
  */
 class AsciiCompactBorder implements BorderInterface
 {
