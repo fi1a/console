@@ -402,6 +402,51 @@ class TableComponentTest extends TestCase
     }
 
     /**
+     * Отобразить (Horizontals границы)
+     */
+    public function testDisplayHorizontals(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setStream(new Stream('php://memory'));
+        $tableStyle = new TableStyle();
+        $tableStyle->setBorder('horizontals');
+        $table = new TableComponent($output, $tableStyle);
+
+        $table->setHeaders([
+            [
+                'Header column 1',
+                'Header column 2',
+                'Header column 3',
+            ],
+        ]);
+        $table->setRows([
+            [
+                'Row 1 column 1', 'Row 1 column 2', 'Row 1 column 3', 'Row 2 column 4',
+            ],
+            [
+                'Row 2 column 1',
+                new TableCell([
+                    'value' => 'Row 2 column 2',
+                    'colspan' => 2,
+                ]),
+                'Row 2 column 4',
+            ],
+            [
+                'Row 3 column 1',
+                new TableCell([
+                    'value' => 'Row 3 column 2',
+                    'colspan' => 3,
+                ]),
+            ],
+        ]);
+
+        $this->assertTrue($table->display());
+
+        $table->setRows([]);
+        $this->assertTrue($table->display());
+    }
+
+    /**
      * Отобразить (Double compact границы)
      */
     public function testDisplayNone(): void
