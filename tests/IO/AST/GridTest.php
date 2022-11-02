@@ -33,7 +33,7 @@ class GridTest extends TestCase
         $ast = new AST('1234567890 1234567890 1234567890', []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->wordWrap(10, 0));
-        $this->assertEquals("1234567890\n 123456789\n0\n 123456789\n0", $grid->getImage());
+        $this->assertEquals("1234567890\n1234567890\n1234567890\n", $grid->getImage());
 
         $ast = new AST('', []);
         $grid = new Grid($ast->getSymbols());
@@ -43,7 +43,7 @@ class GridTest extends TestCase
         $ast = new AST('1234567890 1234567890 1234567890', []);
         $grid = new Grid($ast->getSymbols());
         $this->assertTrue($grid->wordWrap(10, 1));
-        $this->assertEquals("1234567890\n 1234567890\n 1234567890\n", $grid->getImage());
+        $this->assertEquals("1234567890\n1234567890\n1234567890", $grid->getImage());
     }
 
     /**

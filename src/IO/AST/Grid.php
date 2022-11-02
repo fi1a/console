@@ -75,6 +75,13 @@ class Grid implements GridInterface
                 }
                 $startSlice = $lastPosition;
                 $current = $startSlice;
+                /**
+                 * @var SymbolInterface|null $startSliceSymbol
+                 */
+                $startSliceSymbol = $symbols[$startSlice] ?? null;
+                if ($startSliceSymbol && preg_match('/[\s]+/mui', $startSliceSymbol->getValue()) > 0) {
+                    $startSlice++;
+                }
                 $symbols->exchangeArray(
                     array_merge(
                         array_slice($symbols->getArrayCopy(), 0, $lastPosition),

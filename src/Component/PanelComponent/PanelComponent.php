@@ -237,7 +237,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             }
             $grid->wrapTop(
                 1,
-                $width,
+                $grid->getWidth(),
                 $this->getBorderTopBottomSymbol(),
                 $styles
             );
@@ -248,14 +248,18 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             }
             $grid->wrapBottom(
                 1,
-                $width,
+                $grid->getWidth($grid->getHeight()),
                 $this->getBorderTopBottomSymbol(),
                 $styles
             );
             $grid->setValue(1, 1, $this->getBorderTopLeft());
-            $grid->setValue(1, $width, $this->getBorderTopRight());
+            $grid->setValue(1, $grid->getWidth($grid->getHeight()), $this->getBorderTopRight());
             $grid->setValue($grid->getHeight(), 1, $this->getBorderBottomLeft());
-            $grid->setValue($grid->getHeight(), $width, $this->getBorderBottomRight());
+            $grid->setValue(
+                $grid->getHeight(),
+                $grid->getWidth($grid->getHeight()),
+                $this->getBorderBottomRight()
+            );
         }
 
         return $grid->getSymbols();
