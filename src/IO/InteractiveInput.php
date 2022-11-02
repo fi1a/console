@@ -87,7 +87,7 @@ class InteractiveInput implements InteractiveInputInterface
             throw new InvalidArgumentException('Значение $name не может быть пустым');
         }
         if ($this->hasValue($name)) {
-            throw new InvalidArgumentException(sprintf('Значение "%s" уже добавлена', $name));
+            throw new InvalidArgumentException(sprintf('Значение "%s" уже добавлено', $name));
         }
 
         $value = new InteractiveValue();
@@ -156,6 +156,7 @@ class InteractiveInput implements InteractiveInputInterface
             }
             $index = 1;
             if ($value->isMultiple()) {
+                $output->writeln($label . ': ');
                 $values = [];
                 do {
                     $output->write($index . ') ');
