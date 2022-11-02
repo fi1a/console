@@ -85,7 +85,14 @@ class Grid implements GridInterface
                 $symbols->exchangeArray(
                     array_merge(
                         array_slice($symbols->getArrayCopy(), 0, $lastPosition),
-                        [new Symbol(PHP_EOL, $symbol->getStyles()->getArrayCopy())],
+                        [
+                            new Symbol(
+                                PHP_EOL,
+                                $startSliceSymbol
+                                    ? $startSliceSymbol->getStyles()->getArrayCopy()
+                                    : []
+                            ),
+                        ],
                         array_slice($symbols->getArrayCopy(), $startSlice),
                     )
                 );
