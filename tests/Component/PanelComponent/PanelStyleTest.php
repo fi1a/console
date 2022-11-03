@@ -18,9 +18,9 @@ class PanelStyleTest extends TestCase
     public function testBorder(): void
     {
         $style = new PanelStyle();
-        $this->assertEquals($style::BORDER_NONE, $style->getBorder());
-        $style->setBorder($style::BORDER_ASCII);
-        $this->assertEquals($style::BORDER_ASCII, $style->getBorder());
+        $this->assertNull($style->getBorder());
+        $style->setBorder('ascii');
+        $this->assertEquals('ascii', $style->getBorder());
     }
 
     /**

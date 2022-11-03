@@ -10,6 +10,7 @@ use Fi1a\Console\Component\GroupComponent\GroupComponent;
 use Fi1a\Console\Component\GroupComponent\GroupStyle;
 use Fi1a\Console\Component\PanelComponent\PanelComponent;
 use Fi1a\Console\Component\PanelComponent\PanelStyle;
+use Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
 use Fi1a\Console\Definition\DefinitionInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
 use Fi1a\Console\IO\InputArgumentsInterface;
@@ -40,7 +41,7 @@ class OutputCommand extends AbstractCommand
         $output->writeln('');
         $panelStyleTitle = new PanelStyle();
         $panelStyleTitle->setWidth(120)
-            ->setAlign($panelStyleTitle::ALIGN_CENTER);
+            ->setAlign(PanelStyleInterface::ALIGN_CENTER);
         $panelTitle = new PanelComponent(
             $output,
             '<option=bold>Форматированный вывод в консоль</>',
@@ -53,7 +54,7 @@ class OutputCommand extends AbstractCommand
         $group = new GroupComponent($output, $groupStyle);
 
         $panelStyle = new PanelStyle();
-        $panelStyle->setBorder($panelStyle::BORDER_HEAVY)
+        $panelStyle->setBorder('heavy')
             ->setPadding(1);
 
         $panel1 = new PanelComponent(

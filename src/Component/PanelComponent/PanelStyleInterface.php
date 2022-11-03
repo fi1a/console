@@ -11,18 +11,6 @@ use Fi1a\Console\Component\RectangleInterface;
  */
 interface PanelStyleInterface
 {
-    public const BORDER_NONE = 'none';
-
-    public const BORDER_ASCII = 'ascii';
-
-    public const BORDER_DOUBLE = 'double';
-
-    public const BORDER_HEAVY = 'heavy';
-
-    public const BORDER_HORIZONTALS = 'horizontals';
-
-    public const BORDER_ROUNDED = 'rounded';
-
     public const ALIGN_LEFT = RectangleInterface::ALIGN_LEFT;
 
     public const ALIGN_RIGHT = RectangleInterface::ALIGN_RIGHT;

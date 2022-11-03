@@ -30,7 +30,7 @@ class GroupComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setPadding(1)
-            ->setBorder($style::BORDER_ASCII)
+            ->setBorder('ascii')
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setHeight(10);
@@ -56,7 +56,7 @@ class GroupComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setPadding(1)
-            ->setBorder($style::BORDER_ASCII)
+            ->setBorder('ascii')
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setWidth(30);

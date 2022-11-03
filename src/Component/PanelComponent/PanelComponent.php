@@ -113,7 +113,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
         if (!$align) {
             $align = PanelStyleInterface::ALIGN_LEFT;
         }
-        $isBorder = $this->getStyle()->getBorder() !== PanelStyleInterface::BORDER_NONE;
+        $isBorder = !is_null($this->getStyle()->getBorder());
         $width = $rectangle->getWidth();
         $height = $rectangle->getHeight();
 
@@ -218,18 +218,20 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             );
         }
         if ($width && $isBorder) {
+            /** @psalm-suppress PossiblyNullArgument */
+            $borderStyle = BorderRegistry::get($this->getStyle()->getBorder());
             $styles = [];
             $leftBorderColor = $this->getStyle()->getLeftBorderColor();
             if ($leftBorderColor) {
                 $styles[] = ASTStyleConverter::convert(new TrueColorStyle($leftBorderColor));
             }
-            $grid->wrapLeft(1, $this->getBorderLeftRightSymbol(), $styles);
+            $grid->wrapLeft(1, $borderStyle->getVBorder(), $styles);
             $styles = [];
             $rightBorderColor = $this->getStyle()->getRightBorderColor();
             if ($rightBorderColor) {
                 $styles[] = ASTStyleConverter::convert(new TrueColorStyle($rightBorderColor));
             }
-            $grid->wrapRight(1, $this->getBorderLeftRightSymbol(), $styles);
+            $grid->wrapRight(1, $borderStyle->getVBorder(), $styles);
             $styles = [];
             $topBorderColor = $this->getStyle()->getTopBorderColor();
             if ($this->getStyle()->getTopBorderColor()) {
@@ -238,7 +240,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             $grid->wrapTop(
                 1,
                 $grid->getWidth(),
-                $this->getBorderTopBottomSymbol(),
+                $borderStyle->getHBorder(),
                 $styles
             );
             $styles = [];
@@ -249,16 +251,16 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
             $grid->wrapBottom(
                 1,
                 $grid->getWidth($grid->getHeight()),
-                $this->getBorderTopBottomSymbol(),
+                $borderStyle->getHBorder(),
                 $styles
             );
-            $grid->setValue(1, 1, $this->getBorderTopLeft());
-            $grid->setValue(1, $grid->getWidth($grid->getHeight()), $this->getBorderTopRight());
-            $grid->setValue($grid->getHeight(), 1, $this->getBorderBottomLeft());
+            $grid->setValue(1, 1, $borderStyle->getLeftTopCorner());
+            $grid->setValue(1, $grid->getWidth($grid->getHeight()), $borderStyle->getRightTopCorner());
+            $grid->setValue($grid->getHeight(), 1, $borderStyle->getLeftBottomCorner());
             $grid->setValue(
                 $grid->getHeight(),
                 $grid->getWidth($grid->getHeight()),
-                $this->getBorderBottomRight()
+                $borderStyle->getRightBottomCorner()
             );
         }
 
@@ -270,7 +272,7 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
      */
     private function getTextWidth(int $width): int
     {
-        $border = $this->getStyle()->getBorder() === PanelStyleInterface::BORDER_NONE  ? 0 : 1;
+        $border = is_null($this->getStyle()->getBorder()) ? 0 : 1;
         $textWidth = $width - (int) $this->getStyle()->getPaddingLeft()
             - (int) $this->getStyle()->getPaddingRight() - (2 * $border);
 
@@ -282,123 +284,10 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
      */
     private function getTextHeight(int $height): int
     {
-        $border = $this->getStyle()->getBorder() === PanelStyleInterface::BORDER_NONE  ? 0 : 1;
+        $border = is_null($this->getStyle()->getBorder()) ? 0 : 1;
         $textHeight = $height - (int) $this->getStyle()->getPaddingTop()
             - (int) $this->getStyle()->getPaddingBottom() - (2 * $border);
 
         return max($textHeight, 1);
-    }
-
-    /**
-     * Возвращает символ для левой и правой границы
-     */
-    private function getBorderLeftRightSymbol(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '┃';
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return ' ';
-            case PanelStyleInterface::BORDER_ROUNDED:
-                return '│';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '║';
-            default:
-                return '|';
-        }
-    }
-
-    /**
-     * Возвращает символ для левой и правой границы
-     */
-    private function getBorderTopBottomSymbol(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '━';
-            case PanelStyleInterface::BORDER_ROUNDED:
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return '─';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '═';
-            default:
-                return '-';
-        }
-    }
-
-    /**
-     * Возвращает символ для верхнего левого угла
-     */
-    private function getBorderTopLeft(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '┏';
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return ' ';
-            case PanelStyleInterface::BORDER_ROUNDED:
-                return '╭';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '╔';
-            default:
-                return '+';
-        }
-    }
-
-    /**
-     * Возвращает символ для верхнего правого угла
-     */
-    private function getBorderTopRight(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '┓';
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return ' ';
-            case PanelStyleInterface::BORDER_ROUNDED:
-                return '╮';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '╗';
-            default:
-                return '+';
-        }
-    }
-
-    /**
-     * Возвращает символ для нижнего левого угла
-     */
-    private function getBorderBottomLeft(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '┗';
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return ' ';
-            case PanelStyleInterface::BORDER_ROUNDED:
-                return '╰';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '╚';
-            default:
-                return '+';
-        }
-    }
-
-    /**
-     * Возвращает символ для нижнего правого угла
-     */
-    private function getBorderBottomRight(): string
-    {
-        switch ($this->getStyle()->getBorder()) {
-            case PanelStyleInterface::BORDER_HEAVY:
-                return '┛';
-            case PanelStyleInterface::BORDER_HORIZONTALS:
-                return ' ';
-            case PanelStyleInterface::BORDER_ROUNDED:
-                return '╯';
-            case PanelStyleInterface::BORDER_DOUBLE:
-                return '╝';
-            default:
-                return '+';
-        }
     }
 }

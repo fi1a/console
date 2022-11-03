@@ -27,7 +27,7 @@ class PanelComponentTest extends TestCase
         $style = new PanelStyle();
         $style->setPadding(1)
             ->setWidth(20)
-            ->setBorder($style::BORDER_ASCII)
+            ->setBorder('ascii')
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setHeight(10);
@@ -49,7 +49,7 @@ class PanelComponentTest extends TestCase
         $style = new PanelStyle();
         $style->setPadding(1)
             ->setWidth(1)
-            ->setBorder($style::BORDER_ASCII)
+            ->setBorder('ascii')
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setHeight(10);
@@ -75,7 +75,7 @@ class PanelComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setWidth(20)
-            ->setBorder($style::BORDER_HEAVY);
+            ->setBorder('heavy');
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }
@@ -89,7 +89,7 @@ class PanelComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setWidth(20)
-            ->setBorder($style::BORDER_HORIZONTALS);
+            ->setBorder('horizontals');
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }
@@ -103,7 +103,7 @@ class PanelComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setWidth(20)
-            ->setBorder($style::BORDER_ROUNDED);
+            ->setBorder('rounded');
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }
@@ -117,7 +117,7 @@ class PanelComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setWidth(20)
-            ->setBorder($style::BORDER_DOUBLE);
+            ->setBorder('double');
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }
@@ -130,8 +130,7 @@ class PanelComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
-        $style->setWidth(20)
-            ->setBorder($style::BORDER_NONE);
+        $style->setWidth(20);
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }

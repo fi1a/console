@@ -48,7 +48,7 @@ class TreeComponentTest extends TestCase
         $style = new PanelStyle();
         $style->setPadding(1)
             ->setWidth(20)
-            ->setBorder($style::BORDER_ASCII)
+            ->setBorder('ascii')
             ->setBackgroundColor(ColorInterface::YELLOW)
             ->setBorderColor(ColorInterface::YELLOW)
             ->setHeight(10);
