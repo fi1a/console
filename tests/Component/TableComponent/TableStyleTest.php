@@ -49,10 +49,10 @@ class TableStyleTest extends TestCase
     public function testPadding(): void
     {
         $style = new TableStyle();
-        $this->assertEquals(3, $style->getPaddingLeft());
-        $this->assertEquals(1, $style->getPaddingTop());
-        $this->assertEquals(3, $style->getPaddingRight());
-        $this->assertEquals(1, $style->getPaddingBottom());
+        $this->assertEquals(1, $style->getPaddingLeft());
+        $this->assertEquals(0, $style->getPaddingTop());
+        $this->assertEquals(1, $style->getPaddingRight());
+        $this->assertEquals(0, $style->getPaddingBottom());
         $style->setPadding(2);
         $this->assertEquals(6, $style->getPaddingLeft());
         $this->assertEquals(2, $style->getPaddingTop());

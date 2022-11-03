@@ -53,7 +53,11 @@ class TableStyle implements TableStyleInterface
     public function __construct(?int $width = null, ?string $border = null)
     {
         $this->setWidth($width)
-            ->setPadding(1);
+            ->setPaddingLeft(1)
+            ->setPaddingRight(1)
+            ->setPaddingBottom(0)
+            ->setPaddingTop(0);
+
         if ($border) {
             $this->setBorder($border);
         }
