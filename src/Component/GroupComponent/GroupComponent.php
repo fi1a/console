@@ -136,14 +136,18 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
             $heights = [1];
             foreach ($panels as $panel) {
                 $panelGrid = new Grid();
+
                 $width = (int) ($panel->getStyle()->getWidth()
                     ? $panel->getStyle()->getWidth()
                     : $rectangle->getWidth());
+                $border = is_null($panel->getStyle()->getBorder()) ? 0 : 1;
+                $textWidth = $width - (int) $panel->getStyle()->getPaddingLeft()
+                    - (int) $panel->getStyle()->getPaddingRight() - (2 * $border);
 
                 foreach ($panel->getText() as $text) {
                     if ($text instanceof ComponentInterface) {
                         $textRectangle = new Rectangle(
-                            $width,
+                            $textWidth,
                             null,
                             null,
                             null,
@@ -158,7 +162,7 @@ class GroupComponent extends AbstractComponent implements GroupComponentInterfac
                         ASTStyleConverter::convertArray($this->getOutput()->getFormatter()::allStyles())
                     );
                     $panelGrid->appendBottom($ast->getSymbols()->getArrayCopy());
-                    $panelGrid->wordWrap($width);
+                    $panelGrid->wordWrap($textWidth);
                 }
 
                 $heights[] = $panelGrid->getHeight() + (int) $panel->getStyle()->getPaddingTop()
