@@ -19,12 +19,12 @@ class ListStyle implements ListStyleInterface
     /**
      * @var string
      */
-    private $position = self::POSITION_INSIDE;
+    private $position = self::POSITION_OUTSIDE;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $type = self::TYPE_DISC;
+    private $type = 'disc';
 
     /**
      * @var string|null
@@ -47,9 +47,10 @@ class ListStyle implements ListStyleInterface
         if (!is_null($type)) {
             $this->setType($type);
         }
-        if (!is_null($width)) {
-            $this->setWidth($width);
+        if (!$width) {
+            $width = 120;
         }
+        $this->setWidth($width);
     }
 
     /**
@@ -62,9 +63,6 @@ class ListStyle implements ListStyleInterface
             throw new InvalidArgumentException(
                 sprintf('Неизвестное "%s" местоположение маркера списка', $position)
             );
-        }
-        if ($position === self::POSITION_OUTSIDE && is_null($this->getWidth())) {
-            $this->setWidth(120);
         }
         $this->position = $position;
 
@@ -82,18 +80,9 @@ class ListStyle implements ListStyleInterface
     /**
      * @inheritDoc
      */
-    public function setType(string $type)
+    public function setType(?string $type)
     {
-        $type = mb_strtolower($type);
-        if (
-            !in_array(
-                $type,
-                [
-                    self::TYPE_DISC, self::TYPE_CIRCLE, self::TYPE_DECIMAL, self::TYPE_DECIMAL_LEADING_ZERO,
-                    self::TYPE_LOWER_ALPHA, self::TYPE_NONE, self::TYPE_SQUARE, self::TYPE_UPPER_ALPHA,
-                ]
-            )
-        ) {
+        if (!is_null($type) && !ListTypeRegistry::has($type)) {
             throw new InvalidArgumentException(
                 sprintf('Неизвестный "%s" тип маркера списка', $type)
             );
@@ -106,7 +95,7 @@ class ListStyle implements ListStyleInterface
     /**
      * @inheritDoc
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }

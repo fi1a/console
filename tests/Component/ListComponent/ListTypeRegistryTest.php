@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Fi1a\Unit\Console\Component\PanelComponent;
+namespace Fi1a\Unit\Console\Component\ListComponent;
 
-use Fi1a\Console\Component\PanelComponent\AsciiBorder;
-use Fi1a\Console\Component\PanelComponent\BorderRegistry;
+use Fi1a\Console\Component\ListComponent\DecimalListType;
+use Fi1a\Console\Component\ListComponent\ListTypeRegistry;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Реестр
  */
-class BorderRegistryTest extends TestCase
+class ListTypeRegistryTest extends TestCase
 {
     /**
      * Добавить
      */
     public function testAdd(): void
     {
-        $this->assertTrue(BorderRegistry::add('test1', new AsciiBorder()));
-        $this->assertFalse(BorderRegistry::add('test1', new AsciiBorder()));
+        $this->assertTrue(ListTypeRegistry::add('test1', new DecimalListType()));
+        $this->assertFalse(ListTypeRegistry::add('test1', new DecimalListType()));
     }
 
     /**
@@ -30,8 +30,8 @@ class BorderRegistryTest extends TestCase
      */
     public function testHas(): void
     {
-        $this->assertFalse(BorderRegistry::has('unknown'));
-        $this->assertTrue(BorderRegistry::has('test1'));
+        $this->assertFalse(ListTypeRegistry::has('unknown'));
+        $this->assertTrue(ListTypeRegistry::has('test1'));
     }
 
     /**
@@ -41,7 +41,7 @@ class BorderRegistryTest extends TestCase
      */
     public function testGet(): void
     {
-        $this->assertInstanceOf(AsciiBorder::class, BorderRegistry::get('test1'));
+        $this->assertInstanceOf(DecimalListType::class, ListTypeRegistry::get('test1'));
     }
 
     /**
@@ -52,7 +52,7 @@ class BorderRegistryTest extends TestCase
     public function testGetException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        BorderRegistry::get('unknown');
+        ListTypeRegistry::get('unknown');
     }
 
     /**
@@ -62,7 +62,7 @@ class BorderRegistryTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->assertTrue(BorderRegistry::delete('test1'));
-        $this->assertFalse(BorderRegistry::delete('test1'));
+        $this->assertTrue(ListTypeRegistry::delete('test1'));
+        $this->assertFalse(ListTypeRegistry::delete('test1'));
     }
 }

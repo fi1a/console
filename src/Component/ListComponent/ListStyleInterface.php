@@ -15,46 +15,6 @@ interface ListStyleInterface
 
     public const POSITION_OUTSIDE = 'outside';
 
-    /**
-     * В качестве маркера элементов списка выступает закрашенный кружок.
-     */
-    public const TYPE_DISC = 'disc';
-
-    /**
-     * В качестве маркера выступает незакрашенный кружок.
-     */
-    public const TYPE_CIRCLE = 'circle';
-
-    /**
-     * 1, 2, 3, 4, 5, …
-     */
-    public const TYPE_DECIMAL = 'decimal';
-
-    /**
-     * 01, 02, 03, 04, 05, …
-     */
-    public const TYPE_DECIMAL_LEADING_ZERO = 'decimal-leading-zero';
-
-    /**
-     * a, b, c, d, e, …
-     */
-    public const TYPE_LOWER_ALPHA = 'lower-alpha';
-
-    /**
-     * Маркер отсутствует
-     */
-    public const TYPE_NONE = 'none';
-
-    /**
-     * В качестве маркера выступает закрашенный квадрат.
-     */
-    public const TYPE_SQUARE = 'square';
-
-    /**
-     * A, B, C, D, E, …
-     */
-    public const TYPE_UPPER_ALPHA = 'upper-alpha';
-
     public const ALIGN_LEFT = RectangleInterface::ALIGN_LEFT;
 
     public const ALIGN_RIGHT = RectangleInterface::ALIGN_RIGHT;
@@ -90,12 +50,12 @@ interface ListStyleInterface
      *
      * @return $this
      */
-    public function setType(string $type);
+    public function setType(?string $type);
 
     /**
      * Тип маркера списка
      */
-    public function getType(): string;
+    public function getType(): ?string;
 
     /**
      * Вернуть выравнивание

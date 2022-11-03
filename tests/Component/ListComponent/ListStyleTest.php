@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\Unit\Console\Component\ListComponent;
 
 use Fi1a\Console\Component\ListComponent\ListStyle;
+use Fi1a\Console\Component\ListComponent\ListStyleInterface;
 use Fi1a\Console\IO\Style\TrueColor;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -19,9 +20,9 @@ class ListStyleTest extends TestCase
      */
     public function testConstructor(): void
     {
-        $style = new ListStyle(ListStyle::POSITION_OUTSIDE, ListStyle::TYPE_LOWER_ALPHA, 10);
+        $style = new ListStyle(ListStyle::POSITION_OUTSIDE, 'lower-alpha', 10);
         $this->assertEquals(ListStyle::POSITION_OUTSIDE, $style->getPosition());
-        $this->assertEquals($style::TYPE_LOWER_ALPHA, $style->getType());
+        $this->assertEquals('lower-alpha', $style->getType());
         $this->assertEquals(10, $style->getWidth());
     }
 
@@ -31,9 +32,9 @@ class ListStyleTest extends TestCase
     public function testPosition(): void
     {
         $style = new ListStyle();
-        $this->assertEquals($style::POSITION_INSIDE, $style->getPosition());
-        $style->setPosition($style::POSITION_OUTSIDE);
-        $this->assertEquals($style::POSITION_OUTSIDE, $style->getPosition());
+        $this->assertEquals(ListStyleInterface::POSITION_OUTSIDE, $style->getPosition());
+        $style->setPosition(ListStyleInterface::POSITION_INSIDE);
+        $this->assertEquals(ListStyleInterface::POSITION_INSIDE, $style->getPosition());
         $this->assertGreaterThan(0, $style->getWidth());
     }
 
@@ -53,9 +54,9 @@ class ListStyleTest extends TestCase
     public function testType(): void
     {
         $style = new ListStyle();
-        $this->assertEquals($style::TYPE_DISC, $style->getType());
-        $style->setType($style::TYPE_LOWER_ALPHA);
-        $this->assertEquals($style::TYPE_LOWER_ALPHA, $style->getType());
+        $this->assertEquals('disc', $style->getType());
+        $style->setType('lower-alpha');
+        $this->assertEquals('lower-alpha', $style->getType());
     }
 
     /**

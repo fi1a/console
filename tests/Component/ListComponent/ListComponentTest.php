@@ -6,6 +6,7 @@ namespace Fi1a\Unit\Console\Component\ListComponent;
 
 use Fi1a\Console\Component\ListComponent\ListComponent;
 use Fi1a\Console\Component\ListComponent\ListStyle;
+use Fi1a\Console\Component\ListComponent\ListStyleInterface;
 use Fi1a\Console\Component\Rectangle;
 use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\Formatter;
@@ -29,15 +30,20 @@ class ListComponentTest extends TestCase
         $list = new ListComponent($output, $style, []);
 
         $subSubStyle = new ListStyle();
-        $subSubStyle->setPosition($subSubStyle::POSITION_OUTSIDE);
+        $subSubStyle->setPosition(ListStyleInterface::POSITION_OUTSIDE);
         $subSubList = new ListComponent($output, $subSubStyle, ['Lorem', 'Ipsum']);
 
         $subStyle = new ListStyle();
-        $subStyle->setType($subStyle::TYPE_NONE);
+        $subStyle->setType(null);
         $subList = new ListComponent($output, $subStyle, [$subSubList, 'Lorem', 'Ipsum']);
+
+        $subStyle2 = new ListStyle();
+        $subStyle2->setPosition(ListStyleInterface::POSITION_INSIDE);
+        $subList2 = new ListComponent($output, $subStyle2, [$subSubList, 'Lorem', 'Ipsum']);
 
         $list->addItem('Lorem');
         $list->addItem(['Lorem', $subList, 'ipsum']);
+        $list->addItem([$subList2, 'ipsum']);
         $list->addItem('Lorem');
 
         $this->assertTrue($list->display());
@@ -78,7 +84,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_UPPER_ALPHA);
+        $style->setType('upper-alpha');
         $list = new ListComponent($output, $style, []);
         $list->addItem('Lorem');
         $list->addItem('Ipsum');
@@ -93,7 +99,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_SQUARE);
+        $style->setType('square');
         $list = new ListComponent($output, $style, []);
         $list->addItem('Lorem');
         $list->addItem('Ipsum');
@@ -108,7 +114,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_LOWER_ALPHA);
+        $style->setType('lower-alpha');
         $list = new ListComponent($output, $style, []);
         for ($index = 0; $index < 50; $index++) {
             $list->addItem('Lorem ' . $index);
@@ -124,7 +130,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_DECIMAL_LEADING_ZERO);
+        $style->setType('decimal-leading-zero');
         $list = new ListComponent($output, $style, []);
         $list->addItem('Lorem');
         $list->addItem('Ipsum');
@@ -139,7 +145,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_DECIMAL);
+        $style->setType('decimal');
         $list = new ListComponent($output, $style, []);
         $list->addItem('Lorem');
         $list->addItem('Ipsum');
@@ -154,7 +160,7 @@ class ListComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $style = new ListStyle();
-        $style->setType($style::TYPE_CIRCLE);
+        $style->setType('circle');
         $list = new ListComponent($output, $style, []);
         $list->addItem('Lorem');
         $list->addItem('Ipsum');

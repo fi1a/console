@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use Fi1a\Console\Component\ListComponent\CircleListType;
+use Fi1a\Console\Component\ListComponent\DecimalLeadingZeroListType;
+use Fi1a\Console\Component\ListComponent\DecimalListType;
+use Fi1a\Console\Component\ListComponent\DiscListType;
+use Fi1a\Console\Component\ListComponent\ListTypeRegistry;
+use Fi1a\Console\Component\ListComponent\LowerAlphaListType;
+use Fi1a\Console\Component\ListComponent\SquareListType;
+use Fi1a\Console\Component\ListComponent\UpperAlphaListType;
 use Fi1a\Console\Component\PanelComponent\AsciiBorder;
 use Fi1a\Console\Component\PanelComponent\BorderRegistry;
 use Fi1a\Console\Component\PanelComponent\DoubleBorder;
@@ -66,64 +74,27 @@ ProgressbarTemplateRegistry::add(
     . ' {{memory|memory}}{{if(title)}} {{title}}{{endif}}'
 );
 
-TableBorderRegistry::add(
-    'none',
-    new NoneBorder()
-);
-TableBorderRegistry::add(
-    'ascii',
-    new TableAsciiBorder()
-);
-TableBorderRegistry::add(
-    'ascii_compact',
-    new AsciiCompactBorder()
-);
-TableBorderRegistry::add(
-    'double',
-    new TableDoubleBorder()
-);
-TableBorderRegistry::add(
-    'double_compact',
-    new DoubleCompactBorder()
-);
-TableBorderRegistry::add(
-    'heavy',
-    new TableHeavyBorder()
-);
-TableBorderRegistry::add(
-    'heavy_compact',
-    new HeavyCompactBorder()
-);
-TableBorderRegistry::add(
-    'horizontals',
-    new TableHorizontalsBorder()
-);
-TableBorderRegistry::add(
-    'rounded',
-    new TableRoundedBorder()
-);
-TableBorderRegistry::add(
-    'rounded_compact',
-    new RoundedCompactBorder()
-);
+TableBorderRegistry::add('none', new NoneBorder());
+TableBorderRegistry::add('ascii', new TableAsciiBorder());
+TableBorderRegistry::add('ascii_compact', new AsciiCompactBorder());
+TableBorderRegistry::add('double', new TableDoubleBorder());
+TableBorderRegistry::add('double_compact', new DoubleCompactBorder());
+TableBorderRegistry::add('heavy', new TableHeavyBorder());
+TableBorderRegistry::add('heavy_compact', new HeavyCompactBorder());
+TableBorderRegistry::add('horizontals', new TableHorizontalsBorder());
+TableBorderRegistry::add('rounded', new TableRoundedBorder());
+TableBorderRegistry::add('rounded_compact', new RoundedCompactBorder());
 
-BorderRegistry::add(
-    'ascii',
-    new AsciiBorder()
-);
-BorderRegistry::add(
-    'double',
-    new DoubleBorder()
-);
-BorderRegistry::add(
-    'heavy',
-    new HeavyBorder()
-);
-BorderRegistry::add(
-    'horizontals',
-    new HorizontalsBorder()
-);
-BorderRegistry::add(
-    'rounded',
-    new RoundedBorder()
-);
+BorderRegistry::add('ascii', new AsciiBorder());
+BorderRegistry::add('double', new DoubleBorder());
+BorderRegistry::add('heavy', new HeavyBorder());
+BorderRegistry::add('horizontals', new HorizontalsBorder());
+BorderRegistry::add('rounded', new RoundedBorder());
+
+ListTypeRegistry::add('upper-alpha', new UpperAlphaListType());
+ListTypeRegistry::add('square', new SquareListType());
+ListTypeRegistry::add('lower-alpha', new LowerAlphaListType());
+ListTypeRegistry::add('decimal-leading-zero', new DecimalLeadingZeroListType());
+ListTypeRegistry::add('decimal', new DecimalListType());
+ListTypeRegistry::add('circle', new CircleListType());
+ListTypeRegistry::add('disc', new DiscListType());

@@ -140,7 +140,7 @@ class ListComponent extends AbstractComponent implements ListComponentInterface
         $listTypeSymbolWidth = 0;
         if (
             $this->getStyle()->getPosition() === ListStyleInterface::POSITION_OUTSIDE
-            && $this->getStyle()->getType() !== ListStyleInterface::TYPE_NONE
+            && !is_null($this->getStyle()->getType())
         ) {
             $listTypeSymbolWidths = [0];
             foreach (array_keys($items) as $index) {
@@ -152,7 +152,10 @@ class ListComponent extends AbstractComponent implements ListComponentInterface
 
         foreach ($items as $index => $item) {
             assert(is_int($index));
-            if ($this->getStyle()->getPosition() === ListStyleInterface::POSITION_INSIDE) {
+            if (
+                $this->getStyle()->getPosition() === ListStyleInterface::POSITION_INSIDE
+                && !is_null($this->getStyle()->getType())
+            ) {
                 if (is_string($item[0])) {
                     $item[0] = str_repeat(' ', mb_strlen($this->getListTypeSymbol($index)) + 1) . $item[0];
                 } else {
@@ -165,7 +168,7 @@ class ListComponent extends AbstractComponent implements ListComponentInterface
                 ->setPadding(0);
             if (
                 $this->getStyle()->getPosition() === ListStyleInterface::POSITION_OUTSIDE
-                && $this->getStyle()->getType() !== ListStyleInterface::TYPE_NONE
+                && !is_null($this->getStyle()->getType())
             ) {
                 $panelStyle->setPaddingLeft($listTypeSymbolWidth + 1);
             }
@@ -179,7 +182,7 @@ class ListComponent extends AbstractComponent implements ListComponentInterface
             );
             $panelSymbols = $panel->getSymbols($panelRectangle);
             $panelGrid = new Grid($panelSymbols);
-            if ($this->getStyle()->getType() !== ListStyleInterface::TYPE_NONE) {
+            if (!is_null($this->getStyle()->getType())) {
                 $panelGrid->setValue(
                     1,
                     1,
@@ -201,46 +204,11 @@ class ListComponent extends AbstractComponent implements ListComponentInterface
 
     /**
      * Возвращает символ списка
+     *
+     * @psalm-suppress PossiblyNullArgument
      */
     private function getListTypeSymbol(int $index): string
     {
-        switch ($this->getStyle()->getType()) {
-            case ListStyleInterface::TYPE_UPPER_ALPHA:
-                return $this->getAlphaListType($index);
-            case ListStyleInterface::TYPE_SQUARE:
-                return '□';
-            case ListStyleInterface::TYPE_LOWER_ALPHA:
-                return mb_strtolower($this->getAlphaListType($index));
-            case ListStyleInterface::TYPE_DECIMAL_LEADING_ZERO:
-                return ($index + 1 < 10 ? '0' : '') . ($index + 1) . '.';
-            case ListStyleInterface::TYPE_DECIMAL:
-                return ($index + 1) . '.';
-            case ListStyleInterface::TYPE_CIRCLE:
-                return '○';
-            default:
-                return '●';
-        }
-    }
-
-    /**
-     * Алфавитный список
-     */
-    private function getAlphaListType(int $index): string
-    {
-        $out = '';
-        $to = (int) floor($index / 25);
-        for ($dim = 0; $dim <= $to; $dim++) {
-            if ($dim === $to) {
-                $out .= chr(65 + ($index - $dim * 25));
-
-                continue;
-            }
-
-            $out .= 'z';
-        }
-
-        $out .= '.';
-
-        return $out;
+        return ListTypeRegistry::get($this->getStyle()->getType())->getSymbol($index);
     }
 }

@@ -9,6 +9,9 @@ use Fi1a\Console\Component\TableComponent\BorderRegistry;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Реестр
+ */
 class BorderRegistryTest extends TestCase
 {
     /**
