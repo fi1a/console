@@ -50,10 +50,10 @@ class PanelBordersCommand extends AbstractCommand
         $panelTitle->display();
         $output->writeln('');
 
-        $groupStyle1 = new GroupStyle(40);
-        $groupStyle1->setHeight(5)
+        $groupStyle = new GroupStyle(40);
+        $groupStyle->setHeight(5)
             ->setPanelSpacing(2);
-        $group1 = new GroupComponent($output, $groupStyle1);
+        $group1 = new GroupComponent($output, $groupStyle);
 
         $panelStyleAscii = new PanelStyle();
         $panelStyleAscii->setBorder('ascii')
@@ -109,7 +109,7 @@ class PanelBordersCommand extends AbstractCommand
             $panelStyleRounded
         );
 
-        $group2 = new GroupComponent($output, $groupStyle1);
+        $group2 = new GroupComponent($output, $groupStyle);
 
         $group2->addPanel($panelHorizontals);
         $group2->addPanel($panelRounded);
