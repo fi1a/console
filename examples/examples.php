@@ -6,6 +6,7 @@ use Fi1a\Console\App;
 use Fi1a\Console\Examples\Command\ColorsCommand;
 use Fi1a\Console\Examples\Command\GroupCommand;
 use Fi1a\Console\Examples\Command\InteractiveCommand;
+use Fi1a\Console\Examples\Command\ListCommand;
 use Fi1a\Console\Examples\Command\OutputCommand;
 use Fi1a\Console\Examples\Command\PanelBordersCommand;
 use Fi1a\Console\Examples\Command\PanelCommand;
@@ -19,5 +20,6 @@ $code = (new App())
     ->addCommand('panel', PanelCommand::class)
     ->addCommand('panel-borders', PanelBordersCommand::class)
     ->addCommand('group', GroupCommand::class)
+    ->addCommand('list', ListCommand::class)
     ->run();
 exit($code);
