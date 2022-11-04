@@ -167,22 +167,13 @@ class TreeComponent extends AbstractComponent implements TreeComponentInterface
      */
     private function getVerticalLine(TreeNodeInterface $parentNode): string
     {
-        $lineType = null;
+        $line = 'normal';
         $style = $parentNode->getStyle();
         if ($style) {
-            $lineType = $style->getLineType();
+            $line = $style->getLine();
         }
 
-        switch ($lineType) {
-            case TreeStyleInterface::LINE_DOUBLE:
-                return '║';
-            case TreeStyleInterface::LINE_HEAVY:
-                return '┃';
-            case TreeStyleInterface::LINE_ASCII:
-                return '|';
-            default:
-                return '│';
-        }
+        return LineRegistry::get($line)->getVerticalLine();
     }
 
     /**
@@ -190,22 +181,13 @@ class TreeComponent extends AbstractComponent implements TreeComponentInterface
      */
     private function getEndLine(TreeNodeInterface $parentNode): string
     {
-        $lineType = null;
+        $line = 'normal';
         $style = $parentNode->getStyle();
         if ($style) {
-            $lineType = $style->getLineType();
+            $line = $style->getLine();
         }
 
-        switch ($lineType) {
-            case TreeStyleInterface::LINE_DOUBLE:
-                return '╚══';
-            case TreeStyleInterface::LINE_HEAVY:
-                return '┗━━';
-            case TreeStyleInterface::LINE_ASCII:
-                return '`--';
-            default:
-                return '└──';
-        }
+        return LineRegistry::get($line)->getEndLine();
     }
 
     /**
@@ -213,21 +195,12 @@ class TreeComponent extends AbstractComponent implements TreeComponentInterface
      */
     private function getMiddleLine(TreeNodeInterface $parentNode): string
     {
-        $lineType = null;
+        $line = 'normal';
         $style = $parentNode->getStyle();
         if ($style) {
-            $lineType = $style->getLineType();
+            $line = $style->getLine();
         }
 
-        switch ($lineType) {
-            case TreeStyleInterface::LINE_DOUBLE:
-                return '╠══';
-            case TreeStyleInterface::LINE_HEAVY:
-                return '┣━━';
-            case TreeStyleInterface::LINE_ASCII:
-                return '+--';
-            default:
-                return '├──';
-        }
+        return LineRegistry::get($line)->getMiddleLine();
     }
 }

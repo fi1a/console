@@ -94,7 +94,7 @@ class TreeComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
 
         $style = new TreeStyle();
-        $style->setLineType($style::LINE_ASCII);
+        $style->setLine('ascii');
 
         $tree = new TreeComponent($output);
 
@@ -120,7 +120,7 @@ class TreeComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
 
         $style = new TreeStyle();
-        $style->setLineType($style::LINE_DOUBLE);
+        $style->setLine('double');
 
         $tree = new TreeComponent($output);
 
@@ -146,7 +146,7 @@ class TreeComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
 
         $style = new TreeStyle();
-        $style->setLineType($style::LINE_HEAVY);
+        $style->setLine('heavy');
 
         $tree = new TreeComponent($output);
 

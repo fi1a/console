@@ -9,14 +9,6 @@ namespace Fi1a\Console\Component\TreeComponent;
  */
 interface TreeStyleInterface
 {
-    public const LINE_ASCII = 'ascii';
-
-    public const LINE_NORMAL = 'double';
-
-    public const LINE_HEAVY = 'heavy';
-
-    public const LINE_DOUBLE = 'double';
-
     /**
      * Вернуть ширину
      */
@@ -46,10 +38,10 @@ interface TreeStyleInterface
      *
      * @return $this
      */
-    public function setLineType(string $lineType);
+    public function setLine(string $line);
 
     /**
      * Вернуть тип линии
      */
-    public function getLineType(): string;
+    public function getLine(): string;
 }

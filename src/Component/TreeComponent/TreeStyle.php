@@ -22,7 +22,7 @@ class TreeStyle implements TreeStyleInterface
     /**
      * @var string
      */
-    private $lineType = self::LINE_NORMAL;
+    private $line = 'normal';
 
     /**
      * @inheritDoc
@@ -45,19 +45,13 @@ class TreeStyle implements TreeStyleInterface
     /**
      * @inheritDoc
      */
-    public function setLineType(string $lineType)
+    public function setLine(string $line)
     {
-        $lineType =  mb_strtolower($lineType);
-        if (
-            !in_array(
-                $lineType,
-                [self::LINE_ASCII, self::LINE_DOUBLE, self::LINE_HEAVY, self::LINE_NORMAL]
-            )
-        ) {
-            throw new InvalidArgumentException(sprintf('Неизвестный "%s" тип линии', $lineType));
+        if (!LineRegistry::has($line)) {
+            throw new InvalidArgumentException(sprintf('Неизвестное "%s" оформление линии', $line));
         }
 
-        $this->lineType = $lineType;
+        $this->line = $line;
 
         return $this;
     }
@@ -65,8 +59,8 @@ class TreeStyle implements TreeStyleInterface
     /**
      * @inheritDoc
      */
-    public function getLineType(): string
+    public function getLine(): string
     {
-        return $this->lineType;
+        return $this->line;
     }
 }

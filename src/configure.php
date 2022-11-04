@@ -34,6 +34,11 @@ use Fi1a\Console\Component\TableComponent\HorizontalsBorder as TableHorizontalsB
 use Fi1a\Console\Component\TableComponent\NoneBorder;
 use Fi1a\Console\Component\TableComponent\RoundedBorder as TableRoundedBorder;
 use Fi1a\Console\Component\TableComponent\RoundedCompactBorder;
+use Fi1a\Console\Component\TreeComponent\AsciiLine;
+use Fi1a\Console\Component\TreeComponent\DoubleLine;
+use Fi1a\Console\Component\TreeComponent\HeavyLine;
+use Fi1a\Console\Component\TreeComponent\LineRegistry;
+use Fi1a\Console\Component\TreeComponent\NormalLine;
 use Fi1a\Console\IO\Formatter;
 use Fi1a\Console\IO\Style\TrueColor;
 use Fi1a\Console\IO\Style\TrueColorStyle;
@@ -98,3 +103,8 @@ ListTypeRegistry::add('decimal-leading-zero', new DecimalLeadingZeroListType());
 ListTypeRegistry::add('decimal', new DecimalListType());
 ListTypeRegistry::add('circle', new CircleListType());
 ListTypeRegistry::add('disc', new DiscListType());
+
+LineRegistry::add('normal', new NormalLine());
+LineRegistry::add('double', new DoubleLine());
+LineRegistry::add('heavy', new HeavyLine());
+LineRegistry::add('ascii', new AsciiLine());
