@@ -14,6 +14,7 @@ use Fi1a\Console\Examples\Command\PanelCommand;
 use Fi1a\Console\Examples\Command\ProgressbarCommand;
 use Fi1a\Console\Examples\Command\SpinnerCommand;
 use Fi1a\Console\Examples\Command\TableCommand;
+use Fi1a\Console\Examples\Command\TreeCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -29,5 +30,6 @@ $code = (new App())
     ->addCommand('progressbar', ProgressbarCommand::class)
     ->addCommand('spinner', SpinnerCommand::class)
     ->addCommand('table', TableCommand::class)
+    ->addCommand('tree', TreeCommand::class)
     ->run();
 exit($code);
