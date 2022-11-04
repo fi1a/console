@@ -13,6 +13,7 @@ use Fi1a\Console\Examples\Command\PanelBordersCommand;
 use Fi1a\Console\Examples\Command\PanelCommand;
 use Fi1a\Console\Examples\Command\ProgressbarCommand;
 use Fi1a\Console\Examples\Command\SpinnerCommand;
+use Fi1a\Console\Examples\Command\TableCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -27,5 +28,6 @@ $code = (new App())
     ->addCommand('pagination', PaginationCommand::class)
     ->addCommand('progressbar', ProgressbarCommand::class)
     ->addCommand('spinner', SpinnerCommand::class)
+    ->addCommand('table', TableCommand::class)
     ->run();
 exit($code);
