@@ -6,7 +6,7 @@
 ![Coverage Status][badge-coverage]
 [![Total Downloads][badge-downloads]][downloads]
 
-Это библиотека PHP для реализации команд и красивого форматирования текста в консоли.
+Библиотека PHP для реализации команд и красивого форматирования текста в консоли.
 
 Возможности:
 
@@ -96,7 +96,7 @@ class BazCommand extends AbstractCommand
 ```
 
 В этом примере добавляется опция ```time``` и аргумент ```format``` в конструкторе команды.
-После запуска команды проверяется передана ли опция ```time``` и если передана выводит серверное время
+После запуска команды проверяется передана ли опция ```time``` и если передана, выводит серверное время
 с указанным форматом ```format```. Если формат не передан, метод ```getValue```
 вернет значение указанное по умолчанию с помощью метода ```default```.
 
@@ -107,7 +107,7 @@ class BazCommand extends AbstractCommand
 - ```ConsoleOutputInterface $output``` - вывод в консоль;
 - ```InputInterface $stream``` -  потоковый ввод из консоли;
 - ```DefinitionInterface $definition``` - доступ к объявленным аргументам и опциям;
-- ```AppInterface $app``` - объект класса ```Fi1a\Console\App``` вызвавший данную команду.
+- ```AppInterface $app``` - объект класса ```Fi1a\Console\App```, вызвавший данную команду.
 
 #### Использование опций и аргументов
 
@@ -120,7 +120,7 @@ $definition->getArgument('format')->getValue();
 ```
 
 - Опции передаются с помощью --name=value полного имени или -s value короткого кода;
-- Аргументы передаются как просто строки, разделенные пробелами.
+- Аргументы передаются как строки, разделенные пробелами.
 
 #### Запуск консольного приложения
 
@@ -147,8 +147,8 @@ $code = (new App())
 exit($code);
 ```
 
-Запуск нескольких команд указанных в первом аргументе.
-Если передать в качестве первого аргумента название команды ```php foo.php qux```
+Запуск нескольких команд, указанных в первом аргументе.
+Если передать в качестве первого аргумента название команды ```php foo.php qux```,
 будет запущена команда ```\Foo\Bar\QuxCommand```.
 
 ```php
@@ -174,7 +174,7 @@ exit($code);
 
 ![Список команд](images/console-info.png)
 
-Описание команды берется из значения возвращаемого методом ```description```.
+Описание команды берется из значения, возвращаемого методом ```description```.
 
 #### Отображение справки
 
@@ -182,11 +182,27 @@ exit($code);
 
 ![Отображение справки](images/console-help.png)
 
-Описание команды берется из значения возвращаемого методом ```description```.
+Описание команды берется из значения, возвращаемого методом ```description```.
 
 #### Отображение ошибок
 
-Допустим, вы вызываете пример ```php foo.php baz -t j```. Вы увидите следующее сообщение об ошибке:
+
+Допустим, вы вызываете пример ```php foo.php baz -t j```:
+
+```php
+$definition->addOption('time', 't')
+    ->default(false)
+    ->description('Вывод времени.')
+    ->validation()
+    ->allOf()
+    ->boolean();
+    
+$definition->addArgument('format')
+    ->default('H:i:s')
+    ->description('Формат вывода времени.');
+```
+
+Увидете следующее сообщение об ошибке:
 
 ![Сообщения об ошибках](images/console-errors.png)
 
@@ -244,7 +260,7 @@ php examples/examples.php colors
 
 ##### Использование цветовых стилей
 
-При выводе вы можете использовать теги чтобы раскрасить его.
+При выводе можно использовать теги, чтобы раскрасить отображаемый текст.
 
 ```php
 
@@ -279,14 +295,14 @@ use Fi1a\Console\IO\Style\TrueColorStyle;
 Formatter::addStyle('error', new TrueColorStyle(TrueColor::WHITE, TrueColor::RED));
 ```
 
-Любой шестнадцатеричный цвет поддерживается для цветов TrueColor.
-Кроме того, поддерживаются названные цвета опредяемых константами интерфейса
+Любой шестнадцатеричный цвет поддерживается для цветов схемы TrueColor.
+Кроме того, поддерживаются названные цвета, опредяемых константами интерфейса
 ```Fi1a\Console\IO\Style\ColorInterface``` (```ColorInterface::BLACK```, ```ColorInterface::RED```, ```ColorInterface::GREEN``` ...).
 
 Если терминал не поддерживает TrueColor или Extended, используется ближайший ANSI цвет.
 
 Доступны параметры оформления: blink, bold, conceal, reverse, underscore.
-Вы можете установить цвет, фон и параметры непосредственно внутри тега:
+Вы можете установить цвет, фон и параметры непосредственно внутри тега. Поддерживается вложенность стилей.
 
 ```php
 
@@ -310,8 +326,6 @@ public function run(
 ...
 
 ```
-
-Поддерживается вложенность стилей.
 
 Запустить пример с отображением форматированного вывода
 
@@ -348,10 +362,10 @@ public function run(
 
 #### Интерактивный ввод из консоли
 
-С помощью класса ```Fi1a\Console\IO\InteractiveInput``` можно добавить значения для чтения
+С помощью класса ```Fi1a\Console\IO\InteractiveInput```, можно добавить значения для чтения
 из консоли и получить последующий доступ к введенным значениям. 
 С помощью метода ```addValue``` добавляем значение для чтения из консоли. Также как для аргументов
-и опций доступны валидаторы значений из пакета [fi1a/validation](https://github.com/fi1a/validation)
+и опций, доступны валидаторы значений из пакета [fi1a/validation](https://github.com/fi1a/validation)
 
 ```php
 
@@ -499,9 +513,23 @@ php examples/examples.php panel-borders
 
 ![Стили границ панели](images/console-panel-borders.png)
 
+Можно определить свои собственные стили границ, используя метод ```add``` класса ```Fi1a\Console\Component\PanelComponent\BorderRegistry```.
+Класс стиля границ должен реализовать интерфейс ```Fi1a\Console\Component\PanelComponent\BorderInterface```:
+
+```php
+
+use Fi1a\Console\Component\PanelComponent\AsciiBorder;
+use Fi1a\Console\Component\PanelComponent\BorderRegistry;
+
+BorderRegistry::add(
+    'ascii',
+    new AsciiBorder()
+);
+```
+
 #### Компонент группы
 
-Чтобы панели были одной высоты и распологались на одной линии можно использовать компонент группы.
+Чтобы панели были одной высоты и располагались на одной линии, можно использовать компонент группы.
 
 ```php
 
@@ -577,6 +605,491 @@ php examples/examples.php group
 
 ![Группа панелей](images/console-group.png)
 
+#### Компонент списка
+
+Для отображения списка служит компонент ```Fi1a\Console\Component\ListComponent\ListComponent```.
+Поддерживаются вложенные списки.
+
+```php
+
+use Fi1a\Console\Component\ListComponent\ListComponent;
+use Fi1a\Console\Component\ListComponent\ListStyle;
+use Fi1a\Console\Component\ListComponent\ListStyleInterface;
+use Fi1a\Console\IO\Style\ColorInterface;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $listStyle = new ListStyle();
+    $listStyle->setType('upper-alpha')
+        ->setMarkerColor(ColorInterface::GREEN);
+
+    $subListStyle = new ListStyle();
+    $subListStyle->setType('lower-alpha')
+        ->setMarkerColor(ColorInterface::RED)
+        ->setPosition(ListStyleInterface::POSITION_OUTSIDE);
+
+    $subList = new ListComponent($output, $subListStyle);
+
+    $subList->addItem('Lorem ipsum dolor sit amet');
+    $subList->addItem('Consectetur adipiscing elit');
+
+    $list = new ListComponent($output, $listStyle);
+
+    $list->addItem('Lorem ipsum dolor sit amet');
+    $list->addItem('Consectetur adipiscing elit');
+    $list->addItem($subList);
+    $list->addItem('Sed do eiusmod tempor incididunt');
+    $list->addItem('Duis aute irure dolor in reprehenderit');
+    $list->addItem('Reprehenderit in voluptate velit');
+
+    $list->display();
+    
+    return 0;
+}
+
+...
+
+```
+
+Задать тип маркера можно с помощью метода ```setType``` класса стиля списка ```Fi1a\Console\Component\ListComponent\ListStyle```.
+
+Доступны следующие типы маркеров:
+
+- upper-alpha - алфавитный список заглавных букв (A, B, C, D, E, …);
+- square - в качестве маркера выступает квадрат;
+- lower-alpha - алфавитный список (a, b, c, d, e, …);
+- decimal-leading-zero - порядковый номер с лидирующим нулем (01, 02, 03, 04, 05, …);
+- decimal - порядковый номер (1, 2, 3, 4, 5, …);
+- circle - в качестве маркера выступает незакрашенный кружок;
+- disc - в качестве маркера элементов списка выступает закрашенный кружок.
+
+Запустить пример со списками
+
+```shell
+php examples/examples.php list
+```
+
+![Списки в консоли php](images/console-list.png)
+
+Можно определить свои собственные типы маркеров списков, используя метод ```add``` класса ```Fi1a\Console\Component\ListComponent\ListTypeRegistry```.
+Класс типа маркера списка должен реализовать интерфейс ```Fi1a\Console\Component\ListComponent\ListTypeInterface```:
+
+```php
+
+use Fi1a\Console\Component\ListComponent\ListTypeRegistry;
+use Fi1a\Console\Component\ListComponent\UpperAlphaListType;
+
+ListTypeRegistry::add('upper-alpha', new UpperAlphaListType());
+```
+
+#### Компонент постраничной навигации
+
+Если вам необходимо разбить вывод на страницы, можно воспользоваться компонентом постраничной навигации.
+
+Пример:
+
+```php
+
+use Fi1a\Console\Component\PaginationComponent\PaginationComponent;
+use Fi1a\Console\Component\PaginationComponent\PaginationStyle;
+use Fi1a\Console\Component\TableComponent\TableComponent;
+use Fi1a\Console\Component\TableComponent\TableStyle;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $data = [
+        ['Смартфон', '1000', '2', '2000'],
+        ['Шкаф', '500', '1', '500'],
+        ['Электробритва', '300', '5', '1500'],
+        ['Станок', '200', '1', '200'],
+        ['Диван', '1200', '1', '1200'],
+        ['Кровать', '100', '2', '200'],
+        ['Кресло', '300', '3', '900'],
+        ['Шифанер', '150', '1', '150'],
+        ['Стул', '50', '4', '200'],
+        ['Стол', '100', '1', '100'],
+    ];
+
+    $tableStyle = new TableStyle();
+    $table = new TableComponent($output, $tableStyle);
+    $table->setHeaders(['Товар', 'Стоимость', 'Количество', 'Итоговая сумма']);
+    $paginationStyle = new PaginationStyle();
+
+    $pagination = new PaginationComponent($output, $stream, $paginationStyle);
+    $pagination->setCount((int) ceil(count($data) / 3));
+    $page = 1;
+    do {
+        $rows = array_slice($data, ($page - 1) * 3, 3);
+        $table->setRows($rows);
+        $table->display();
+        $pagination->display();
+        $page = $pagination->getCurrent();
+    } while ($pagination->isValid());
+
+    $output->writeln('');
+
+    return 0;
+}
+
+...
+
+```
+
+Запустить пример c постраничной навигацией
+
+```shell
+php examples/examples.php pagination
+```
+
+![Постраничная навигация](images/console-pagination.png)
+
+#### Компонент Progressbar
+
+При выполнении длительных команд, полезно отображать информацию о ходе выполнения.
+
+Чтобы отобразить сведения о ходе выполнения, используйте ```Fi1a\Console\Component\ProgressbarComponent\ProgressbarComponent```:
+
+```php
+
+use Fi1a\Console\Component\ProgressbarComponent\ProgressbarComponent;
+use Fi1a\Console\Component\ProgressbarComponent\ProgressbarStyle;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $progressbarStyle = new ProgressbarStyle();
+    $progressbarStyle->setTemplateByName('full');
+    $progressbar = new ProgressbarComponent($output, $progressbarStyle);
+
+    $progressbar->start(10);
+    do {
+        $progressbar->increment();
+        $progressbar->display();
+        sleep(1);
+    } while($progressbar->getProgress() < $progressbar->getMaxSteps());
+    $progressbar->finish();
+    $output->writeln(['', '']);
+
+    return 0;
+}
+
+...
+
+```
+
+Используя метод ```setTemplateByName```, можно задать один из предустановленных шаблонов:
+
+- short (```[{{bar}}]```);
+- normal (```{{current}}/{{max}} [{{bar}}] {{percent|sprintf("3s")}}%{{if(title)}} {{title}}{{endif}}```);
+- time (```[{{bar}}] {{elapsed|sprintf("10s")}} / {{remaining|sprintf("-10s")}}{{if(title)}} {{title}}{{endif}}```);
+- memory (```[{{bar}}] {{memory|memory}}{{if(title)}} {{title}}{{endif}}```);
+- full (```{{current}}/{{max}} [{{bar}}] {{percent|sprintf("3s")}}% {{elapsed|sprintf("10s")}} / {{remaining|sprintf("-10s")}} {{memory|memory}}{{if(title)}} {{title}}{{endif}}```).
+
+Вы можете добавить свой шаблон, используя метод ```add```  класса ```Fi1a\Console\Component\ProgressbarComponent\ProgressbarTemplateRegistry```:
+
+```php
+
+use Fi1a\Console\Component\ProgressbarComponent\ProgressbarTemplateRegistry;
+
+ProgressbarTemplateRegistry::add(
+    'normal',
+    '{{current}}/{{max}} [{{bar}}] {{percent|sprintf("3s")}}%{{if(title)}} {{title}}{{endif}}'
+);
+```
+
+Запустить пример c progressbar'ом
+
+```shell
+php examples/examples.php progressbar
+```
+
+![Progressbar](images/console-progressbar.png)
+
+#### Компонент Spinner
+
+Возможности:
+
+- заголовок во время вращения;
+- поддержка шаблона (```{{if(title)}}{{title}} {{endif}}<color=green>{{spinner}}</> ```);
+- имеет метод ```clear```;
+- различный внешний вид и возможность добавить свой spinner.
+
+Внешний вид spinner'а:
+
+- dots;
+- line;
+- growVertical;
+- growHorizontal;
+- bar.
+
+Вы можете добавить свой spinner, используя метод ```add```  класса ```Fi1a\Console\Component\SpinnerComponent\SpinnerRegistry```.
+Добавляемый spinner должен реализовать интерфейс ```Fi1a\Console\Component\SpinnerComponent\SpinnerInterface```:
+
+```php
+
+use Fi1a\Console\Component\SpinnerComponent\DotsSpinner;
+use Fi1a\Console\Component\SpinnerComponent\SpinnerRegistry;
+
+SpinnerRegistry::add('dots', new DotsSpinner());
+```
+
+Пример:
+
+```php
+
+use Fi1a\Console\Component\SpinnerComponent\SpinnerComponent;
+use Fi1a\Console\Component\SpinnerComponent\SpinnerStyle;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $spinnerStyle = new SpinnerStyle();
+    $spinnerStyle->setTemplate('{{if(title)}}{{title}} {{endif}}<color=green>{{spinner}}</> ');
+
+    $spinner = new SpinnerComponent($output, $spinnerStyle);
+
+    $index = 0;
+    do {
+        if ($index % 1000000 === 0) {
+            $title = $spinner->getTitle();
+            if ($title) {
+                $spinner->clear();
+                $output->writeln($title);
+            }
+            $spinner->setTitle('In progress (' . $index . ')');
+        }
+
+        $spinner->display();
+        $index++;
+    } while ($index < 10000000);
+    $output->writeln('');
+
+    return 0;
+}
+
+...
+
+```
+
+Запустить пример
+
+```shell
+php examples/examples.php spinner
+```
+
+![Spinner](images/console-spinner.png)
+
+#### Компонент таблицы
+
+Класс ```Fi1a\Console\Component\TableComponent\TableComponent``` предназначен для вывода табличных данных на терминал.
+
+Чтобы отобразить таблицу, создайте объект ```Fi1a\Console\Component\TableComponent\TableComponent```, добавьте заголовоки с помощью ```setHeaders``` и строки с помощью ```setRows```,
+а затем выведите на консоль методом ```display```:
+
+```php
+
+use Fi1a\Console\Component\TableComponent\TableComponent;
+use Fi1a\Console\Component\TableComponent\TableStyle;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $headers = ['Товар', 'Стоимость', 'Количество', 'Итоговая сумма'];
+    $rows = [
+        ['Смартфон', '1000', '2', '2000'],
+        ['Шкаф', '500', '1', '500'],
+    ];
+
+    $tableStyle = new TableStyle();
+    $tableStyle->setBorder('ascii')
+        ->setWidth(50);
+
+    $table = new TableComponent($output, $tableStyle);
+    $table->setHeaders($headers);
+    $table->setRows($rows);
+
+    $table->display();
+    
+    return 0;
+}
+
+...
+
+```
+
+Если ширина таблицы не задана, то ширина колонок рассчитывается исходя из содержимого ячеек.
+
+Свойства ячейки:
+
+- value - значение;
+- colspan - кол-во столбцов  ячейки;
+- style - стиль ```Fi1a\Console\Component\TableComponent\TableCellStyleInterface```.
+
+```php
+use Fi1a\Console\Component\TableComponent\TableCell;
+use Fi1a\Console\Component\TableComponent\TableCellStyle;
+use Fi1a\Console\Component\TableComponent\TableCellStyleInterface;
+
+$style = new TableCellStyle();
+$style->setAlign(TableCellStyleInterface::ALIGN_CENTER)
+
+$cell = new TableCell([
+    'value' => 'foo',
+    'colspan' => 2,
+    'style' => $style,
+]);
+```
+
+Вы можете установить стиль границы таблицы, задав одно из следующих значений c помощью метода
+```setBorder``` объекта стиля ```Fi1a\Console\Component\TableComponent\TableStyle```:
+
+- none;
+- ascii;
+- ascii_compact;
+- double;
+- double_compact;
+- heavy;
+- heavy_compact;
+- horizontals;
+- rounded;
+- rounded_compact.
+
+Запустить пример
+
+```shell
+php examples/examples.php table
+```
+
+![Таблицы в консоли](images/console-table.png)
+
+Можно определить свои собственные стили границ, используя метод ```add``` класса ```Fi1a\Console\Component\TableComponent\BorderRegistry```.
+Класс стиля границ должен реализовать интерфейс ```Fi1a\Console\Component\TableComponent\BorderInterface```:
+
+```php
+
+use Fi1a\Console\Component\TableComponent\BorderRegistry;
+
+BorderRegistry::add('none', new NoneBorder());
+```
+
+#### Компонент отображения дерева
+
+Класс ```Fi1a\Console\Component\TreeComponent\TreeComponent``` может генерировать древовидное представление в терминале.
+Дерево — отличный способ представления содержимого файловой системы или любых других иерархических данных.
+
+```php
+
+use Fi1a\Console\Component\TreeComponent\TreeComponent;
+use Fi1a\Console\Component\TreeComponent\TreeStyle;
+
+...
+
+/**
+ * @inheritDoc
+ */
+public function run(
+    InputArgumentsInterface $input,
+    ConsoleOutputInterface $output,
+    InputInterface $stream,
+    DefinitionInterface $definition,
+    AppInterface $app
+): int {
+    $style = new TreeStyle();
+    $style->setWidth(20)
+        ->setLine('heavy');
+
+    $tree = new TreeComponent($output);
+
+    $node1 = $tree->addNode('Lorem ipsum dolor', $style);
+    $node1->addNode('Ex ea commodo consequat', $style);
+    $node2 = $tree->addNode('Consectetur adipiscing elit', $style);
+    $node3 = $node2->addNode('Ex ea commodo consequat', $style);
+    $node2->addNode('Sunt in culpa qui officia', $style);
+    $node3->addNode('Ut aliquip ex ea commodo');
+    $node3->addNode('Sunt in culpa qui officia');
+    $tree->addNode('Ut enim ad minim veniam', $style);
+
+    $tree->display();
+    
+    return 0;
+}
+
+...
+
+```
+
+Вы можете установить стиль линии, задав одно из следующих значений c помощью метода
+```setLine``` объекта стиля ```Fi1a\Console\Component\TreeComponent\TreeStyle```:
+
+- normal;
+- double;
+- heavy;
+- ascii.
+
+Запустить пример
+
+```shell
+php examples/examples.php tree
+```
+
+![Дерево в консоли](images/console-tree.png)
+
+Можно определить свои собственные стили линий, используя метод ```add``` класса ```Fi1a\Console\Component\TreeComponent\LineRegistry```.
+Класс стиля линии должен реализовать интерфейс ```Fi1a\Console\Component\TreeComponent\LineInterface```:
+
+```php
+use Fi1a\Console\Component\TreeComponent\LineRegistry;
+use Fi1a\Console\Component\TreeComponent\NormalLine;
+
+LineRegistry::add('normal', new NormalLine());
+```
 
 [badge-release]: https://img.shields.io/packagist/v/fi1a/console?label=release
 [badge-license]: https://img.shields.io/github/license/fi1a/console?style=flat-square
