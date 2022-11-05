@@ -1,7 +1,7 @@
 {
   "name": "fi1a/console",
   "type": "library",
-  "description": "Библиотека для расширения функционала консоли (команды, опции) и красивого форматирования",
+  "description": "Консольные команды на PHP. Аргументы, опции и форматирование",
   "keywords": [],
   "homepage": "https://github.com/fi1a/console",
   "license": "MIT",
