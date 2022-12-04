@@ -29,6 +29,7 @@ class TableComponentTest extends TestCase
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
         $tableStyle = new TableStyle();
+        $tableStyle->setBorder('ascii');
         $tableStyle->setBorderColor(TrueColor::RED);
         $cellHeaderStyle = new TableCellStyle();
         $cellStyle = new TableCellStyle();
