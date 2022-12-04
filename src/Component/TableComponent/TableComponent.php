@@ -323,7 +323,6 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
             assert(is_int($index));
             $cell = $row[$column] ?? (new TableCell())->setValue(' ');
             $prevRowCell = $rows[$rowIndex - 1][$column] ?? (new TableCell())->setValue(' ');
-            $prevRowCellNext = $rows[$rowIndex - 1][$column + 1] ?? (new TableCell())->setValue(' ');
             $borderStyles = [];
             if ($this->getStyle()->getBorderColor()) {
                 $borderStyles = [new Style(
@@ -385,7 +384,12 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                     $panelGrid->setValue(
                         1,
                         $width,
-                        $isHLine ? $this->getBorder()->getBottomCrossing() : $this->getBorder()->getVBorder(),
+                        $isHLine
+                            ? ($prevRowCell->getColspan() > 1
+                                ? $this->getBorder()->getHBorder()
+                                : $this->getBorder()->getBottomCrossing()
+                            )
+                            : $this->getBorder()->getVBorder(),
                         $borderStyles
                     );
                     foreach (range($column + 1, $column + $prevRowCell->getColspan() - 1) as $next) {
@@ -407,13 +411,7 @@ class TableComponent extends AbstractComponent implements TableComponentInterfac
                     $borderStyles
                 );
             } else {
-                if (
-                    $prevRowCell->getColspan() > 1
-                    || (
-                        $prevRowCell instanceof TableCellColspan
-                        && $prevRowCellNext instanceof TableCellColspan
-                    )
-                ) {
+                if ($prevRowCell->getColspan() > 1) {
                     $panelGrid->setValue(
                         1,
                         $panelGrid->getWidth(),

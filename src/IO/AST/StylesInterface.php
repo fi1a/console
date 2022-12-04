@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Collection\DataType\IMapArrayObject;
+use Fi1a\Collection\DataType\MapArrayObjectInterface;
 
 /**
  * Коллекция стилей
@@ -18,7 +18,7 @@ use Fi1a\Collection\DataType\IMapArrayObject;
  * @method StyleInterface[] column(string $name)
  * @method StyleInterface[] getArrayCopy()
  */
-interface StylesInterface extends IMapArrayObject
+interface StylesInterface extends MapArrayObjectInterface
 {
     /**
      * Возвращает вычисленный стиль

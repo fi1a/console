@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\Component\TableComponent;
 
-use Fi1a\Collection\DataType\IValueObject;
+use Fi1a\Collection\DataType\ValueObjectInterface;
 use Fi1a\Console\Component\ComponentInterface;
 
 /**
  * Интерфейс ячейки
  */
-interface TableCellInterface extends IValueObject
+interface TableCellInterface extends ValueObjectInterface
 {
     /**
      * Устанавливает объединение столбцов

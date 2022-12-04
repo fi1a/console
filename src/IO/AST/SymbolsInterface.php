@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Console\IO\AST;
 
-use Fi1a\Collection\DataType\IMapArrayObject;
+use Fi1a\Collection\DataType\MapArrayObjectInterface;
 
 /**
  * Символы
@@ -18,6 +18,6 @@ use Fi1a\Collection\DataType\IMapArrayObject;
  * @method SymbolInterface[] column(string $name)
  * @method SymbolInterface[] getArrayCopy()
  */
-interface SymbolsInterface extends IMapArrayObject
+interface SymbolsInterface extends MapArrayObjectInterface
 {
 }
