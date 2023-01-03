@@ -5,6 +5,7 @@
 [![PHP Version][badge-php]][php]
 ![Coverage Status][badge-coverage]
 [![Total Downloads][badge-downloads]][downloads]
+[![Support mail][badge-mail]][mail]
 
 Библиотека PHP для реализации команд и красивого форматирования текста в консоли.
 
@@ -1096,8 +1097,10 @@ LineRegistry::add('normal', new NormalLine());
 [badge-php]: https://img.shields.io/packagist/php-v/fi1a/console?style=flat-square
 [badge-coverage]: https://img.shields.io/badge/coverage-100%25-green
 [badge-downloads]: https://img.shields.io/packagist/dt/fi1a/console.svg?style=flat-square&colorB=mediumvioletred
+[badge-mail]: https://img.shields.io/badge/mail-support%40fi1a.ru-brightgreen
 
 [packagist]: https://packagist.org/packages/fi1a/console
 [license]: https://github.com/fi1a/console/blob/master/LICENSE
 [php]: https://php.net
 [downloads]: https://packagist.org/packages/fi1a/console
+[mail]: mailto:support@fi1a.ru
