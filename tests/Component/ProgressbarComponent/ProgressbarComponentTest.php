@@ -8,6 +8,7 @@ use Fi1a\Console\Component\ProgressbarComponent\ProgressbarComponent;
 use Fi1a\Console\Component\ProgressbarComponent\ProgressbarStyle;
 use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\OutputInterface;
 use Fi1a\Console\IO\Stream;
 use PHPUnit\Framework\TestCase;
 
@@ -59,6 +60,23 @@ class ProgressbarComponentTest extends TestCase
     {
         $output = new ConsoleOutput(new Formatter());
         $output->setStream(new Stream('php://memory'));
+        $style = new ProgressbarStyle();
+        $progressbar = new ProgressbarComponent($output, $style);
+        $progressbar->start(10);
+        for ($index = 0; $index < 100; $index++) {
+            $progressbar->increment();
+            $this->assertTrue(true);
+        }
+        $progressbar->finish();
+    }
+
+    /**
+     * Не отображаем при отключенном выводе
+     */
+    public function testDisplayOnVerboseNone(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(OutputInterface::VERBOSE_NONE);
         $style = new ProgressbarStyle();
         $progressbar = new ProgressbarComponent($output, $style);
         $progressbar->start(10);
