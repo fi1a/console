@@ -286,6 +286,15 @@ public function run(
 
 ```
 
+Доступны следующие предопределенные стили:
+
+- error;
+- success;
+- info;
+- comment;
+- question;
+- notice.
+
 Можно определить свои собственные стили, используя метод ```addStyle``` класса ```Fi1a\Console\IO\Formatter```:
 
 ```php
