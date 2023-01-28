@@ -287,7 +287,7 @@ class ProgressbarComponent extends AbstractComponent implements ProgressbarCompo
             'max' => $this->renderMax(),
             'percent' => $this->renderPercent(),
             'title' => $this->renderTitle(),
-        ]);
+        ], [], false);
 
         $ast = new AST(
             $template,
