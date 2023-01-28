@@ -11,6 +11,7 @@ use Fi1a\Console\Component\RectangleInterface;
 use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
+use Fi1a\Console\IO\OutputInterface;
 use Fi1a\Console\IO\Safe;
 use Fi1a\Console\IO\Style\ASTStyleConverter;
 use Fi1a\Format\Formatter;
@@ -261,6 +262,10 @@ class ProgressbarComponent extends AbstractComponent implements ProgressbarCompo
      */
     public function display(): bool
     {
+        if ($this->getOutput()->getVerbose() <= OutputInterface::VERBOSE_NONE) {
+            return true;
+        }
+
         $symbols = $this->getSymbols(new Rectangle());
         if ($this->lastLength) {
             $this->clear();
