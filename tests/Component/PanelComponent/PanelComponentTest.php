@@ -8,6 +8,7 @@ use Fi1a\Console\Component\PanelComponent\PanelComponent;
 use Fi1a\Console\Component\PanelComponent\PanelStyle;
 use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\Formatter;
+use Fi1a\Console\IO\OutputInterface;
 use Fi1a\Console\IO\Stream;
 use Fi1a\Console\IO\Style\ColorInterface;
 use PHPUnit\Framework\TestCase;
@@ -131,6 +132,24 @@ class PanelComponentTest extends TestCase
         $output->setStream(new Stream('php://memory'));
         $style = new PanelStyle();
         $style->setWidth(20);
+        $panel = new PanelComponent($output, 'Lorem', $style);
+        $this->assertTrue($panel->display());
+    }
+
+    /**
+     * Не отображаем при отключенном выводе
+     */
+    public function testDisplayOnVerboseNone(): void
+    {
+        $output = new ConsoleOutput(new Formatter());
+        $output->setVerbose(OutputInterface::VERBOSE_NONE);
+        $style = new PanelStyle();
+        $style->setPadding(1)
+            ->setWidth(20)
+            ->setBorder('ascii')
+            ->setBackgroundColor(ColorInterface::YELLOW)
+            ->setBorderColor(ColorInterface::YELLOW)
+            ->setHeight(10);
         $panel = new PanelComponent($output, 'Lorem', $style);
         $this->assertTrue($panel->display());
     }
