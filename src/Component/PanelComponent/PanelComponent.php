@@ -13,6 +13,7 @@ use Fi1a\Console\IO\AST\AST;
 use Fi1a\Console\IO\AST\Grid;
 use Fi1a\Console\IO\AST\SymbolsInterface;
 use Fi1a\Console\IO\ConsoleOutputInterface;
+use Fi1a\Console\IO\OutputInterface;
 use Fi1a\Console\IO\Style\ASTStyleConverter;
 use Fi1a\Console\IO\Style\TrueColorStyle;
 
@@ -89,6 +90,10 @@ class PanelComponent extends AbstractComponent implements PanelComponentInterfac
      */
     public function display(): bool
     {
+        if ($this->getOutput()->getVerbose() <= OutputInterface::VERBOSE_NONE) {
+            return true;
+        }
+
         $rectangle = new Rectangle(
             $this->getStyle()->getWidth(),
             $this->getStyle()->getHeight(),
