@@ -9,9 +9,6 @@ use Fi1a\Console\Definition\Definition;
 use Fi1a\Console\Definition\DefinitionValidator;
 use Fi1a\Console\Definition\Exception\ValueSetterException;
 use Fi1a\Console\Definition\ValueSetter;
-use Fi1a\Console\IO\ArgvInputArguments;
-use Fi1a\Console\IO\ConsoleInput;
-use Fi1a\Console\IO\ConsoleOutput;
 use Fi1a\Console\IO\ConsoleOutputInterface;
 use Fi1a\Console\IO\EntityInterface;
 use Fi1a\Console\IO\Formatter;
@@ -31,17 +28,17 @@ use const PHP_EOL;
 class App implements AppInterface
 {
     /**
-     * @var InputArgumentsInterface|null
+     * @var InputArgumentsInterface
      */
     private $input;
 
     /**
-     * @var ConsoleOutputInterface|null
+     * @var ConsoleOutputInterface
      */
     private $output;
 
     /**
-     * @var InputInterface|null
+     * @var InputInterface
      */
     private $stream;
 
@@ -58,8 +55,20 @@ class App implements AppInterface
         ?ConsoleOutputInterface $output = null,
         ?InputInterface $stream = null
     ) {
+        if ($input === null) {
+            /** @var InputArgumentsInterface $input */
+            $input = di()->get(InputArgumentsInterface::class);
+        }
         $this->input = $input;
+        if ($output === null) {
+            /** @var ConsoleOutputInterface $output */
+            $output = di()->get(ConsoleOutputInterface::class);
+        }
         $this->output = $output;
+        if ($stream === null) {
+            /** @var InputInterface $stream */
+            $stream = di()->get(InputInterface::class);
+        }
         $this->stream = $stream;
 
         $this->addCommand('info', InfoCommand::class);
@@ -70,21 +79,6 @@ class App implements AppInterface
      */
     public function run(?string $command = null): int
     {
-        $input = $this->input;
-        // @codeCoverageIgnoreStart
-        if (is_null($input)) {
-            $input = new ArgvInputArguments(Registry::getArgv());
-        }
-        $output = $this->output;
-        if (is_null($output)) {
-            $output = new ConsoleOutput(new Formatter(ANSIStyle::class));
-        }
-        $stream = $this->stream;
-        if (is_null($stream)) {
-            $stream = new ConsoleInput();
-        }
-        // @codeCoverageIgnoreEnd
-
         $definition = new Definition();
 
         $definition->addOption('colors', 'c')
@@ -121,17 +115,17 @@ class App implements AppInterface
                 throw new InvalidArgumentException('Класс должен реализовывать интерфейс ' . CommandInterface::class);
             }
         } else {
-            $tokens = $input->getTokens();
+            $tokens = $this->input->getTokens();
             $commandName = reset($tokens);
             if (!$commandName || substr($commandName, 0, 1) === '-') {
                 $commandName = 'info';
             } else {
                 $tokens = array_slice($tokens, 1);
             }
-            $input->setTokens($tokens);
+            $this->input->setTokens($tokens);
             $command = $this->getCommand($commandName);
             if ($command === false) {
-                $output->getErrorOutput()->writeln(
+                $this->output->getErrorOutput()->writeln(
                     'Команда "{{commandName}}" не найдена',
                     ['commandName' => $commandName],
                     'error'
@@ -144,11 +138,11 @@ class App implements AppInterface
         $instance = new $command($definition);
         assert($instance instanceof CommandInterface);
 
-        $valueSetter = new ValueSetter($definition, $input);
+        $valueSetter = new ValueSetter($definition, $this->input);
         try {
             $valueSetter->setValues();
         } catch (ValueSetterException $exception) {
-            $output->getErrorOutput()->writeln($exception->getMessage(), [], 'error');
+            $this->output->getErrorOutput()->writeln($exception->getMessage(), [], 'error');
 
             return 1;
         }
@@ -157,23 +151,23 @@ class App implements AppInterface
         assert($colorsOption instanceof EntityInterface);
         switch (mb_strtolower((string) $colorsOption->getValue())) {
             case 'ext':
-                $output->setFormatter(new Formatter(ExtendedStyle::class));
+                $this->output->setFormatter(new Formatter(ExtendedStyle::class));
 
                 break;
             case 'truecolor':
-                $output->setFormatter(new Formatter(TrueColorStyle::class));
+                $this->output->setFormatter(new Formatter(TrueColorStyle::class));
 
                 break;
             case 'ansi':
-                $output->setFormatter(new Formatter(ANSIStyle::class));
+                $this->output->setFormatter(new Formatter(ANSIStyle::class));
 
                 break;
             case 'none':
-                $output->setDecorated(false);
+                $this->output->setDecorated(false);
 
                 break;
             default:
-                $output->getErrorOutput()->writeln(
+                $this->output->getErrorOutput()->writeln(
                     'Доступные значения для опции --colors (none, ansi, ext, trueColor)',
                     [],
                     'error'
@@ -192,7 +186,7 @@ class App implements AppInterface
             'debug' => ConsoleOutputInterface::VERBOSE_DEBUG,
         ];
         if (!array_key_exists(mb_strtolower((string) $verboseOption->getValue()), $verbose)) {
-            $output->getErrorOutput()->writeln(
+            $this->output->getErrorOutput()->writeln(
                 'Доступные значения для опции --verbose (none, normal, hight, hightest, debug)',
                 [],
                 'error'
@@ -200,7 +194,7 @@ class App implements AppInterface
 
             return 1;
         }
-        $output->setVerbose($verbose[mb_strtolower((string) $verboseOption->getValue())]);
+        $this->output->setVerbose($verbose[mb_strtolower((string) $verboseOption->getValue())]);
 
         $helpOption = $definition->getOption('help');
         assert($helpOption instanceof EntityInterface);
@@ -212,7 +206,14 @@ class App implements AppInterface
             $helpValue = mb_strtolower($helpValue);
         }
         if (in_array($helpValue, ['y', true, '1', 1])) {
-            return $instance->help($input, $output, $stream, $definition, $this, $commandName);
+            return $instance->help(
+                $this->input,
+                $this->output,
+                $this->stream,
+                $definition,
+                $this,
+                $commandName
+            );
         }
 
         $definitionValidator = new DefinitionValidator($definition);
@@ -223,13 +224,19 @@ class App implements AppInterface
              */
             foreach ($result->getErrors() as $error) {
                 $message = (string) $error->getMessage();
-                $output->getErrorOutput()->writeln($message, [], 'error');
+                $this->output->getErrorOutput()->writeln($message, [], 'error');
             }
 
             return 1;
         }
 
-        return $instance->run($input, $output, $stream, $definition, $this);
+        return $instance->run(
+            $this->input,
+            $this->output,
+            $this->stream,
+            $definition,
+            $this
+        );
     }
 
     /**
