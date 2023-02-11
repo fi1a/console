@@ -25,6 +25,38 @@
 composer require fi1a/console
 ```
 
+## Dependency injection
+
+Контейнер dependency injection из пакета [fi1a/dependency-injection](https://github.com/fi1a/dependency-injection)
+
+Для интерфейсов, в контейнере dependency injection, доступны следующие определения:
+
+- Fi1a\Console\IO\InputArgumentsInterface;
+- Fi1a\Console\IO\FormatterInterface;
+- Fi1a\Console\IO\ConsoleOutputInterface;
+- Fi1a\Console\IO\InputInterface;
+- Fi1a\Console\IO\InteractiveInputInterface;
+- Fi1a\Console\Component\GroupComponent\GroupStyleInterface;
+- Fi1a\Console\Component\GroupComponent\GroupComponentInterface;
+- Fi1a\Console\Component\ListComponent\ListStyleInterface;
+- Fi1a\Console\Component\ListComponent\ListComponentInterface;
+- Fi1a\Console\Component\PaginationComponent\PaginationStyleInterface;
+- Fi1a\Console\Component\PaginationComponent\PaginationComponentInterface;
+- Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
+- Fi1a\Console\Component\PanelComponent\PanelComponentInterface;
+- Fi1a\Console\Component\ProgressbarComponent\ProgressbarStyleInterface;
+- Fi1a\Console\Component\ProgressbarComponent\ProgressbarComponentInterface;
+- Fi1a\Console\Component\SpinnerComponent\SpinnerStyleInterface;
+- Fi1a\Console\Component\SpinnerComponent\SpinnerComponentInterface;
+- Fi1a\Console\Component\TableComponent\TableStyleInterface;
+- Fi1a\Console\Component\TableComponent\TableComponentInterface;
+- Fi1a\Console\Component\TreeComponent\TreeStyleInterface;
+- Fi1a\Console\Component\TreeComponent\TreeComponentInterface;
+
+```php
+di()->get(Fi1a\Console\IO\ConsoleOutputInterface::class)->writeln('Вывод в консоль');
+```
+
 ## Использование
 
 ### Команды, аргументы и опции в консоли
@@ -187,7 +219,6 @@ exit($code);
 
 #### Отображение ошибок
 
-
 Допустим, вы вызываете пример ```php foo.php baz -t j```:
 
 ```php
@@ -286,6 +317,18 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\IO\ConsoleOutputInterface;
+
+$output = di()->get(ConsoleOutputInterface::class);
+
+$output->writeln('<info>foo</info>');
+$output->writeln('<error>bar</error>');
+$output->writeln('<success>baz<info>qux</info></success>');
+```
+
 Доступны следующие предопределенные стили:
 
 - error;
@@ -370,6 +413,16 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\IO\InputInterface;
+
+$stream = di()->get(InputInterface::class);
+
+$value = $stream->read('y');
+```
+
 #### Интерактивный ввод из консоли
 
 С помощью класса ```Fi1a\Console\IO\InteractiveInput```, можно добавить значения для чтения
@@ -439,6 +492,51 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\IO\ConsoleOutputInterface;
+use Fi1a\Console\IO\InteractiveInputInterface;
+
+$output  = di()->get(ConsoleOutputInterface::class);
+$interactive = di()->get(InteractiveInputInterface::class);
+
+$output->writeln(['', '<option=bold>Интерактивный ввод</>', '']);
+
+$interactive->addValue('foo')
+    ->description('Введите количество от 1 до 10')
+    ->validation()
+    ->allOf()
+    ->min(1)
+    ->max(10);
+
+$bar = $interactive->addValue('bar')
+    ->description('Введите строки длиной от 2-х символов')
+    ->multiple();
+
+$bar->multipleValidation()
+    ->allOf()
+    ->minCount(1)
+    ->required();
+
+$bar->validation()
+    ->allOf()
+    ->minLength(2);
+
+$interactive->addValue('baz')
+    ->description('Согласны (y/n)')
+    ->validation()
+    ->allOf()
+    ->boolean();
+
+$interactive->read();
+
+// Доступ к введенным значениям
+$output->writeln((string) $interactive->getValue('foo')->getValue());
+$output->writeln((string) count((array) $interactive->getValue('bar')->getValue()));
+$output->writeln((string) $interactive->getValue('baz')->getValue());
+```
+
 Запустить пример с интерактивным вводом
 
 ```shell
@@ -497,6 +595,30 @@ public function run(
 
 ...
 
+```
+
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\PanelComponent\PanelComponentInterface;
+use Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
+use Fi1a\Console\IO\Style\ColorInterface;
+
+$panel = di()->get(PanelComponentInterface::class);
+$panelStyle = $panel->getStyle();
+
+$panelStyle->setWidth(40)
+    ->setPadding(1)
+    ->setBorder('heavy')
+    ->setBackgroundColor(ColorInterface::YELLOW)
+    ->setBorderColor(ColorInterface::RED)
+    ->setColor(ColorInterface::BLACK)
+    ->setAlign(PanelStyleInterface::ALIGN_CENTER);
+
+$panel->setText('Lorem ipsum dolor sit amet, <error>consectetur adipiscing elit</error>, '
+    . 'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+
+$panel->display();
 ```
 
 Запустить пример с отображением панелей
@@ -607,6 +729,53 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\GroupComponent\GroupComponentInterface;
+use Fi1a\Console\Component\PanelComponent\PanelComponentInterface;
+use Fi1a\Console\Component\PanelComponent\PanelStyleInterface;
+
+$group = di()->get(GroupComponentInterface::class);
+
+$group->getStyle()->setPanelSpacing(2);
+
+$panelStyle = di()->get(PanelStyleInterface::class);
+$panelStyle->setBorder('heavy')
+    ->setPadding(1);
+
+$panel1 = di()->get(PanelComponentInterface::class);
+
+$panel1->setStyle($panelStyle);
+$panel1->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+    . 'sed do eiusmod tempor incididunt ut '
+    . 'labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris '
+    . 'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit '
+    . 'in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat '
+    . 'non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+
+$panel2 = di()->get(PanelComponentInterface::class);
+
+$panel2->setStyle($panelStyle);
+$panel2->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+    . 'sed do eiusmod tempor incididunt ut '
+    . 'labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris '
+    . 'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit '
+    . 'in voluptate velit esse cillum dolore eu fugiat nulla pariatur.');
+
+$panel3 = di()->get(PanelComponentInterface::class);
+
+$panel3->setStyle($panelStyle);
+$panel3->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+    . 'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+
+$group->addPanel($panel1);
+$group->addPanel($panel2);
+$group->addPanel($panel3);
+
+$group->display();
+```
+
 Запустить пример с группой панелей
 
 ```shell
@@ -669,6 +838,39 @@ public function run(
 
 ...
 
+```
+
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\ListComponent\ListComponentInterface;
+use Fi1a\Console\Component\ListComponent\ListStyleInterface;
+use Fi1a\Console\IO\Style\ColorInterface;
+
+$subList = di()->get(ListComponentInterface::class);
+
+$subList->getStyle()
+    ->setType('lower-alpha')
+    ->setMarkerColor(ColorInterface::RED)
+    ->setPosition(ListStyleInterface::POSITION_OUTSIDE);
+
+$subList->addItem('Lorem ipsum dolor sit amet');
+$subList->addItem('Consectetur adipiscing elit');
+
+$list = di()->get(ListComponentInterface::class);
+
+$list->getStyle()
+    ->setType('upper-alpha')
+    ->setMarkerColor(ColorInterface::GREEN);
+
+$list->addItem('Lorem ipsum dolor sit amet');
+$list->addItem('Consectetur adipiscing elit');
+$list->addItem($subList);
+$list->addItem('Sed do eiusmod tempor incididunt');
+$list->addItem('Duis aute irure dolor in reprehenderit');
+$list->addItem('Reprehenderit in voluptate velit');
+
+$list->display();
 ```
 
 Задать тип маркера можно с помощью метода ```setType``` класса стиля списка ```Fi1a\Console\Component\ListComponent\ListStyle```.
@@ -765,6 +967,45 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\PaginationComponent\PaginationComponentInterface;
+use Fi1a\Console\Component\TableComponent\TableComponentInterface;
+use Fi1a\Console\IO\ConsoleOutputInterface;
+
+$data = [
+    ['Смартфон', '1000', '2', '2000'],
+    ['Шкаф', '500', '1', '500'],
+    ['Электробритва', '300', '5', '1500'],
+    ['Станок', '200', '1', '200'],
+    ['Диван', '1200', '1', '1200'],
+    ['Кровать', '100', '2', '200'],
+    ['Кресло', '300', '3', '900'],
+    ['Шифанер', '150', '1', '150'],
+    ['Стул', '50', '4', '200'],
+    ['Стол', '100', '1', '100'],
+];
+
+$output = di()->get(ConsoleOutputInterface::class);
+
+$table = di()->get(TableComponentInterface::class);
+$table->setHeaders(['Товар', 'Стоимость', 'Количество', 'Итоговая сумма']);
+
+$pagination = di()->get(PaginationComponentInterface::class);
+$pagination->setCount((int) ceil(count($data) / 3));
+$page = 1;
+do {
+    $rows = array_slice($data, ($page - 1) * 3, 3);
+    $table->setRows($rows);
+    $table->display();
+    $pagination->display();
+    $page = $pagination->getCurrent();
+} while ($pagination->isValid());
+
+$output->writeln('');
+```
+
 Запустить пример c постраничной навигацией
 
 ```shell
@@ -814,6 +1055,29 @@ public function run(
 
 ...
 
+```
+
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\ProgressbarComponent\ProgressbarComponentInterface;
+use Fi1a\Console\IO\ConsoleOutputInterface;
+
+$output = di()->get(ConsoleOutputInterface::class);
+
+$progressbar = di()->get(ProgressbarComponentInterface::class);
+
+$progressbar->getStyle()
+    ->setTemplateByName('full');
+
+$progressbar->start(10);
+do {
+    $progressbar->increment();
+    $progressbar->display();
+    sleep(1);
+} while($progressbar->getProgress() < $progressbar->getMaxSteps());
+$progressbar->finish();
+$output->writeln(['', '']);
 ```
 
 Используя метод ```setTemplateByName```, можно задать один из предустановленных шаблонов:
@@ -919,6 +1183,36 @@ public function run(
 
 ```
 
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\SpinnerComponent\SpinnerComponentInterface;
+use Fi1a\Console\IO\ConsoleOutputInterface;
+
+$output = di()->get(ConsoleOutputInterface::class);
+
+$spinner = di()->get(SpinnerComponentInterface::class);
+
+$spinner->getStyle()
+    ->setTemplate('{{if(title)}}{{title}} {{endif}}<color=green>{{spinner}}</> ');
+
+$index = 0;
+do {
+    if ($index % 1000000 === 0) {
+        $title = $spinner->getTitle();
+        if ($title) {
+            $spinner->clear();
+            $output->writeln($title);
+        }
+        $spinner->setTitle('In progress (' . $index . ')');
+    }
+
+    $spinner->display();
+    $index++;
+} while ($index < 10000000);
+$output->writeln('');
+```
+
 Запустить пример
 
 ```shell
@@ -972,6 +1266,29 @@ public function run(
 
 ...
 
+```
+
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\TableComponent\TableComponentInterface;
+
+$headers = ['Товар', 'Стоимость', 'Количество', 'Итоговая сумма'];
+$rows = [
+    ['Смартфон', '1000', '2', '2000'],
+    ['Шкаф', '500', '1', '500'],
+];
+
+$table = di()->get(TableComponentInterface::class);
+
+$table->getStyle()
+    ->setBorder('ascii')
+    ->setWidth(50);
+
+$table->setHeaders($headers);
+$table->setRows($rows);
+
+$table->display();
 ```
 
 Если ширина таблицы не задана, то ширина колонок рассчитывается исходя из содержимого ячеек.
@@ -1073,6 +1390,32 @@ public function run(
 
 ...
 
+```
+
+Пример с использованием контейнера:
+
+```php
+use Fi1a\Console\Component\TreeComponent\TreeComponentInterface;
+use Fi1a\Console\Component\TreeComponent\TreeStyleInterface;
+
+$style = di()->get(TreeStyleInterface::class);
+
+$style->setWidth(20)
+    ->setLine('heavy');
+
+$tree = di()->get(TreeComponentInterface::class);
+$tree->setStyle($style);
+
+$node1 = $tree->addNode('Lorem ipsum dolor', $style);
+$node1->addNode('Ex ea commodo consequat', $style);
+$node2 = $tree->addNode('Consectetur adipiscing elit', $style);
+$node3 = $node2->addNode('Ex ea commodo consequat', $style);
+$node2->addNode('Sunt in culpa qui officia', $style);
+$node3->addNode('Ut aliquip ex ea commodo');
+$node3->addNode('Sunt in culpa qui officia');
+$tree->addNode('Ut enim ad minim veniam', $style);
+
+$tree->display();
 ```
 
 Вы можете установить стиль линии, задав одно из следующих значений c помощью метода
