@@ -230,6 +230,17 @@ class TokenizerTest extends TestCase
                     Token::T_TEXT, Token::T_END_TAG_STYLE,
                 ],
             ],
+            // 18
+            [
+                '0',
+                1,
+                [
+                    '0',
+                ],
+                [
+                    Token::T_TEXT,
+                ],
+            ],
         ];
     }
 
